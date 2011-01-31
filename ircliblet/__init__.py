@@ -11,5 +11,5 @@ __summary__      = "Eventlet IRC Library"
 __author__       = 'Pedro Algarvio'
 __email__        = 'pedro@algarvio.me'
 __license__      = 'BSD'
-__url__          = 'https://bitbucket.org/s0undt3ch/ircliblet'
+__url__          = 'https://github.com/s0undt3ch/ircliblet'
 __description__  = __doc__
