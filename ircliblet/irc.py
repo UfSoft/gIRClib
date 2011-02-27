@@ -11,6 +11,7 @@
 """
 
 import time
+import errno
 import socket
 import random
 import logging
@@ -37,6 +38,7 @@ class IRCTransport(object):
     network_host = None
     network_port = None
     use_ssl = False
+    _processing = False
 
     def connect(self, network_host, network_port=6667, use_ssl=False):
         self.network_host = network_host
@@ -53,6 +55,7 @@ class IRCTransport(object):
             )
 #        signals.on_connected.send(self)
         eventlet.spawn_after(0.5, signals.on_connected.send, self)
+        self._processing = True
         eventlet.spawn_n(self.__read_socket)
 
     def send(self, msg, *args, **kwargs):
@@ -80,24 +83,34 @@ class IRCTransport(object):
                 )
         msg = (msg.replace("%s", "%%s") % bkwargs % tuple(bargs)).encode(encoding)
         log.debug("Sending message: \"%s\"", msg)
-        self.socket.send("%s\r\n" % msg)
+        eventlet.spawn_n(self.socket.send, "%s\r\n" % msg)
 
     def disconnect(self):
+        self._processing = False
+        # Allow some time to stop recv socket
+        eventlet.sleep(1)
         self.socket.close()
+        log.log(5, "Client disconnected")
 
     def __read_socket(self):
         buffer = ascii('')
-        while True:
+        while self._processing:
             try:
                 buffer += self.socket.recv(2048)
             except socket.error, e:
                 try:  # a little dance of compatibility to get the errno
-                    errno = e.errno
+                    _errno = e.errno
                 except AttributeError:
-                    errno = e[0]
-                if errno == 11:
-                    print 1234567890, e, '\n\n\n'
-#                    eventlet.spawn_after(0.1, self.__read_socket)
+                    _errno = e[0]
+                if _errno == errno.EAGAIN:
+                    # Socket not ready
+                    eventlet.spawn_after(0.2, self.__read_socket)
+                    break
+                elif _errno == errno.EBADF:
+                    # Bad file desctiptor. Socket closed!? Re-try just in case,
+                    # if self._processing is False this wont run again...
+                    eventlet.spawn_after(0.2, self.__read_socket)
+                    break
                 else:
                     raise e
             else:
@@ -1242,8 +1255,8 @@ class IRCCommandsHelper(IRCProtocol):
         self.set_nick(nickname)
         if self.username is None:
             self.username = nickname
-        self.send("USER %s %s %s :%s", self.username, hostname, servername,
-                  self.realname)
+        eventlet.spawn_after(0.5, self.send, "USER %s %s %s :%s", self.username,
+                             hostname, servername, self.realname)
 
     def set_nick(self, nickname):
         """
@@ -1253,7 +1266,7 @@ class IRCCommandsHelper(IRCProtocol):
         :param nickname: The nickname to change to.
         """
         self._attempted_nick = nickname
-        self.send("NICK %s", nickname)
+        eventlet.spawn_after(0.5, self.send, "NICK %s", nickname)
 
     def quit(self, message=''):
         """
