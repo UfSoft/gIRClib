@@ -1,25 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-    ircliblet.evblinker
-    ~~~~~~~~~~~~~~~~~~~
+    girclib.gblinker
+    ~~~~~~~~~~~~~~~~
 
 
     :copyright: © 2011 UfSoft.org - :email:`Pedro Algarvio (pedro@algarvio.me)`
     :license: BSD, see LICENSE for more details.
 """
 
-#@PydevCodeAnalysisIgnore
-
-import eventlet
 import logging
 import blinker.base
+from gevent.pool import Pool
 
 log = logging.getLogger(__name__)
 
 class NamedSignal(blinker.base.NamedSignal):
     def __init__(self, name, doc=None):
         super(NamedSignal, self).__init__(name, doc=doc)
-        self.pool = eventlet.GreenPool()
+        self.pool = Pool()
 
     def send(self, *sender, **kwargs):
         """Emit this signal on behalf of *sender*, passing on \*\*kwargs.
@@ -32,12 +30,7 @@ class NamedSignal(blinker.base.NamedSignal):
 
         :param \*\*kwargs: Data to be sent to receivers.
 
-        :type _waitall: ``bool``
-        :param _waitall: Boolean value which if set to ``True`` will not use
-                         eventlet's Pile and will run the receivers one after
-                         the other until all have finished.
         """
-        waitall = kwargs.pop('_waitall', False)
         # Using '*sender' rather than 'sender=None' allows 'sender' to be
         # used as a keyword argument- i.e. it's an invisible name in the
         # function signature.
@@ -61,36 +54,24 @@ class NamedSignal(blinker.base.NamedSignal):
         if not self.receivers:
             return []
 
-        if waitall:
-            results = []
-            for receiver in self.receivers_for(sender):
-                try:
-                    results.append((receiver, receiver(sender, **kwargs)))
-                except Exception, err:
-                    log.exception(err)
-            return results
+        results = []
 
         def spawned_receiver(receiver, sender, kwargs):
             log.log(5, "spawned %r for signal %r, sender: %r  kwargs: %r",
                     receiver, self.name, sender, kwargs)
             try:
-                return receiver, eventlet.spawn(receiver, sender, **kwargs)
+                results.append((receiver, receiver(sender, **kwargs)))
             except Exception, err:
                 log.error("Failed to run spawned function")
                 log.exception(err)
 
-        pile = eventlet.GreenPile(self.pool)
         for receiver in self.receivers_for(sender):
             log.log(5, "Spawning for receiver: %s", receiver)
-            pile.spawn(spawned_receiver, receiver, sender, kwargs)
-        return pile
+            self.pool.spawn(spawned_receiver, receiver, sender, kwargs)
 
-#    def connect(self, receiver, sender=blinker.base.ANY, weak=True):
-#        return blinker.base.NamedSignal.connect(
-#            self, receiver, sender=sender, weak=weak
-#        )
-
-
+        # Wait for results
+        self.pool.join()
+        return results
 
 class Namespace(blinker.base.Namespace):
     """A mapping of signal names to signals."""
@@ -107,4 +88,3 @@ class Namespace(blinker.base.Namespace):
             return self.setdefault(name, NamedSignal(name, doc))
 
 signal = Namespace().signal
-

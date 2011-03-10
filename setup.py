@@ -11,17 +11,17 @@
 """
 
 from setuptools import setup, find_packages
-import ircliblet
+import girclib
 
-setup(name = ircliblet.__package_name__,
-      version = ircliblet.__version__,
-      author = ircliblet.__author__,
-      author_email = ircliblet.__email__,
-      url = ircliblet.__url__,
-      download_url = 'http://python.org/pypi/%s' % ircliblet.__package_name__,
-      description = ircliblet.__summary__,
-      long_description = ircliblet.__description__,
-      license = ircliblet.__license__,
+setup(name = girclib.__package_name__,
+      version = girclib.__version__,
+      author = girclib.__author__,
+      author_email = girclib.__email__,
+      url = girclib.__url__,
+      download_url = 'http://python.org/pypi/%s' % girclib.__package_name__,
+      description = girclib.__summary__,
+      long_description = girclib.__description__,
+      license = girclib.__license__,
       platforms = "OS Independent - Anywhere Eventlet is known to run.",
       keywords = "Eventlet IRC Library",
       packages = find_packages(),

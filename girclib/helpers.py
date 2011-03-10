@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    ircliblet.helpers
-    ~~~~~~~~~~~~~~~~~
+    girclib.helpers
+    ~~~~~~~~~~~~~~~
 
 
     :copyright: © 2011 UfSoft.org - :email:`Pedro Algarvio (pedro@algarvio.me)`
@@ -14,8 +14,8 @@ import types
 import string
 import logging
 import textwrap
-from ircliblet.constants import numeric_to_symbolic
-from ircliblet.exceptions import IRCBadModes, UnhandledCommand
+from girclib.constants import numeric_to_symbolic
+from girclib.exceptions import IRCBadModes, UnhandledCommand
 
 NUL     = chr(0)
 CR      = chr(015)
@@ -375,12 +375,13 @@ class _CommandDispatcherMixin(object):
         return method(command_name, *args)
 
 
-def setup_logging(format=None):
+def setup_logging(format=None, level=5):
+    logging.addLevelName(5, 'TRACE')
     if format is None:
-        format='%(asctime)s.%(msecs)03.0f [%(name)-10s:%(lineno)-4s] %(levelname)-7.7s: %(message)s'
+        format='%(asctime)s.%(msecs)03.0f [%(name)-10s:%(lineno)-4s] ' + \
+               '%(levelname)-7.7s: %(message)s'
     logging.basicConfig(
         format=format,
         datefmt="%H:%M:%S",
-#        level=logging.DEBUG
-        level=5
+        level=level
     )

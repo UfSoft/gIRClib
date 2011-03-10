@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    ircliblet.exceptions
-    ~~~~~~~~~~~~~~~~~~~~
+    girclib.exceptions
+    ~~~~~~~~~~~~~~~~~~
 
 
     :copyright: © 2011 UfSoft.org - :email:`Pedro Algarvio (pedro@algarvio.me)`

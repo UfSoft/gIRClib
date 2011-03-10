@@ -1,7 +1,7 @@
-IRCLibLet IRC Client
-====================
+gIRClib IRC Client
+==================
 
-.. module:: ircliblet.client
+.. module:: girclib.client
 
 .. autoclass:: IRCClient
   :members:

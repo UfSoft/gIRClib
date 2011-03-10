@@ -1,5 +1,10 @@
 IRCLibLet
 ircliblet
+gEvent
+gIRClib
+girclib
+gIRClib's
+gblinker
 Algarvio
 BNF
 unicode

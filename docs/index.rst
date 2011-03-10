@@ -1,11 +1,11 @@
-.. IRCLibLet documentation master file, created by
+.. gIRClib documentation master file, created by
    sphinx-quickstart on Thu Jan 27 10:43:56 2011.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. module:: ircliblet.client
+.. module:: girclib.client
 
-Welcome to IRCLibLet's documentation!
+Welcome to gIRClib's documentation!
 =====================================
 
 Contents:
@@ -14,7 +14,7 @@ Contents:
   :maxdepth: 2
 
 
-IRCLibLet IRCClient
+gIRClib IRCClient
 -------------------
 
 .. toctree::
@@ -22,7 +22,7 @@ IRCLibLet IRCClient
 
   client
 
-IRCLibLet IRC Implementation
+gIRClib IRC Implementation
 ----------------------------
 
 .. toctree::
@@ -32,7 +32,7 @@ IRCLibLet IRC Implementation
 
 
 
-IRCLibLet Signaling
+gIRClib Signaling
 -------------------
 
 .. toctree::
@@ -46,9 +46,10 @@ Blinker Signaling Implementation
 .. toctree::
   :maxdepth: 2
 
-  evblinker
+  gblinker
 
-IRCLibLet Helper Functions
+
+gIRClib Helper Functions
 --------------------------
 
 .. toctree::

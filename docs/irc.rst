@@ -1,7 +1,7 @@
-Eventlet IRC Implementation
-===========================
+gEvent IRC Implementation
+=========================
 
-.. module:: ircliblet.irc
+.. module:: girclib.irc
 
 .. autoclass:: IRCTransport
   :members:

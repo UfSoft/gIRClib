@@ -1,4 +1,4 @@
-.. automodule:: ircliblet.evblinker
+.. automodule:: girclib.gblinker
 
 Eventlet dispatching of `blinker`_ signals.
 

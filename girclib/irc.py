@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    ircliblet.irc
-    ~~~~~~~~~~~~~
+    girclib.irc
+    ~~~~~~~~~~~
 
     *Under the hood* implementation of the IRC protocol handling.
 
@@ -15,16 +15,17 @@ import errno
 import socket
 import random
 import logging
-import eventlet
-import ircliblet
+import gevent
+from gevent.pool import Pool
+from gevent.socket import create_connection
 from string import letters, digits, punctuation
-from ircliblet import signals
-from ircliblet.exceptions import IRCBadMessage, IRCBadModes, UnhandledCommand
-from ircliblet.helpers import (parse_modes, _int_or_default, split, ascii,
-                               nick_from_netmask, ctcp_stringify, ctcp_extract,
-                               X_DELIM, CHANNEL_PREFIXES, MAX_COMMAND_LENGTH,
-                               parse_raw_irc_command, native,
-                               _CommandDispatcherMixin)
+from girclib import signals
+from girclib.exceptions import IRCBadMessage, IRCBadModes, UnhandledCommand
+from girclib.helpers import (parse_modes, _int_or_default, split, ascii,
+                             nick_from_netmask, ctcp_stringify, ctcp_extract,
+                             X_DELIM, CHANNEL_PREFIXES, MAX_COMMAND_LENGTH,
+                             parse_raw_irc_command, native,
+                             _CommandDispatcherMixin)
 
 log = logging.getLogger(__name__)
 
@@ -44,19 +45,20 @@ class IRCTransport(object):
         self.network_host = network_host
         self.network_port = network_port
         self.use_ssl = use_ssl
+        log.debug("Connecting to %s:%s", self.network_host, self.network_port)
         if self.use_ssl:
-            raise NotImplementedError, "SSL support not properly tested yet"
-            self.socket = eventlet.wrap_ssl(
-                eventlet.connect((self.network_host, self.network_port))
+            from gevent.ssl import SSLSocket
+            log.warning("SSL support not properly tested yet")
+            self.socket = SSLSocket(
+                create_connection((self.network_host, self.network_port))
             )
         else:
-            self.socket = eventlet.connect(
+            self.socket = create_connection(
                 (self.network_host, self.network_port)
             )
-#        signals.on_connected.send(self)
-        eventlet.spawn_after(0.5, signals.on_connected.send, self)
+        gevent.spawn_later(0.5, signals.on_connected.send, self)
         self._processing = True
-        eventlet.spawn_n(self.__read_socket)
+        gevent.spawn_raw(self.__read_socket)
 
     def send(self, msg, *args, **kwargs):
         encoding = kwargs.get('encoding') or self.encoding
@@ -83,13 +85,14 @@ class IRCTransport(object):
                 )
         msg = (msg.replace("%s", "%%s") % bkwargs % tuple(bargs)).encode(encoding)
         log.debug("Sending message: \"%s\"", msg)
-        eventlet.spawn_n(self.socket.send, "%s\r\n" % msg)
+        gevent.spawn_raw(self.socket.send, "%s\r\n" % msg)
 
     def disconnect(self):
         self._processing = False
-        # Allow some time to stop recv socket
-        eventlet.sleep(1)
-        self.socket.close()
+        if hasattr(self, 'socket'):
+            # Allow some time to stop recv socket
+            gevent.sleep(1)
+            self.socket.close()
         log.log(5, "Client disconnected")
 
     def __read_socket(self):
@@ -104,12 +107,12 @@ class IRCTransport(object):
                     _errno = e[0]
                 if _errno == errno.EAGAIN:
                     # Socket not ready
-                    eventlet.spawn_after(0.2, self.__read_socket)
+                    gevent.spawn_later(0.2, self.__read_socket)
                     break
                 elif _errno == errno.EBADF:
                     # Bad file desctiptor. Socket closed!? Re-try just in case,
                     # if self._processing is False this wont run again...
-                    eventlet.spawn_after(0.2, self.__read_socket)
+                    gevent.spawn_later(0.2, self.__read_socket)
                     break
                 else:
                     raise e
@@ -117,7 +120,7 @@ class IRCTransport(object):
                 data = buffer.replace(ascii('\r'), ascii('')).split(ascii("\n"))
                 buffer = data.pop()
                 for el in data:
-                    eventlet.spawn(self.on_data_available, el)
+                    gevent.spawn(self.on_data_available, el)
 
     def on_data_available(self, data):
         raise NotImplementedError
@@ -253,7 +256,7 @@ class ServerSupportedFeatures(_CommandDispatcherMixin):
         """
         Parse the ISUPPORT "CHANMODES" parameter.
 
-        See :meth:`~ircliblet.client.ServerSupportedFeatures.isupport_CHANMODES`
+        See :meth:`~girclib.client.ServerSupportedFeatures.isupport_CHANMODES`
         for a detailed explanation of this parameter.
         """
         names = ('addressModes', 'param', 'setParam', 'noParam')
@@ -1255,8 +1258,8 @@ class IRCCommandsHelper(IRCProtocol):
         self.set_nick(nickname)
         if self.username is None:
             self.username = nickname
-        eventlet.spawn_after(0.5, self.send, "USER %s %s %s :%s", self.username,
-                             hostname, servername, self.realname)
+        gevent.spawn_later(0.5, self.send, "USER %s %s %s :%s", self.username,
+                           hostname, servername, self.realname)
 
     def set_nick(self, nickname):
         """
@@ -1266,7 +1269,7 @@ class IRCCommandsHelper(IRCProtocol):
         :param nickname: The nickname to change to.
         """
         self._attempted_nick = nickname
-        eventlet.spawn_after(0.5, self.send, "NICK %s", nickname)
+        gevent.spawn_later(0.5, self.send, "NICK %s", nickname)
 
     def quit(self, message=''):
         """
@@ -1318,8 +1321,7 @@ class IRCCommandsHelper(IRCProtocol):
 
 class BaseIRCClient(IRCCommandsHelper):
     def __init__(self):
-        self.pool = eventlet.GreenPool()
-        self.pile = eventlet.GreenPile(self.pool)
+        self.pool = Pool()
         self.supported = ServerSupportedFeatures()
 
     def on_data_available(self, data):
@@ -1327,4 +1329,4 @@ class BaseIRCClient(IRCCommandsHelper):
         prefix, command, args = parse_raw_irc_command(data)
         log.debug('Incomming message. Prefix: "%s" Command: "%s" '
                   'Args: "%s"', prefix, command, args)
-        self.pile.spawn(self.handle_command, prefix, command, args)
+        self.pool.spawn(self.handle_command, prefix, command, args)

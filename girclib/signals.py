@@ -1,20 +1,29 @@
 # -*- coding: utf-8 -*-
 """
-    ircliblet.signals
-    ~~~~~~~~~~~~~~~~~
+    girclib.signals
+    ~~~~~~~~~~~~~~~
 
 
     :copyright: © 2011 UfSoft.org - :email:`Pedro Algarvio (pedro@algarvio.me)`
     :license: BSD, see LICENSE for more details.
 """
 
-from ircliblet.evblinker import signal
+from girclib.gblinker import signal
 
 on_connected = signal('on-connected', """\
 Called once connected to the IRC network.
 
 :param emitter: The signal emitter, in this case a
-                :class:`~ircliblet.client.IRCTransport` instance.
+                :class:`~girclib.client.IRCTransport` instance.
+:type  emitter: ``object``
+
+""")
+
+on_disconnected = signal('on-disconnected', """\
+Called once disconnected from the IRC network.
+
+:param emitter: The signal emitter, in this case a
+                :class:`~girclib.client.IRCTransport` instance.
 :type  emitter: ``object``
 
 """)

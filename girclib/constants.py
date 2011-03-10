@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    ircliblet.constants
-    ~~~~~~~~~~~~~~~~~~~
+    girclib.constants
+    ~~~~~~~~~~~~~~~~~
 
 
     :copyright: © 2011 UfSoft.org - :email:`Pedro Algarvio (pedro@algarvio.me)`
