@@ -5,7 +5,6 @@
     setup.py
     ~~~~~~~~
 
-
     :copyright: © 2011 UfSoft.org - :email:`Pedro Algarvio (pedro@algarvio.me)`
     :license: BSD, see LICENSE for more details.
 """
@@ -22,11 +21,11 @@ setup(name = girclib.__package_name__,
       description = girclib.__summary__,
       long_description = girclib.__description__,
       license = girclib.__license__,
-      platforms = "OS Independent - Anywhere Eventlet is known to run.",
-      keywords = "Eventlet IRC Library",
+      platforms = "OS Independent - Anywhere gEvent is known to run.",
+      keywords = "gEvent IRC Library",
       packages = find_packages(),
       install_requires = [
-        "Distribute", "eventlet>=0.9.14", "blinker>=1.1"
+        "Distribute", "gevent>=0.13.3", "blinker>=1.1"
       ],
       classifiers = [
           'Development Status :: 3 - Alpha',

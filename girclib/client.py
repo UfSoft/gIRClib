@@ -289,14 +289,11 @@ class IRCClient(BaseIRCClient):
 
 
 if __name__ == '__main__':
+    import logging
     from girclib.helpers import setup_logging
     format='%(asctime)s [%(lineno)-4s] %(levelname)-7.7s: %(message)s'
-    setup_logging(format)
-#    client = IRCClient('irc.freenode.net', 6667, 'tester', 'Tester')
+    setup_logging(format, 5)
     client = IRCClient('irc.freenode.net', 6667, 'girclib', 'gIRClib')
-#    gevent.spawn_after(10, client.join, "ufs")
-#    gevent.spawn_after(3, client.join, "#twisted")
-    import logging
     log = logging.getLogger('gIRClib')
 
     @signals.on_motd.connect
