@@ -1,2 +1,2 @@
-Eventlet IRC Library
-====================
+gEvent IRC Library
+==================
