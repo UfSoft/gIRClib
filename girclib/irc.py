@@ -16,6 +16,7 @@ import socket
 import random
 import logging
 import gevent
+from gevent import monkey
 from gevent.pool import Pool
 from gevent.socket import create_connection
 from string import letters, digits, punctuation
@@ -26,6 +27,8 @@ from girclib.helpers import (parse_modes, _int_or_default, split, ascii,
                              X_DELIM, CHANNEL_PREFIXES, MAX_COMMAND_LENGTH,
                              parse_raw_irc_command, native,
                              _CommandDispatcherMixin)
+
+monkey.patch_socket()
 
 log = logging.getLogger(__name__)
 
@@ -88,11 +91,16 @@ class IRCTransport(object):
         gevent.spawn_raw(self.socket.send, "%s\r\n" % msg)
 
     def disconnect(self):
+        if not self._processing:
+            # Double disconnects!?
+            return
+
         self._processing = False
         if hasattr(self, 'socket'):
             # Allow some time to stop recv socket
-            gevent.sleep(1)
+            # gevent.sleep(1)
             self.socket.close()
+        signals.on_disconnected.send(self)
         log.log(5, "Client disconnected")
 
     def __read_socket(self):
