@@ -496,7 +496,8 @@ class IRCProtocol(IRCTransport):
     userinfo     = None
 
     def ctcp_query(self, user, channel, messages):
-        """Dispatch method for any CTCP queries received.
+        """
+        Dispatch method for any CTCP queries received.
         """
         for m in messages:
             method = getattr(self, "ctcp_query_%s" % m[0], None)
@@ -515,8 +516,9 @@ class IRCProtocol(IRCTransport):
 
     def ctcp_query_FINGER(self, user, channel, data):
         if data is not None:
-            self.quirky_message("Why did %s send '%s' with a FINGER query?"
-                               % (user, data))
+            self.quirky_message(
+                "Why did %s send '%s' with a FINGER query?" % (user, data)
+            )
 
         signals.on_ctcp_query_finger.send(
             self, user=user, channel=channel, data=data
@@ -524,8 +526,9 @@ class IRCProtocol(IRCTransport):
 
     def ctcp_query_VERSION(self, user, channel, data):
         if data is not None:
-            self.quirky_message("Why did %s send '%s' with a VERSION query?"
-                               % (user, data))
+            self.quirky_message(
+                "Why did %s send '%s' with a VERSION query?" % (user, data)
+            )
 
         signals.on_ctcp_query_version.send(
             self, user=user, channel=channel, data=data
@@ -533,16 +536,18 @@ class IRCProtocol(IRCTransport):
 
     def ctcp_query_SOURCE(self, user, channel, data):
         if data is not None:
-            self.quirky_message("Why did %s send '%s' with a SOURCE query?"
-                               % (user, data))
+            self.quirky_message(
+                "Why did %s send '%s' with a SOURCE query?" % (user, data)
+            )
         signals.on_ctcp_query_source.send(
             self, user=user, channel=channel, data=data
         )
 
     def ctcp_query_USERINFO(self, user, channel, data):
         if data is not None:
-            self.quirky_message("Why did %s send '%s' with a USERINFO query?"
-                                % (user, data))
+            self.quirky_message(
+                "Why did %s send '%s' with a USERINFO query?" % (user, data)
+            )
         if self.userinfo:
             self.ctcp_make_reply(nick_from_netmask(user),
                                  [('USERINFO', self.userinfo)])
@@ -819,7 +824,8 @@ class IRCProtocol(IRCTransport):
                 return
 
             message = ascii(' ').join(m['normal'])
-        signals.on_privmsg.send(self, user=user, channel=channel, message=message)
+        signals.on_privmsg.send(self, user=nick_from_netmask(prefix),
+                                channel=channel, message=message)
 
     def irc_NOTICE(self, prefix, params):
         """
@@ -838,7 +844,8 @@ class IRCProtocol(IRCTransport):
                 return
             message = ascii(' ').join(m['normal'])
 
-        signals.on_notice.send(self, user=user, channel=channel, message=message)
+        signals.on_notice.send(self, user=nick_from_netmask(prefix),
+                               channel=channel, message=message)
 
     def irc_NICK(self, prefix, params):
         """
@@ -869,27 +876,25 @@ class IRCProtocol(IRCTransport):
         """
         Someone in the channel set the topic.
         """
-        nick = nick_from_netmask(prefix)
         channel = params[0]
         newtopic = params[1]
-        signals.on_topic_changed.send(self, user=nick, channel=channel,
-                                      new_topic=newtopic)
+        signals.on_topic_changed.send(self, user=nick_from_netmask(prefix),
+                                      channel=channel, new_topic=newtopic)
 
     def irc_RPL_TOPIC(self, prefix, params):
         """
         Called when the topic for a channel is initially reported or when it
         subsequently changes.
         """
-        nick = nick_from_netmask(prefix)
         channel = params[1]
         newtopic = params[2]
-        signals.on_rpl_topic.send(self, user=nick, channel=channel,
-                                  new_topic=newtopic)
+        signals.on_rpl_topic.send(self, user=nick_from_netmask(prefix),
+                                  channel=channel, new_topic=newtopic)
 
     def irc_RPL_NOTOPIC(self, prefix, params):
-        nick = nick_from_netmask(prefix)
         channel = params[1]
-        signals.on_rpl_topic.send(self, user=nick, channel=channel)
+        signals.on_rpl_topic.send(self, user=nick_from_netmask(prefix),
+                                  channel=channel)
 
     def irc_RPL_MOTDSTART(self, prefix, params):
         if params[-1].startswith("- "):
@@ -922,7 +927,7 @@ class IRCProtocol(IRCTransport):
         while len(info) < 4:
             info.append(None)
         signals.on_rpl_myinfo.send(self, servername=info[0], version=info[1],
-                              umodes=info[2], cmodes=info[3])
+                                   umodes=info[2], cmodes=info[3])
 
     def irc_RPL_BOUNCE(self, prefix, params):
         signals.on_rpl_bounce.send(self, info=params[1])
