@@ -20,6 +20,7 @@ import httplib2
 from gevent import monkey
 from girclib import signals
 from girclib.client import IRCClient
+from girclib.helpers import nick_from_netmask
 
 log = logging.getLogger(__name__)
 
@@ -40,18 +41,23 @@ class GoogleSearchBot(IRCClient):
 
     def on_privmsg(self, emitter, user=None, channel=None, message=None):
         log.debug("Google search bot got a message")
-        match = re.match(r'^(?:[^\s]+)(?:[\s]+)(?:find me)(?:[\s]+)(.*)$',
+        log.debug("user=%s, channel=%s, message=%s", user, channel, message)
+        match = re.match(r'^(?:(?:[^\s]+)(?:[\s]+))?(?:find me)(?:[\s]+)(.*)$',
                          message.strip())
         if match:
             log.debug("Google search bot got a search string: %r",
                       match.group(0))
             results = self.fetch_result(match.group(1))
-            if channel:
+            if channel != self.nickname:
                 user = channel
-            if results:
-                self.notice(user, "Search results: %s" % ', '.join(results))
+                say = self.notice
             else:
-                self.notice(user, "No results for %r" % match.group(1))
+                say = self.msg
+                user = nick_from_netmask(user)
+            if results:
+                say(user, "Search results: %s" % ', '.join(results))
+            else:
+                say(user, "No results for %r" % match.group(1))
 
 
 if __name__ == '__main__':
