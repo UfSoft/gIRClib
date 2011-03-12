@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     @signals.on_disconnected.connect
     def disconnected(emitter):
-        log.info("Exited!?\n\n")
+        log.info("Exited!?")
         try:
             gevent.shutdown()
         except AssertionError:
