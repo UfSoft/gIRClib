@@ -6,6 +6,7 @@
     A simple bot which does searches on google and returns their results.
 
 
+    :copyright: © 2009 coleifer - https://github.com/coleifer/irc/blob/master/bots/google.py
     :copyright: © 2010 traviscline - https://github.com/traviscline/irc/blob/master/bots/google.py
     :copyright: © 2011 UfSoft.org - :email:`Pedro Algarvio (pedro@algarvio.me)`
     :license: BSD, see LICENSE for more details.
@@ -61,12 +62,10 @@ class GoogleSearchBot(IRCClient):
 
 
 if __name__ == '__main__':
-#    import logging
     from girclib.helpers import setup_logging
     format='%(asctime)s [%(lineno)-4s] %(levelname)-7.7s: %(message)s'
     setup_logging(format, 5)
     client = GoogleSearchBot('irc.freenode.net', 6667, 'girclib', 'gIRClib')
-#    log = logging.getLogger('gIRClib')
 
     # Just for the fun, start telnet backdoor on port 2000
     from gevent.backdoor import BackdoorServer
