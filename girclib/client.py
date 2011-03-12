@@ -10,9 +10,12 @@
 
 import gevent
 import girclib
+import logging
 from girclib import signals
 from girclib.helpers import nick_from_netmask, parse_raw_irc_command
 from girclib.irc import BaseIRCClient, ServerSupportedFeatures
+
+log = logging.getLogger(__name__)
 
 class IRCClient(BaseIRCClient):
     source_url   = girclib.__url__
@@ -289,27 +292,35 @@ class IRCClient(BaseIRCClient):
 
 
 if __name__ == '__main__':
-    import logging
     from girclib.helpers import setup_logging
     format='%(asctime)s [%(lineno)-4s] %(levelname)-7.7s: %(message)s'
     setup_logging(format, 5)
     client = IRCClient('irc.freenode.net', 6667, 'girclib', 'gIRClib')
-    log = logging.getLogger('gIRClib')
+#    log = logging.getLogger('gIRClib')
 
-    @signals.on_motd.connect
-    def _on_motd(emitter, motd=None):
-        log.info("Received MOTD")
+    # Just for the fun, start telnet backdoor on port 2000
+    from gevent.backdoor import BackdoorServer
+    server = BackdoorServer(('127.0.0.1', 2000), locals=locals())
+    server.start()
+
+    @signals.on_signed_on.connect
+    def _on_motd(emitter):
+        log.info("Signed on. Let's join #ufs")
         client.join("ufs")
+
+    @signals.on_disconnected.connect
+    def disconnected(emitter):
+        log.info("Exited!?")
+        try:
+            gevent.shutdown()
+        except AssertionError:
+            # Shutting down is only possible from MAIN greenlet
+            pass
 
     client.connect()
 
     try:
         while True:
-            gevent.sleep(1)
+            gevent.sleep(10)
     except KeyboardInterrupt:
-
-        @signals.on_disconnected.connect
-        def disconnected(emitter):
-            log.info("Exited!?")
-
         client.disconnect()
