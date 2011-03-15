@@ -152,6 +152,8 @@ def nick_from_netmask(netmask):
     :returns: Returns the nickname part of a netmask.
 
     """
+    if ascii('!') not in netmask:
+        return netmask
     return netmask.split(ascii('!'))[0]
 
 X_DELIM = chr(001)

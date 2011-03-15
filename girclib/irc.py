@@ -59,7 +59,11 @@ class IRCTransport(object):
             self.socket = create_connection(
                 (self.network_host, self.network_port)
             )
-        gevent.spawn_later(0.5, signals.on_connected.send, self)
+        # Socket shouldn't be blobking because we're using gevent,
+        # but, just in case...
+        self.socket.setblocking(0)
+
+        gevent.spawn_later(0.2, signals.on_connected.send, self)
         self._processing = True
         gevent.spawn_raw(self.__read_socket)
 
@@ -107,7 +111,7 @@ class IRCTransport(object):
         buffer = ascii('')
         while self._processing:
             try:
-                buffer += self.socket.recv(2048)
+                buffer += self.socket.recv(MAX_COMMAND_LENGTH)
             except socket.error, e:
                 try:  # a little dance of compatibility to get the errno
                     _errno = e.errno
@@ -128,7 +132,8 @@ class IRCTransport(object):
                 data = buffer.replace(ascii('\r'), ascii('')).split(ascii("\n"))
                 buffer = data.pop()
                 for el in data:
-                    gevent.spawn(self.on_data_available, el)
+                    gevent.spawn_raw(self.on_data_available, el)
+            gevent.sleep(0.1)   # Allow other greenlets to run
 
     def on_data_available(self, data):
         raise NotImplementedError
@@ -676,6 +681,7 @@ class IRCProtocol(IRCTransport):
         taken.
         """
         # TODO: signals
+        log.warn("Nickname %r already in use!", self._attempted_nick)
         signals.on_nickname_in_use.send(self, nickname=self._attempted_nick)
 
     def irc_ERR_ERRONEUSNICKNAME(self, prefix, params):
@@ -785,15 +791,15 @@ class IRCProtocol(IRCTransport):
             if added:
                 modes, params = zip(*added)
                 signals.on_mode_changed.send(
-                    self, user=user, channel=channel, set=True,
-                    modes=ascii('').join(modes), args=params
+                    self, user=nick_from_netmask(user), channel=channel,
+                    set=True, modes=ascii('').join(modes), args=params
                 )
 
             if removed:
                 modes, params = zip(*removed)
                 signals.on_mode_changed.send(
-                    self, user=user, channel=channel, set=False,
-                    modes=ascii('').join(modes), args=params
+                    self, user=nick_from_netmask(user), channel=channel,
+                    set=False, modes=ascii('').join(modes), args=params
                 )
 
 
@@ -867,7 +873,8 @@ class IRCProtocol(IRCTransport):
         message = params[-1]
         if ascii(kicked).lower() == ascii(self.nickname).lower():
             # Yikes!
-            signals.on_kicked.send(self, channel=channel, kicker=kicker, message=message)
+            signals.on_kicked.send(self, channel=channel, kicker=kicker,
+                                   message=message)
         else:
             signals.on_user_kicked.send(self, channel=channel, kicked=kicked,
                                         kicker=kicker, message=message)
@@ -892,11 +899,17 @@ class IRCProtocol(IRCTransport):
                                   channel=channel, new_topic=newtopic)
 
     def irc_RPL_NOTOPIC(self, prefix, params):
+        """
+        Called when no topic for a channel is set.
+        """
         channel = params[1]
-        signals.on_rpl_topic.send(self, user=nick_from_netmask(prefix),
-                                  channel=channel)
+        signals.on_rpl_notopic.send(self, user=nick_from_netmask(prefix),
+                                    channel=channel)
 
     def irc_RPL_MOTDSTART(self, prefix, params):
+        """
+        ``RPL_MOTDSTART`` indicates the start of the message of the day messages.
+        """
         if params[-1].startswith("- "):
             params[-1] = params[-1][2:]
         self.motd = [params[-1]]
@@ -917,12 +930,22 @@ class IRCProtocol(IRCTransport):
         signals.on_motd.send(self, motd=motd)
 
     def irc_RPL_CREATED(self, prefix, params):
+        """
+        This is called to tell when the server was created.
+        """
         signals.on_rpl_created.send(self, when=params[1])
 
     def irc_RPL_YOURHOST(self, prefix, params):
+        """
+        This is called to tell to which server we're connected to and
+        it's version.
+        """
         signals.on_rpl_yourhost.send(self, info=params[1])
 
     def irc_RPL_MYINFO(self, prefix, params):
+        """
+        This is called upon a sucessfull registration.
+        """
         info = params[1].split(None, 3)
         while len(info) < 4:
             info.append(None)
@@ -930,6 +953,12 @@ class IRCProtocol(IRCTransport):
                                    umodes=info[2], cmodes=info[3])
 
     def irc_RPL_BOUNCE(self, prefix, params):
+        """
+        This is sent by the server to a user to suggest an alternative server.
+        This is often used when the connection is refused because the server is
+        already full.
+        """
+        # XXX: Shoult we handle this ourselves and connect to the server provided???
         signals.on_rpl_bounce.send(self, info=params[1])
 
     def irc_RPL_ISUPPORT(self, prefix, params):
@@ -942,15 +971,24 @@ class IRCProtocol(IRCTransport):
         signals.on_rpl_isupport.send(self, options=args)
 
     def irc_RPL_LUSERCLIENT(self, prefix, params):
+        """
+        This tells us how many clients, services and servers are connected.
+        """
         signals.on_rpl_luserclient.send(self, info=params[1])
 
     def irc_RPL_LUSEROP(self, prefix, params):
+        """
+        This tells us how many operators are connected.
+        """
         try:
             signals.on_rpl_luserop.send(self, ops=int(params[1]))
         except ValueError:
             pass
 
     def irc_RPL_LUSERCHANNELS(self, prefix, params):
+        """
+        This tells us how many channels there are.
+        """
         try:
             signals.on_rpl_luserchannels.send(self, channels=int(params[1]))
         except ValueError:
@@ -999,6 +1037,11 @@ class IRCProtocol(IRCTransport):
                  command, params)
 
 class IRCChannel(object):
+    """
+    Class to store the channel's state.
+    """
+    __slots__ = ('name', 'public', 'private', 'secret', 'users')
+
     def __init__(self, name, public=False, private=False, secret=False):
         self.name = name
         self.public = public
