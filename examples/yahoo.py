@@ -63,7 +63,6 @@ class YahooAnswerBot(IRCClient):
                 say = self.notice
             else:
                 say = self.msg
-                user = nick_from_netmask(user)
             if answer:
                 say(user, "Answer: %s" % answer)
             else:
@@ -85,7 +84,7 @@ if __name__ == '__main__':
     @signals.on_signed_on.connect
     def _on_motd(emitter):
         log.info("Signed on. Let's join #ufs")
-        client.join("ufs")
+        client.join("#ufs")
 
     @signals.on_disconnected.connect
     def disconnected(emitter):
