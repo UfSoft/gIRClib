@@ -19,6 +19,15 @@ Called once connected to the IRC network.
 
 """)
 
+on_quited = signal('on-quited', """\
+Called once quited from the IRC network.
+
+:param emitter: The signal emitter, in this case a
+                :class:`~girclib.client.IRCTransport` instance.
+:type  emitter: ``object``
+
+""")
+
 on_disconnected = signal('on-disconnected', """\
 Called once disconnected from the IRC network.
 
@@ -131,13 +140,30 @@ Called when the channel has no topic set
 """)
 
 on_privmsg = signal('on-privmsg', """\
-Called when I have a message from a user to me or a channel.
+Called when I receive a message from a user to me.
+
+:param emitter: The signal emitter
+:type  emitter: ``object``
+
+:param user: The user the message is coming from.
+:type  user: ``str``
+
+:param message: The message.
+:type  message: ``str``
+
+""")
+
+on_chanmsg = signal('on-chanmsg', """\
+Called when I receive a message from a channel.
 
 :param emitter: The signal emitter
 :type  emitter: ``object``
 
 :param channel: The channel the message is coming from.
 :type  channel: ``str``
+
+:param user: The user who sent the message.
+:type  user: ``str``
 
 :param message: The message.
 :type  message: ``str``

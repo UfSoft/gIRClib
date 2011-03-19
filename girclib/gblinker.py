@@ -48,8 +48,8 @@ class NamedSignal(blinker.base.NamedSignal):
         except:
             sender_name = sender
 
-        log.log(5, "signal: %r  sender: %r  kwargs: %r",
-                self.name, sender_name, kwargs)
+        log.log(5, "signal: %r  sender: %r  kwargs: %r  receivers: %r",
+                self.name, sender_name, kwargs, self.receivers)
 
         if not self.receivers:
             return []

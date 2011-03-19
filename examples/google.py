@@ -40,30 +40,50 @@ class GoogleSearchBot(IRCClient):
                 e['unescapedUrl'] for e in response['responseData']['results']
             ]
 
-    def on_privmsg(self, emitter, user=None, channel=None, message=None):
-        log.debug("Google search bot got a message")
-        log.debug("user=%s, channel=%s, message=%s", user, channel, message)
-        match = re.match(r'^(?:(?:[^\s]+)(?:[\s]+))?(?:find me)(?:[\s]+)(.*)$',
-                         message.strip())
+    def on_privmsg(self, emitter, user=None, message=None):
+        log.debug("Google search bot got a private message")
+        log.debug("user=%s, message=%s", user, message)
+        match = re.match(r'^(?:find me)(?:[\s]+)(.*)$', message.strip())
         if match:
             log.debug("Google search bot got a search string: %r",
                       match.group(0))
             results = self.fetch_result(match.group(1))
-            if channel != self.nickname:
-                user = channel
-                say = self.notice
-            else:
-                say = self.msg
             if results:
-                say(user, "Search results: %s" % ', '.join(results))
+                self.msg(user, "Search results: %s" % ', '.join(results))
             else:
-                say(user, "No results for %r" % match.group(1))
+                self.msg(user, "No results for %r" % match.group(1))
+        else:
+            self.msg(user, "Can't understand your command: \"%s\"" % message)
+
+    def on_chanmsg(self, emitter, channel=None, user=None, message=None):
+        log.debug("Google search bot got a channel message")
+        log.debug("channel=%s, message=%s", channel, message)
+        match = re.match(r'^(?:([^\s]+)(?:[\s]+))?(?:find me(?:[\:])?)(?:[\s]+)(.*)$',
+                         message.strip())
+        if match:
+            addressing_me = match.group(1).rstrip(':')
+            if addressing_me != self.nickname:
+                return
+
+            log.debug("Google search bot got a search string: %r",
+                      match.group(0))
+            results = self.fetch_result(match.group(2))
+            if results:
+                self.notice(channel, "%s: Search results: %s" % (
+                    user, ', '.join(results),
+                ))
+            else:
+                self.notice(channel, "%: No results for %r" % (
+                    user, match.group(1)
+                ))
+        else:
+            self.notice(channel,
+                        "Can't understand your command: \"%s\"" % message)
 
 
 if __name__ == '__main__':
     from girclib.helpers import setup_logging
-    format='%(asctime)s [%(lineno)-4s] %(levelname)-7.7s: %(message)s'
-    setup_logging(format, 5)
+    setup_logging(level=5)
     client = GoogleSearchBot('irc.freenode.net', 6667, 'girclib', 'gIRClib')
 
     # Just for the fun, start telnet backdoor on port 2000

@@ -152,8 +152,6 @@ def nick_from_netmask(netmask):
     :returns: Returns the nickname part of a netmask.
 
     """
-    if ascii('!') not in netmask:
-        return netmask
     return netmask.split(ascii('!'))[0]
 
 X_DELIM = chr(001)
@@ -380,7 +378,7 @@ class _CommandDispatcherMixin(object):
 def setup_logging(format=None, level=5):
     logging.addLevelName(5, 'TRACE')
     if format is None:
-        format='%(asctime)s.%(msecs)03.0f [%(name)-10s:%(lineno)-4s] ' + \
+        format='%(asctime)s.%(msecs)03.0f [%(name)-16s:%(lineno)-4s] ' + \
                '%(levelname)-7.7s: %(message)s'
     logging.basicConfig(
         format=format,

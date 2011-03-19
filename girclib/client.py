@@ -8,6 +8,7 @@
     :license: BSD, see LICENSE for more details.
 """
 
+import socket
 import gevent
 import girclib
 import logging
@@ -68,6 +69,7 @@ class IRCClient(BaseIRCClient):
         signals.on_user_left.connect(self.on_user_left)
         signals.on_user_quit.connect(self.on_user_quit)
         signals.on_mode_changed.connect(self.on_mode_changed)
+        signals.on_chanmsg.connect(self.on_chanmsg)
         signals.on_privmsg.connect(self.on_privmsg)
         signals.on_notice.connect(self.on_notice)
         signals.on_nick_changed.connect(self.on_nick_changed)
@@ -78,7 +80,8 @@ class IRCClient(BaseIRCClient):
 
     def on_connected(self, emitter):
         log.debug("Connected to %s:%s", self.network_host, self.network_port)
-        self.register(self.nickname)
+        self.register(self.nickname, hostname=socket.gethostname(),
+                      servername=socket.gethostname())
 
     def on_ctcp_query_ping(self, emitter, user=None, channel=None, data=None):
         """
@@ -253,7 +256,12 @@ class IRCClient(BaseIRCClient):
         See :meth:`~girclib.signals.on_mode_changed`.
         """
 
-    def on_privmsg(self, emitter, user=None, channel=None, message=None):
+    def on_chanmsg(self, emitter, channel=None, user=None, message=None):
+        """
+        See :meth:`~girclib.signals.on_chanmsg`.
+        """
+
+    def on_privmsg(self, emitter, user=None, message=None):
         """
         See :meth:`~girclib.signals.on_privmsg`.
         """

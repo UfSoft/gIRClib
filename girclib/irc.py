@@ -16,7 +16,6 @@ import socket
 import random
 import logging
 import gevent
-from gevent import monkey
 from gevent.pool import Pool
 from gevent.socket import create_connection
 from string import letters, digits, punctuation
@@ -27,8 +26,6 @@ from girclib.helpers import (parse_modes, _int_or_default, split, ascii,
                              X_DELIM, CHANNEL_PREFIXES, MAX_COMMAND_LENGTH,
                              parse_raw_irc_command, native,
                              _CommandDispatcherMixin)
-
-monkey.patch_socket()
 
 log = logging.getLogger(__name__)
 
@@ -96,16 +93,24 @@ class IRCTransport(object):
 
     def disconnect(self):
         if not self._processing:
+            log.log(5, "Not processing")
             # Double disconnects!?
             return
 
-        self._processing = False
-        if hasattr(self, 'socket'):
-            # Allow some time to stop recv socket
-            # gevent.sleep(1)
-            self.socket.close()
-        signals.on_disconnected.send(self)
-        log.log(5, "Client disconnected")
+        def on_quited(emitter):
+            self._processing = False
+            if hasattr(self, 'socket'):
+                # Allow some time to stop recv socket
+                # gevent.sleep(1)
+                self.socket.close()
+
+            signals.on_disconnected.send(self)
+            log.log(5, "Client disconnected")
+
+        signals.on_quited.connect(on_quited, weak=False)
+        self.pool.spawn(self.quit)
+        gevent.sleep(0)
+        self.pool.join()
 
     def __read_socket(self):
         buffer = ascii('')
@@ -812,6 +817,14 @@ class IRCProtocol(IRCTransport):
     def irc_PRIVMSG(self, prefix, params):
         """
         Called when we get a message.
+
+        Here, for usage simplicity, we separate between two signals;
+        :meth:`~girclib.signals.on_chanmsg` and
+        :meth:`~girclib.signals.on_privmsg`.
+
+        :meth:`~girclib.signals.on_chanmsg`. Is not really an IRC signal,
+        but it will simplify the library usage by separating channel, from
+        private messages.
         """
         user = prefix
         channel = params[0]
@@ -830,8 +843,13 @@ class IRCProtocol(IRCTransport):
                 return
 
             message = ascii(' ').join(m['normal'])
-        signals.on_privmsg.send(self, user=nick_from_netmask(prefix),
-                                channel=channel, message=message)
+        if channel == self.nickname:
+            signals.on_privmsg.send(self, user=nick_from_netmask(user),
+                                    message=message)
+        else:
+            signals.on_chanmsg.send(self, channel=channel,
+                                    user=nick_from_netmask(user),
+                                    message=message)
 
     def irc_NOTICE(self, prefix, params):
         """
@@ -1327,7 +1345,7 @@ class IRCCommandsHelper(IRCProtocol):
         self._attempted_nick = nickname
         gevent.spawn_later(0.5, self.send, "NICK %s", nickname)
 
-    def quit(self, message=''):
+    def quit(self, message='Quiting...'):
         """
         Disconnect from the server
 
@@ -1335,7 +1353,12 @@ class IRCCommandsHelper(IRCProtocol):
         :param message: If specified, the message to give when quitting the
             server.
         """
-        self.send("QUIT :%s", message)
+        for channel in self.channels.keys():
+            self.pool.spawn(self.leave, channel, message)
+
+        gevent.spawn(self.send, "QUIT :%s" % message).join()
+        signals.on_quited.send(self)
+        gevent.sleep(0)
 
     ### user input commands, client->client
     def describe(self, channel, action):

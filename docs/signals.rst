@@ -54,8 +54,10 @@ Signals
 -------
 
 .. autofunction:: on_connected(emitter)
+.. autofunction:: on_quited(emitter)
 .. autofunction:: on_disconnected(emitter)
 .. autofunction:: on_privmsg(emitter, channel=None, message=None)
+.. autofunction:: on_chanmsg(emitter, channel=None, user=None, message=None)
 .. autofunction:: on_joined(emitter, channel=None)
 .. autofunction:: on_left(emitter, channel=None)
 .. autofunction:: on_notice(emitter, user=None, channel=None, message=None)

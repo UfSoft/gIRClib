@@ -47,33 +47,51 @@ class YahooAnswerBot(IRCClient):
                     chosen = response['all']['question'][0]['ChosenAnswer']
                     return chosen.encode('utf-8', 'replace')
 
-    def on_privmsg(self, emitter, user=None, channel=None, message=None):
-        log.debug("Yahoo search bot got a message")
+    def on_chanmsg(self, emitter, user=None, channel=None, message=None):
+        log.debug("Yahoo search bot got a channel message")
         log.debug("user=%s, channel=%s, message=%s", user, channel, message)
         match = re.match(
-            r'^(?:(?:[^\s]+)(?:[\s]+))?(?:answer me)(?:[\s]+)(.*)$',
+            r'^(?:([^\s]+)(?:[\s]+))?(?:answer me)(?:[\s]+)(.*)$',
             message.strip()
         )
+        if match:
+            addressing_me = match.group(1).rstrip(':')
+            if addressing_me != self.nickname:
+                return
+
+            log.debug("Yahoo search bot got a search string: %r", match.group(0))
+
+            answer = self.fetch_result(match.group(2))
+            if answer:
+                self.notice(channel, "%s: %s" % (user, answer))
+            else:
+                self.notice(channel, "%s: Yahoo answers cannot answer %r" % (
+                    user, match.group(1)
+                ))
+                self.notice(
+                    channel, "%s: Try \"Does napping make you smarter?\"" % user
+                )
+
+    def on_privmsg(self, emitter, user=None, channel=None, message=None):
+        log.debug("Yahoo search bot got a private message")
+        log.debug("user=%s, channel=%s, message=%s", user, channel, message)
+        match = re.match(r'^(?:answer me)(?:[\s]+)(.*)$', message.strip())
         if match:
             log.debug("Yahoo search bot got a search string: %r",
                       match.group(0))
             answer = self.fetch_result(match.group(1))
-            if channel != self.nickname:
-                user = channel
-                say = self.notice
-            else:
-                say = self.msg
             if answer:
-                say(user, "Answer: %s" % answer)
+                self.msg(user, "Answer: %s" % answer)
             else:
-                say(user, "Yahoo answers cannot answer %r" % match.group(1))
-                say(user, "Try: \"Does napping make you smarter?\"")
+                self.msg(user, "Yahoo answers cannot answer %r" % match.group(1))
+                self.msg(user, "Try: \"Does napping make you smarter?\"")
+        else:
+            self.msg(user, "Can't understand your command: \"%s\"" % message)
 
 
 if __name__ == '__main__':
     from girclib.helpers import setup_logging
-    format='%(asctime)s [%(lineno)-4s] %(levelname)-7.7s: %(message)s'
-    setup_logging(format, 5)
+    setup_logging(level=5)
     client = YahooAnswerBot('irc.freenode.net', 6667, 'girclib', 'gIRClib')
 
     # Just for the fun, start telnet backdoor on port 2000
