@@ -65,6 +65,9 @@ class IRCTransport(object):
         gevent.spawn_raw(self.__read_socket)
 
     def send(self, msg, *args, **kwargs):
+        if not self._processing:
+            log.info("Not processing, so not sending any data.")
+            return
         encoding = kwargs.get('encoding') or self.encoding
         bargs = []
         bkwargs = {}
@@ -89,7 +92,8 @@ class IRCTransport(object):
                 )
         msg = (msg.replace("%s", "%%s") % bkwargs % tuple(bargs)).encode(encoding)
         log.debug("Sending message: \"%s\"", msg)
-        gevent.spawn_raw(self.socket.send, "%s\r\n" % msg)
+        self.pool.spawn(self.__write_socket, "%s\r\n" % msg)
+        gevent.sleep(0) # allow other greenlets to run
 
     def disconnect(self):
         if not self._processing:
@@ -111,6 +115,40 @@ class IRCTransport(object):
         self.pool.spawn(self.quit)
         gevent.sleep(0)
         self.pool.join()
+
+    def __write_socket(self, data):
+        if not self._processing:
+            return
+
+        try:
+            log.debug("Writing data to socket: \"%r\"", data)
+            self.socket.send(data)
+        except socket.error, e:
+            try:  # a little dance of compatibility to get the errno
+                _errno = e.errno
+            except AttributeError:
+                _errno = e[0]
+            if _errno == errno.ECONNRESET:
+                # Server disconnected us
+                self._processing = False
+                signals.on_disconnected.send(self)
+            elif _errno == errno.EPIPE:
+                # broken pipe. Server disconnected us???
+                self._processing = False
+                signals.on_disconnected.send(self)
+            elif _errno == errno.EAGAIN:
+                # Socket not ready
+                gevent.spawn_later(0.2, self.__write_socket, data)
+            elif _errno == errno.EBADF:
+                # Bad file desctiptor. Socket closed!? Re-try just in case,
+                # if self._processing is False this wont run again...
+                gevent.spawn_later(0.2, self.__write_socket, data)
+            else:
+                raise
+        except Exception, e:
+            self._processing = False
+            signals.on_disconnected.send(self)
+            raise
 
     def __read_socket(self):
         buffer = ascii('')
@@ -755,7 +793,7 @@ class IRCProtocol(IRCTransport):
         """
         nick = nick_from_netmask(prefix)
         for channel in self.channels.iterkeys():
-            if nick in self.channels[channel].names:
+            if nick in self.channels[channel].users:
                 self.channels[channel].remove_user(nick)
                 break
         signals.on_user_quit.send(
@@ -772,11 +810,13 @@ class IRCProtocol(IRCTransport):
         if modes[0] not in '-+':
             modes = '+' + modes
 
-        if channel == self.nickname:
-            # This is a mode change to our individual user, not a channel mode
-            # that involves us.
-            param_modes = ['', '']
-        else:
+
+        # Mode change to our individual user, not a channel mode
+        # that involves us.
+        param_modes = ['', '']
+
+        if channel != self.nickname:
+            # This is a mode change to a channel
             prefixes = self.supported.get_feature('PREFIX', {})
             param_modes[0] = param_modes[1] = ''.join(prefixes.iterkeys())
 
@@ -1034,6 +1074,13 @@ class IRCProtocol(IRCTransport):
         signals.on_channel_users_available.send(
             self, channel_users=self.channels[channel].users
         )
+
+    def irc_ERROR(self, prefix, params):
+        if 'Closing Link' in params[0]:
+            self._processing = False
+            signals.on_disconnected.send(self)
+        else:
+            log.debug("\n\n%s\n\n", params)
 
     def handle_command(self, prefix, command, params):
         """
