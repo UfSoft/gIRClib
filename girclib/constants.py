@@ -292,6 +292,32 @@ symbolic_to_numeric = {
     "ERR_USERSDONTMATCH":       '502',
 }
 
+
+# -- NON RFC --
+
+# This is returned for a TOPIC request or when you JOIN, if the channel has a
+# topic.
+# Parameters:
+#   channel     A channel name.
+#   nickname    User who last set the channel topic.
+#   time        The time the user set the current channel topic.
+#
+# Example:
+#    333 #boredom IAmBored 902508764
+#
+# To convert the time you can do something like:
+#    datetime.fromtimestamp(time)
+NONRFC_RPL_333 = 333
+symbolic_to_numeric["NONRFC_RPL_333"] = '333'
+
+# This is used on some networks as a way to prevent spammers and other
+# mass-messagers. This is returned when a user tries to message too many
+# different users or join too many different channels in a short period of time.
+# Example:
+#    439 X :Target change too fast. Please wait 104 seconds.
+NONRFC_RPL_439 = 439
+symbolic_to_numeric["NONRFC_RPL_439"] = '439'
+
 numeric_to_symbolic = {}
 for k, v in symbolic_to_numeric.items():
     numeric_to_symbolic[v] = k
