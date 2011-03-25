@@ -3,12 +3,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. module:: girclib.client
-
 Welcome to gIRClib's documentation!
-=====================================
+===================================
 
-Contents:
+gIRClib tries to be a simple yet, extensible and detachable irc library.
+
+Where can you get it? From `our git`_ repository.
+
+
+.. module:: girclib.client
 
 .. toctree::
   :maxdepth: 2
@@ -31,7 +34,6 @@ gIRClib IRC Implementation
   irc
 
 
-
 gIRClib Signaling
 -------------------
 
@@ -39,6 +41,7 @@ gIRClib Signaling
   :maxdepth: 3
 
   signals
+
 
 Blinker Signaling Implementation
 --------------------------------
@@ -65,3 +68,5 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+.. _our git: https://github.com/s0undt3ch/gIRClib
