@@ -45,7 +45,7 @@ With Blinker 1.1 you can also easily subscribe to signals by using the
 gIRClib Signaling
 =================
 
-Signaling is used throughout the library to handle the serveral actions needed
+Signaling is used throughout the library to handle the several actions needed
 to interact with an IRC server.
 
 .. module:: girclib.signals

@@ -1035,7 +1035,7 @@ class IRCProtocol(IRCTransport):
 
     def irc_RPL_MYINFO(self, prefix, params):
         """
-        This is called upon a sucessfull registration.
+        This is called upon a successful registration.
         """
         info = params[1].split(None, 3)
         while len(info) < 4:
