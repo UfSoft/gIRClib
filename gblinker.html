@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>girclib.gblinker &mdash; gIRClib v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="gIRClib v0.1 documentation" href="index.html" />
+    <link rel="next" title="girclib.helpers" href="helpers.html" />
+    <link rel="prev" title="Signals" href="signals.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="helpers.html" title="girclib.helpers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="signals.html" title="Signals"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">gIRClib v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <span class="target" id="module-girclib.gblinker"></span><div class="section" id="girclib-gblinker">
+<h1>girclib.gblinker<a class="headerlink" href="#girclib-gblinker" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">© 2011 UfSoft.org - <script type="text/javascript">document.write(
+              "<n uers=\"znvygb:crqeb\100nytneivb\056zr\">Crqeb Nytneivb <\057n>".replace(/[a-zA-Z]/g,
+              function(c){
+                return String.fromCharCode(
+                (c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);}));
+                </script></td>
+</tr>
+<tr class="field"><th class="field-name">license:</th><td class="field-body">BSD, see LICENSE for more details.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Eventlet dispatching of <a class="reference external" href="http://pypi.python.org/pypi/blinker">blinker</a> signals.</p>
+<dl class="class">
+<dt id="girclib.gblinker.NamedSignal">
+<em class="property">class </em><tt class="descclassname">girclib.gblinker.</tt><tt class="descname">NamedSignal</tt><big>(</big><em>name</em>, <em>doc=None</em><big>)</big><a class="headerlink" href="#girclib.gblinker.NamedSignal" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="girclib.gblinker.NamedSignal.connect">
+<tt class="descname">connect</tt><big>(</big><em>receiver</em>, <em>sender=ANY</em>, <em>weak=True</em><big>)</big><a class="headerlink" href="#girclib.gblinker.NamedSignal.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect <em>receiver</em> to signal events sent by <em>sender</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>receiver</strong> &#8211; A callable.  Will be invoked by <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send()</span></tt></a> with
+<cite>sender=</cite> as a single positional argument and any **kwargs that
+were provided to a call to <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send()</span></tt></a>.</li>
+<li><strong>sender</strong> &#8211; Any object or <tt class="xref py py-obj docutils literal"><span class="pre">ANY</span></tt>, defaults to <tt class="docutils literal"><span class="pre">ANY</span></tt>.
+Restricts notifications delivered to <em>receiver</em> to only those
+<a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send()</span></tt></a> emissions sent by <em>sender</em>.  If <tt class="docutils literal"><span class="pre">ANY</span></tt>, the receiver
+will always be notified.  A <em>receiver</em> may be connected to
+multiple <em>sender</em> values on the same Signal through multiple calls
+to <a class="reference internal" href="#girclib.gblinker.NamedSignal.connect" title="girclib.gblinker.NamedSignal.connect"><tt class="xref py py-meth docutils literal"><span class="pre">connect()</span></tt></a>.</li>
+<li><strong>weak</strong> &#8211; If true, the Signal will hold a weakref to <em>receiver</em>
+and automatically disconnect when <em>receiver</em> goes out of scope or
+is garbage collected.  Defaults to True.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.gblinker.NamedSignal.connect_via">
+<tt class="descname">connect_via</tt><big>(</big><em>sender</em>, <em>weak=False</em><big>)</big><a class="headerlink" href="#girclib.gblinker.NamedSignal.connect_via" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect the decorated function as a receiver for <em>sender</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sender</strong> &#8211; Any object or <tt class="xref py py-obj docutils literal"><span class="pre">ANY</span></tt>.  The decorated function
+will only receive <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send()</span></tt></a> emissions sent by <em>sender</em>.  If
+<tt class="docutils literal"><span class="pre">ANY</span></tt>, the receiver will always be notified.  A function may be
+decorated multiple times with differing <em>sender</em> values.</li>
+<li><strong>weak</strong> &#8211; If true, the Signal will hold a weakref to the
+decorated function and automatically disconnect when <em>receiver</em>
+goes out of scope or is garbage collected.  Unlike
+<a class="reference internal" href="#girclib.gblinker.NamedSignal.connect" title="girclib.gblinker.NamedSignal.connect"><tt class="xref py py-meth docutils literal"><span class="pre">connect()</span></tt></a>, this defaults to False.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>The decorated function will be invoked by <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send()</span></tt></a> with</dt>
+<dd><cite>sender=</cite> as a single positional argument and any **kwargs that
+were provided to the call to <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send()</span></tt></a>.</dd>
+</dl>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.1.</span></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.gblinker.NamedSignal.connected_to">
+<tt class="descname">connected_to</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#girclib.gblinker.NamedSignal.connected_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a block with the signal temporarily connected to <em>receiver</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>receiver</strong> &#8211; a receiver callable</li>
+<li><strong>sender</strong> &#8211; optional, a sender to filter on</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This is a context manager for use in the <tt class="docutils literal"><span class="pre">with</span></tt> statement.  It can
+be useful in unit tests.  <em>receiver</em> is connected to the signal for
+the duration of the <tt class="docutils literal"><span class="pre">with</span></tt> block, and will be disconnected
+automatically when exiting the block:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">on_ready</span><span class="o">.</span><span class="n">connected_to</span><span class="p">(</span><span class="n">receiver</span><span class="p">):</span>
+   <span class="c"># do stuff</span>
+   <span class="n">on_ready</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.1.</span></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.gblinker.NamedSignal.disconnect">
+<tt class="descname">disconnect</tt><big>(</big><em>receiver</em>, <em>sender=ANY</em><big>)</big><a class="headerlink" href="#girclib.gblinker.NamedSignal.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnect <em>receiver</em> from this signal&#8217;s events.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>receiver</strong> &#8211; a previously <a class="reference internal" href="#girclib.gblinker.NamedSignal.connect" title="girclib.gblinker.NamedSignal.connect"><tt class="xref py py-meth docutils literal"><span class="pre">connected</span></tt></a> callable</li>
+<li><strong>sender</strong> &#8211; a specific sender to disconnect from, or <tt class="xref py py-obj docutils literal"><span class="pre">ANY</span></tt>
+to disconnect from all senders.  Defaults to <tt class="docutils literal"><span class="pre">ANY</span></tt>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.gblinker.NamedSignal.has_receivers_for">
+<tt class="descname">has_receivers_for</tt><big>(</big><em>sender</em><big>)</big><a class="headerlink" href="#girclib.gblinker.NamedSignal.has_receivers_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if there is probably a receiver for <em>sender</em>.</p>
+<p>Performs an optimistic check only.  Does not guarantee that all
+weakly referenced receivers are still alive.  See
+<a class="reference internal" href="#girclib.gblinker.NamedSignal.receivers_for" title="girclib.gblinker.NamedSignal.receivers_for"><tt class="xref py py-meth docutils literal"><span class="pre">receivers_for()</span></tt></a> for a stronger search.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.gblinker.NamedSignal.receivers_for">
+<tt class="descname">receivers_for</tt><big>(</big><em>sender</em><big>)</big><a class="headerlink" href="#girclib.gblinker.NamedSignal.receivers_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate all live receivers listening for <em>sender</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.gblinker.NamedSignal.send">
+<tt class="descname">send</tt><big>(</big><em>*sender</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#girclib.gblinker.NamedSignal.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emit this signal on behalf of <em>sender</em>, passing on **kwargs.</p>
+<p>Returns a list of 2-tuples, pairing receivers with their return
+value. The ordering of receiver notification is undefined.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>*sender</strong> &#8211; Any object or <tt class="xref docutils literal"><span class="pre">None</span></tt>.  If omitted, synonymous
+with <tt class="xref docutils literal"><span class="pre">None</span></tt>.  Only accepts one positional argument.</li>
+<li><strong>**kwargs</strong> &#8211; Data to be sent to receivers.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.gblinker.NamedSignal.temporarily_connected_to">
+<tt class="descname">temporarily_connected_to</tt><big>(</big><em>receiver</em>, <em>sender=ANY</em><big>)</big><a class="headerlink" href="#girclib.gblinker.NamedSignal.temporarily_connected_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>An alias for <a class="reference internal" href="#girclib.gblinker.NamedSignal.connected_to" title="girclib.gblinker.NamedSignal.connected_to"><tt class="xref py py-meth docutils literal"><span class="pre">connected_to()</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>receiver</strong> &#8211; a receiver callable</li>
+<li><strong>sender</strong> &#8211; optional, a sender to filter on</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.9.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 1.1: </span>Renamed to <a class="reference internal" href="#girclib.gblinker.NamedSignal.connected_to" title="girclib.gblinker.NamedSignal.connected_to"><tt class="xref py py-meth docutils literal"><span class="pre">connected_to()</span></tt></a>.  <tt class="docutils literal"><span class="pre">temporarily_connected_to</span></tt>
+will be deprecated in 1.2 and removed in a subsequent version.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="girclib.gblinker.Namespace">
+<em class="property">class </em><tt class="descclassname">girclib.gblinker.</tt><tt class="descname">Namespace</tt><big>(</big><em>*args</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#girclib.gblinker.Namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mapping of signal names to signals.</p>
+<dl class="method">
+<dt id="girclib.gblinker.Namespace.itervaluerefs">
+<tt class="descname">itervaluerefs</tt><big>(</big><big>)</big><a class="headerlink" href="#girclib.gblinker.Namespace.itervaluerefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator that yields the weak references to the values.</p>
+<p>The references are not guaranteed to be &#8216;live&#8217; at the time
+they are used, so the result of calling the references needs
+to be checked before being used.  This can be used to avoid
+creating references that will cause the garbage collector to
+keep the values around longer than needed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.gblinker.Namespace.signal">
+<tt class="descname">signal</tt><big>(</big><em>name</em>, <em>doc=None</em><big>)</big><a class="headerlink" href="#girclib.gblinker.Namespace.signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="#girclib.gblinker.NamedSignal" title="girclib.gblinker.NamedSignal"><tt class="xref py py-class docutils literal"><span class="pre">NamedSignal</span></tt></a> <em>name</em>, creating it if required.</p>
+<p>Repeated calls to this function will return the same signal object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.gblinker.Namespace.valuerefs">
+<tt class="descname">valuerefs</tt><big>(</big><big>)</big><a class="headerlink" href="#girclib.gblinker.Namespace.valuerefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of weak references to the values.</p>
+<p>The references are not guaranteed to be &#8216;live&#8217; at the time
+they are used, so the result of calling the references needs
+to be checked before being used.  This can be used to avoid
+creating references that will cause the garbage collector to
+keep the values around longer than needed.</p>
+</dd></dl>
+
+</dd></dl>
+
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/girclib.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="signals.html"
+                        title="previous chapter">Signals</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="helpers.html"
+                        title="next chapter">girclib.helpers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/gblinker.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="helpers.html" title="girclib.helpers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="signals.html" title="Signals"
+             >previous</a> |</li>
+        <li><a href="index.html">gIRClib v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Pedro Algarvio.
+      Last updated on Mar 25, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

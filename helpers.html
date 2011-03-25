@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>girclib.helpers &mdash; gIRClib v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="gIRClib v0.1 documentation" href="index.html" />
+    <link rel="prev" title="girclib.gblinker" href="gblinker.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gblinker.html" title="girclib.gblinker"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">gIRClib v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <span class="target" id="module-girclib.helpers"></span><div class="section" id="girclib-helpers">
+<h1>girclib.helpers<a class="headerlink" href="#girclib-helpers" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">© 2011 UfSoft.org - <script type="text/javascript">document.write(
+              "<n uers=\"znvygb:crqeb\100nytneivb\056zr\">Crqeb Nytneivb <\057n>".replace(/[a-zA-Z]/g,
+              function(c){
+                return String.fromCharCode(
+                (c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);}));
+                </script></td>
+</tr>
+<tr class="field"><th class="field-name">license:</th><td class="field-body">BSD, see LICENSE for more details.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="girclib.helpers.ascii">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">ascii</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#girclib.helpers.ascii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an ASCII string to a native string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.ctcp_dequote">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">ctcp_dequote</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#girclib.helpers.ctcp_dequote" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.ctcp_extract">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">ctcp_extract</tt><big>(</big><em>message</em><big>)</big><a class="headerlink" href="#girclib.helpers.ctcp_extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract CTCP data from a string.</p>
+<dl class="docutils">
+<dt>Returns a dictionary with two items:</dt>
+<dd><ul class="first last simple">
+<li><strong>extended</strong>: a list of CTCP <tt class="docutils literal"><span class="pre">(tag,</span> <span class="pre">data)</span></tt> tuples</li>
+<li><strong>normal</strong>: a list of strings which were not inside a CTCP delimiter</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.ctcp_quote">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">ctcp_quote</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#girclib.helpers.ctcp_quote" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.ctcp_stringify">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">ctcp_stringify</tt><big>(</big><em>messages</em><big>)</big><a class="headerlink" href="#girclib.helpers.ctcp_stringify" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>messages</strong> (<tt class="docutils literal"><span class="pre">list</span></tt>) &#8211; a list of extended messages.  An extended message is a
+<tt class="docutils literal"><span class="pre">(tag,</span> <span class="pre">data)</span></tt> tuple, where &#8216;data&#8217; may be <tt class="xref docutils literal"><span class="pre">None</span></tt>, a
+<tt class="docutils literal"><span class="pre">string</span></tt>, or a <tt class="docutils literal"><span class="pre">list</span></tt> of strings to be joined with
+white-space.</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><tt class="docutils literal"><span class="pre">str</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><em>Stringified</em> message</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.low_dequote">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">low_dequote</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#girclib.helpers.low_dequote" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.low_quote">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">low_quote</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#girclib.helpers.low_quote" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.native">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">native</tt><big>(</big><em>data</em>, <em>encoding='utf-8'</em><big>)</big><a class="headerlink" href="#girclib.helpers.native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert anything to native strings</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.nick_from_netmask">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">nick_from_netmask</tt><big>(</big><em>netmask</em><big>)</big><a class="headerlink" href="#girclib.helpers.nick_from_netmask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the nickname from a netmask</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><tt class="docutils literal"><span class="pre">str</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Returns the nickname part of a netmask.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.parse_modes">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">parse_modes</tt><big>(</big><em>modes</em>, <em>params</em>, <em>param_modes=(''</em>, <em>'')</em><big>)</big><a class="headerlink" href="#girclib.helpers.parse_modes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse an IRC mode string.</p>
+<p>The mode string is parsed into two lists of mode changes (added and
+removed), with each mode change represented as <cite>(mode, param)</cite> where mode
+is the mode character, and param is the parameter passed for that mode, or
+<cite>None</cite> if no parameter is required.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>modes</strong> (<cite>str</cite>) &#8211; Modes string to parse.</li>
+<li><strong>params</strong> (<cite>list</cite>) &#8211; Parameters specified along with <cite>modes</cite>.</li>
+<li><strong>param_modes</strong> (<cite>(str, str)</cite>) &#8211; A pair of strings (<cite>(add, remove)</cite>) that indicate which
+modes take parameters when added or removed.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Two lists of mode changes, one for modes added and the other for
+modes removed respectively, mode changes in each list are
+represented as <cite>(mode, param)</cite>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.parse_raw_irc_command">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">parse_raw_irc_command</tt><big>(</big><em>element</em><big>)</big><a class="headerlink" href="#girclib.helpers.parse_raw_irc_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function parses a raw irc command and returns a tuple
+of (prefix, command, args).
+The following is a pseudo BNF of the input text:</p>
+<div class="highlight-python"><pre>&lt;message&gt;  ::= [':' &lt;prefix&gt; &lt;SPACE&gt; ] &lt;command&gt; &lt;params&gt; &lt;crlf&gt;
+&lt;prefix&gt;   ::= &lt;servername&gt; | &lt;nick&gt; [ '!' &lt;user&gt; ] [ '@' &lt;host&gt; ]
+&lt;command&gt;  ::= &lt;letter&gt; { &lt;letter&gt; } | &lt;number&gt; &lt;number&gt; &lt;number&gt;
+&lt;SPACE&gt;    ::= ' ' { ' ' }
+&lt;params&gt;   ::= &lt;SPACE&gt; [ ':' &lt;trailing&gt; | &lt;middle&gt; &lt;params&gt; ]
+
+&lt;middle&gt;   ::= &lt;Any *non-empty* sequence of octets not including SPACE
+               or NUL or CR or LF, the first of which may not be ':'&gt;
+&lt;trailing&gt; ::= &lt;Any, possibly *empty*, sequence of octets not including
+               NUL or CR or LF&gt;
+
+&lt;crlf&gt;     ::= CR LF</pre>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.setup_logging">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">setup_logging</tt><big>(</big><em>format=None</em>, <em>level=5</em><big>)</big><a class="headerlink" href="#girclib.helpers.setup_logging" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.split">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">split</tt><big>(</big><em>text</em>, <em>length=80</em><big>)</big><a class="headerlink" href="#girclib.helpers.split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split a string into multiple lines.</p>
+<p>White-space near <tt class="docutils literal"><span class="pre">str[length]</span></tt> will be preferred as a breaking point.
+&#8220;<tt class="docutils literal"><span class="pre">\n</span></tt>&#8221; will also be used as a breaking point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>str</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The string to split.</li>
+<li><strong>length</strong> (<tt class="docutils literal"><span class="pre">int</span></tt>) &#8211; The maximum length which will be allowed for any string in
+the result.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">list</span></tt> of <tt class="docutils literal"><span class="pre">str</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.to_bytes">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">to_bytes</tt><big>(</big><em>data</em>, <em>encoding='utf-8'</em><big>)</big><a class="headerlink" href="#girclib.helpers.to_bytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert anything to native strings</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.helpers.to_uni">
+<tt class="descclassname">girclib.helpers.</tt><tt class="descname">to_uni</tt><big>(</big><em>x</em>, <em>encoding='utf-8'</em><big>)</big><a class="headerlink" href="#girclib.helpers.to_uni" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert anything to unicode</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/girclib.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gblinker.html"
+                        title="previous chapter">girclib.gblinker</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/helpers.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gblinker.html" title="girclib.gblinker"
+             >previous</a> |</li>
+        <li><a href="index.html">gIRClib v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Pedro Algarvio.
+      Last updated on Mar 25, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

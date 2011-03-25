@@ -1,0 +1,990 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Signals &mdash; gIRClib v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="gIRClib v0.1 documentation" href="index.html" />
+    <link rel="next" title="girclib.gblinker" href="gblinker.html" />
+    <link rel="prev" title="gEvent IRC Implementation" href="irc.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gblinker.html" title="girclib.gblinker"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="irc.html" title="gEvent IRC Implementation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">gIRClib v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="signals">
+<span id="id1"></span><h1>Signals<a class="headerlink" href="#signals" title="Permalink to this headline">¶</a></h1>
+<p>Signaling support is provided by the excellent <a class="reference external" href="http://pypi.python.org/pypi/blinker">blinker</a> library.</p>
+<p>What are signals?  Signals help you decouple applications by sending
+notifications when actions occur elsewhere in the core framework or
+another decoupled part of the application.  In short, signals allow certain
+senders to notify subscribers that something happened.</p>
+<p>gIRClib comes with a bunch of signals.
+Also keep in mind that signals are intended to notify subscribers
+and should not encourage subscribers to modify data.</p>
+<p>The big advantage of signals over handlers is that you can safely
+subscribe to them for the split of a second.  These temporary subscriptions
+are helpful for unittesting for example.</p>
+<div class="section" id="subscribing-to-signals">
+<h2>Subscribing to Signals<a class="headerlink" href="#subscribing-to-signals" title="Permalink to this headline">¶</a></h2>
+<p>To subscribe to a signal, you can use the
+<tt class="xref py py-meth docutils literal"><span class="pre">connect()</span></tt> method of a signal.  The first
+argument is the function that should be called when the signal is emitted,
+the optional second argument specifies a sender.  To unsubscribe from a
+signal, you can use the <tt class="xref py py-meth docutils literal"><span class="pre">disconnect()</span></tt> method.</p>
+</div>
+<div class="section" id="decorator-based-signal-subscriptions">
+<h2>Decorator Based Signal Subscriptions<a class="headerlink" href="#decorator-based-signal-subscriptions" title="Permalink to this headline">¶</a></h2>
+<p>With Blinker 1.1 you can also easily subscribe to signals by using the
+<tt class="xref py py-meth docutils literal"><span class="pre">connect()</span></tt> decorator:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">girclib.signals</span> <span class="kn">import</span> <span class="n">on_connected</span>
+
+<span class="nd">@on_connected.connect</span>
+<span class="k">def</span> <span class="nf">on_connected_signal</span><span class="p">(</span><span class="n">sender</span><span class="p">):</span>
+  <span class="k">print</span> <span class="s">&#39;Connected!&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="girclib-signaling">
+<h1>gIRClib Signaling<a class="headerlink" href="#girclib-signaling" title="Permalink to this headline">¶</a></h1>
+<p>Signaling is used throughout the library to handle the several actions needed
+to interact with an IRC server.</p>
+<span class="target" id="module-girclib.signals"></span><div class="section" id="id2">
+<h2>Signals<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="girclib.signals.on_connected">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_connected</tt><big>(</big><em>emitter</em><big>)</big><a class="headerlink" href="#girclib.signals.on_connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called once connected to the IRC network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter, in this case a
+<tt class="xref py py-class docutils literal"><span class="pre">IRCTransport</span></tt> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_quited">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_quited</tt><big>(</big><em>emitter</em><big>)</big><a class="headerlink" href="#girclib.signals.on_quited" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called once quited from the IRC network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter, in this case a
+<tt class="xref py py-class docutils literal"><span class="pre">IRCTransport</span></tt> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_disconnected">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_disconnected</tt><big>(</big><em>emitter</em><big>)</big><a class="headerlink" href="#girclib.signals.on_disconnected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called once disconnected from the IRC network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter, in this case a
+<tt class="xref py py-class docutils literal"><span class="pre">IRCTransport</span></tt> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_privmsg">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_privmsg</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_privmsg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when I receive a message from a user to me.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user the message is coming from.</li>
+<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The message.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_chanmsg">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_chanmsg</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>user=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_chanmsg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when I receive a message from a channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the message is coming from.</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user who sent the message.</li>
+<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The message.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_joined">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_joined</tt><big>(</big><em>emitter</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_joined" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the client(we) finish joining a channel.  The <tt class="docutils literal"><span class="pre">channel</span></tt> has the
+starting character (<tt class="docutils literal"><span class="pre">#</span></tt>, <tt class="docutils literal"><span class="pre">&amp;</span></tt>, <tt class="docutils literal"><span class="pre">!</span></tt> or <tt class="docutils literal"><span class="pre">+</span></tt>) intact.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel joined</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_left">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_left</tt><big>(</big><em>emitter</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the client(we) have left a channel.  The <tt class="docutils literal"><span class="pre">channel</span></tt> has the
+starting character (<tt class="docutils literal"><span class="pre">#</span></tt>, <tt class="docutils literal"><span class="pre">&amp;</span></tt>, <tt class="docutils literal"><span class="pre">!</span></tt> or <tt class="docutils literal"><span class="pre">+</span></tt>) intact.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel left</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_notice">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_notice</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_notice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when I have a notice from a user to me or a channel.</p>
+<p>If the client makes any automated replies, it must not do so in response to a
+<tt class="docutils literal"><span class="pre">NOTICE</span></tt> message, per the RFC:</p>
+<div class="highlight-python"><pre>The difference between NOTICE and PRIVMSG is that
+automatic replies MUST NEVER be sent in response to a
+NOTICE message. [...] The object of this rule is to avoid
+loops between clients automatically sending something in
+response to something it received.</pre>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the user sending the notice</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel where the notice is coming from</li>
+<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the notice message</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_mode_changed">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_mode_changed</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>set=None</em>, <em>modes=None</em>, <em>args=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_mode_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when users or channel&#8217;s modes are changed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user and hostmask which instigated this change.</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel where the modes are changed. If args is
+empty the channel for which the modes are changing. If the
+changes are at server level it could be equal to <tt class="docutils literal"><span class="pre">user</span></tt>.</li>
+<li><strong>set</strong> (<tt class="docutils literal"><span class="pre">bool</span></tt>) &#8211; True if the mode(s) is being added, False if it is being removed.
+If some modes are added and others removed at the same time this
+function will be called twice, the first time with all the added
+modes, the second with the removed ones. (To change this behaviour
+override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt> method)</li>
+<li><strong>modes</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The mode or modes which are being changed.</li>
+<li><strong>args</strong> (<tt class="docutils literal"><span class="pre">tuple</span></tt>) &#8211; Any additional information required for the mode change.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_pong">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_pong</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>secs=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_pong" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emitted with the results of a CTCP PING query.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user.</li>
+<li><strong>secs</strong> (<tt class="docutils literal"><span class="pre">float</span></tt>) &#8211; Number of seconds</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_signed_on">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_signed_on</tt><big>(</big><em>emitter</em><big>)</big><a class="headerlink" href="#girclib.signals.on_signed_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called after successfully signing on to the server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_kicked">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_kicked</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>kicker=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_kicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when I am kicked from a channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel being kicked from.</li>
+<li><strong>kicker</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user that kicked.</li>
+<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The kick message.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_nick_changed">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_nick_changed</tt><big>(</big><em>emitter</em>, <em>nickname=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_nick_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when my nick has been changed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>nickname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The nickname.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_user_joined">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_user_joined</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_user_joined" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when I see another user joining a channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the message is coming from.</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The joining.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_user_left">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_user_left</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_user_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when I see another user joining a channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the message is coming from.</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The joining.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_user_quit">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_user_quit</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_user_quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when I see another user disconnect from the network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user quiting.</li>
+<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The quit message.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_user_kicked">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_user_kicked</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>kicked=None</em>, <em>kicker=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_user_kicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when I observe someone else being kicked from a channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>kicked</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user being kicked.</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the user is being kicked from.</li>
+<li><strong>message</strong> &#8211; The kick message.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_action">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_action</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when I see a user perform an <tt class="docutils literal"><span class="pre">ACTION</span></tt> on a channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user that performed the <tt class="docutils literal"><span class="pre">ACTION</span></tt></li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the <tt class="docutils literal"><span class="pre">ACTION</span></tt> is coming from.</li>
+<li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The <tt class="docutils literal"><span class="pre">ACTION</span></tt> data.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_topic_changed">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_topic_changed</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>new_topic=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_topic_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>In channel, user changed the topic to <tt class="docutils literal"><span class="pre">new_topic</span></tt>. Also called when first
+joining a channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user changing the topic.</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the topic is being changed.</li>
+<li><strong>new_topic</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel&#8217;s new topic.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_user_renamed">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_user_renamed</tt><big>(</big><em>emitter</em>, <em>oldname=None</em>, <em>newname=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_user_renamed" title="Permalink to this definition">¶</a></dt>
+<dd><p>A user changed their name from oldname to newname.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>oldname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The old name.</li>
+<li><strong>newname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The new name.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_motd">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_motd</tt><big>(</big><em>emitter</em>, <em>motd=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_motd" title="Permalink to this definition">¶</a></dt>
+<dd><p>I received a message-of-the-day banner from the server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>motd</strong> (<tt class="docutils literal"><span class="pre">list</span></tt>) &#8211; list of strings, where each string was sent as a separate
+message from the server.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>To display and get a nicely formatted string, you might want to use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">motd</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_channel_users_available">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_channel_users_available</tt><big>(</big><em>emitter</em>, <em>channel_users=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_channel_users_available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emitted when the list of channel users is available.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>channel_users</strong> (<tt class="docutils literal"><span class="pre">list</span></tt>) &#8211; The channel users list.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_nickname_in_use">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_nickname_in_use</tt><big>(</big><em>emitter</em>, <em>nickname=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_nickname_in_use" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when we try to register or change to a nickname that is already taken.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>nickname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The nickname which is in use.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_erroneous_nickname">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_erroneous_nickname</tt><big>(</big><em>emitter</em>, <em>nickname=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_erroneous_nickname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when we try to register or change to an illegal nickname.</p>
+<p>The server should send this reply when the nickname contains any disallowed
+characters.  The bot will stall, waiting for <tt class="docutils literal"><span class="pre">RPL_WELCOME</span></tt>, if we don&#8217;t handle
+this during sign-on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body"><p class="first">The method uses the spelling <em>erroneus</em>, as it appears in the RFC,
+section 6.1.</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>nickname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The erroneous nickname.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_password_mismatch">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_password_mismatch</tt><big>(</big><em>emitter</em><big>)</big><a class="headerlink" href="#girclib.signals.on_password_mismatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emitted when the login was incorrect.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_banned_from_channel">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_banned_from_channel</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_banned_from_channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emitted when the client has been banned from a channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The banned channel.</li>
+<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The banned message.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_channels_available">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_channels_available</tt><big>(</big><em>emitter</em>, <em>channels=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_channels_available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emitted after issuing a LIST command and when the complete list of channels a
+server handles is available.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>channels</strong> (<tt class="docutils literal"><span class="pre">list</span></tt>) &#8211; A list of tuples in the form of (channel_name, users_count, topic)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="section" id="server-queries">
+<h3>Server Queries<a class="headerlink" href="#server-queries" title="Permalink to this headline">¶</a></h3>
+<p>These are queries from the IRC server we&#8217;re connecting to to this IRC client.</p>
+<div class="section" id="id3">
+<h4>Signals<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="girclib.signals.on_ctcp_query_ping">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_ctcp_query_ping</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_ctcp_query_ping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emitted when receiving a PING query.</p>
+<p>A CTCP reply must be made with the data received.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the nickname netmask querying</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
+<li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_ctcp_query_finger">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_ctcp_query_finger</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_ctcp_query_finger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emitted when receiving a FINGER query.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the nickname netmask querying</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
+<li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_ctcp_query_version">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_ctcp_query_version</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_ctcp_query_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emitted when receiving a VERSION query.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the nickname netmask querying</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
+<li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_ctcp_query_source">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_ctcp_query_source</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_ctcp_query_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emitted when receiving a SOURCE query.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the nickname netmask querying</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
+<li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_ctcp_query_userinfo">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_ctcp_query_userinfo</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_ctcp_query_userinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emitted when receiving a SOURCE query.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the nickname netmask querying</li>
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
+<li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="server-replies">
+<h3>Server Replies<a class="headerlink" href="#server-replies" title="Permalink to this headline">¶</a></h3>
+<p>These are replies from the IRC server we&#8217;re connecting to to this IRC client.</p>
+<div class="section" id="id4">
+<h4>Signals<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="girclib.signals.on_rpl_created">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_created</tt><big>(</big><em>emitter</em>, <em>when=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_created" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with creation date information about the server, usually at logon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>when</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; A string describing when the server was created, probably.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_rpl_yourhost">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_yourhost</tt><big>(</big><em>emitter</em>, <em>info=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_yourhost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with daemon information about the server, usually at logon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>when</strong> &#8211; A string describing what software the server is running, probably.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_rpl_myinfo">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_myinfo</tt><big>(</big><em>emitter</em>, <em>servername=None</em>, <em>version=None</em>, <em>umodes=None</em>, <em>cmodes=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_myinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with information about the server, usually at logon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>servername</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The hostname of this server.</li>
+<li><strong>version</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; A description of what software this server runs.</li>
+<li><strong>umodes</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; All the available user modes.</li>
+<li><strong>cmodes</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; All the available channel modes.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_rpl_luserme">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_luserme</tt><big>(</big><em>emitter</em>, <em>info=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_luserme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with information about the server connected to.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; A plain-text string describing the number of users and servers
+connected to this server.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_rpl_luserclient">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_luserclient</tt><big>(</big><em>emitter</em>, <em>info=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_luserclient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with information about the number of connections, usually at logon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; A description of the number of clients and servers
+connected to the network, probably.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_rpl_luserchannels">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_luserchannels</tt><big>(</big><em>emitter</em>, <em>channels=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_luserchannels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with the number of channels existing on the server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>channels</strong> (<tt class="docutils literal"><span class="pre">int</span></tt>) &#8211; Number of channels existing on the server.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_rpl_luserop">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_luserop</tt><big>(</big><em>emitter</em>, <em>channels=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_luserop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with the number of ops logged on to the server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ops</strong> (<tt class="docutils literal"><span class="pre">int</span></tt>) &#8211; Number of operators logged on to the server.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_rpl_bounce">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_bounce</tt><big>(</big><em>emitter</em>, <em>info=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_bounce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with information about where the client should reconnect.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; A plain-text description of the address that should be connected to.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_rpl_isupport">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_isupport</tt><big>(</big><em>emitter</em>, <em>options=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_isupport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with various information about what the server supports.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>options</strong> (<tt class="docutils literal"><span class="pre">list</span></tt> of <tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; Descriptions of features or limits of the server, possibly in
+the form &#8220;NAME=VALUE&#8221;.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_rpl_topic">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_topic</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>topic=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with the initial information about the channel&#8217;s topic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel name.</li>
+<li><strong>topic</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel&#8217;s topic.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="girclib.signals.on_rpl_notopic">
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_notopic</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_notopic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with the initial information about the channel&#8217;s topic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel name.</li>
+<li><strong>topic</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel&#8217;s topic.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/girclib.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Signals</a><ul>
+<li><a class="reference internal" href="#subscribing-to-signals">Subscribing to Signals</a></li>
+<li><a class="reference internal" href="#decorator-based-signal-subscriptions">Decorator Based Signal Subscriptions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#girclib-signaling">gIRClib Signaling</a><ul>
+<li><a class="reference internal" href="#id2">Signals</a><ul>
+<li><a class="reference internal" href="#server-queries">Server Queries</a><ul>
+<li><a class="reference internal" href="#id3">Signals</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#server-replies">Server Replies</a><ul>
+<li><a class="reference internal" href="#id4">Signals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="irc.html"
+                        title="previous chapter">gEvent IRC Implementation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gblinker.html"
+                        title="next chapter">girclib.gblinker</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/signals.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gblinker.html" title="girclib.gblinker"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="irc.html" title="gEvent IRC Implementation"
+             >previous</a> |</li>
+        <li><a href="index.html">gIRClib v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Pedro Algarvio.
+      Last updated on Mar 25, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

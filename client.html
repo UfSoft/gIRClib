@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gIRClib IRC Client &mdash; gIRClib v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="gIRClib v0.1 documentation" href="index.html" />
+    <link rel="next" title="gEvent IRC Implementation" href="irc.html" />
+    <link rel="prev" title="Welcome to gIRClib’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="irc.html" title="gEvent IRC Implementation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to gIRClib’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">gIRClib v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-girclib.client">
+<span id="girclib-irc-client"></span><h1>gIRClib IRC Client<a class="headerlink" href="#module-girclib.client" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="girclib.client.IRCClient">
+<em class="property">class </em><tt class="descclassname">girclib.client.</tt><tt class="descname">IRCClient</tt><big>(</big><em>host=''</em>, <em>port=6667</em>, <em>nickname='girclib'</em>, <em>username=None</em>, <em>realname='gIRClib'</em>, <em>password=None</em>, <em>encoding='utf-8'</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="irc.html#girclib.irc.BaseIRCClient" title="girclib.irc.BaseIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">girclib.irc.BaseIRCClient</span></tt></a></p>
+<dl class="method">
+<dt id="girclib.client.IRCClient.connect">
+<tt class="descname">connect</tt><big>(</big><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.connect_signals">
+<tt class="descname">connect_signals</tt><big>(</big><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.connect_signals" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_chanmsg">
+<tt class="descname">on_chanmsg</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>user=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_chanmsg" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_chanmsg" title="girclib.signals.on_chanmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_chanmsg()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_channel_users_available">
+<tt class="descname">on_channel_users_available</tt><big>(</big><em>emitter</em>, <em>channel_users=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_channel_users_available" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_channel_users_available" title="girclib.signals.on_channel_users_available"><tt class="xref py py-meth docutils literal"><span class="pre">on_channel_users_available()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_connected">
+<tt class="descname">on_connected</tt><big>(</big><em>emitter</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_connected" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_ctcp_query_finger">
+<tt class="descname">on_ctcp_query_finger</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_ctcp_query_finger" title="Permalink to this definition">¶</a></dt>
+<dd><p>In case you implement a finger reply, a response should be made like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">emitter</span><span class="o">.</span><span class="n">ctcp_make_reply</span><span class="p">(</span><span class="n">nick_from_netmask</span><span class="p">(</span><span class="n">user</span><span class="p">),</span> <span class="p">[(</span><span class="s">&#39;FINGER&#39;</span><span class="p">,</span> <span class="n">reply</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_finger" title="girclib.signals.on_ctcp_query_finger"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_finger()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_ctcp_query_ping">
+<tt class="descname">on_ctcp_query_ping</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_ctcp_query_ping" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_ping" title="girclib.signals.on_ctcp_query_ping"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_ping()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_ctcp_query_source">
+<tt class="descname">on_ctcp_query_source</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_ctcp_query_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_source" title="girclib.signals.on_ctcp_query_source"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_source()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_ctcp_query_userinfo">
+<tt class="descname">on_ctcp_query_userinfo</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_ctcp_query_userinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_userinfo" title="girclib.signals.on_ctcp_query_userinfo"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_userinfo()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_ctcp_query_version">
+<tt class="descname">on_ctcp_query_version</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_ctcp_query_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_version" title="girclib.signals.on_ctcp_query_version"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_version()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_erroneous_nickname">
+<tt class="descname">on_erroneous_nickname</tt><big>(</big><em>emitter</em>, <em>nickname=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_erroneous_nickname" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_erroneous_nickname" title="girclib.signals.on_erroneous_nickname"><tt class="xref py py-meth docutils literal"><span class="pre">on_erroneous_nickname()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_joined">
+<tt class="descname">on_joined</tt><big>(</big><em>emitter</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_joined" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_joined" title="girclib.signals.on_joined"><tt class="xref py py-meth docutils literal"><span class="pre">on_joined()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_kicked">
+<tt class="descname">on_kicked</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>kicker=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_kicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_kicked" title="girclib.signals.on_kicked"><tt class="xref py py-meth docutils literal"><span class="pre">on_kicked()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_left">
+<tt class="descname">on_left</tt><big>(</big><em>emitter</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_left" title="girclib.signals.on_left"><tt class="xref py py-meth docutils literal"><span class="pre">on_left()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_mode_changed">
+<tt class="descname">on_mode_changed</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>set=None</em>, <em>modes=None</em>, <em>args=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_mode_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_mode_changed" title="girclib.signals.on_mode_changed"><tt class="xref py py-meth docutils literal"><span class="pre">on_mode_changed()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_motd">
+<tt class="descname">on_motd</tt><big>(</big><em>emitter</em>, <em>motd=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_motd" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_motd" title="girclib.signals.on_motd"><tt class="xref py py-meth docutils literal"><span class="pre">on_motd()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_nick_changed">
+<tt class="descname">on_nick_changed</tt><big>(</big><em>emitter</em>, <em>nickname=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_nick_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_nick_changed" title="girclib.signals.on_nick_changed"><tt class="xref py py-meth docutils literal"><span class="pre">on_nick_changed()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_nickname_in_use">
+<tt class="descname">on_nickname_in_use</tt><big>(</big><em>emitter</em>, <em>nickname=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_nickname_in_use" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_nickname_in_use" title="girclib.signals.on_nickname_in_use"><tt class="xref py py-meth docutils literal"><span class="pre">on_nickname_in_use()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_notice">
+<tt class="descname">on_notice</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_notice" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_notice" title="girclib.signals.on_notice"><tt class="xref py py-meth docutils literal"><span class="pre">on_notice()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_password_mismatch">
+<tt class="descname">on_password_mismatch</tt><big>(</big><em>emitter</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_password_mismatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_password_mismatch" title="girclib.signals.on_password_mismatch"><tt class="xref py py-meth docutils literal"><span class="pre">on_password_mismatch()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_privmsg">
+<tt class="descname">on_privmsg</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_privmsg" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_privmsg" title="girclib.signals.on_privmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_privmsg()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_rpl_bounce">
+<tt class="descname">on_rpl_bounce</tt><big>(</big><em>emitter</em>, <em>info=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_rpl_bounce" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_rpl_bounce" title="girclib.signals.on_rpl_bounce"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_bounce()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_rpl_created">
+<tt class="descname">on_rpl_created</tt><big>(</big><em>emitter</em>, <em>when=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_rpl_created" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_rpl_created" title="girclib.signals.on_rpl_created"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_created()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_rpl_isupport">
+<tt class="descname">on_rpl_isupport</tt><big>(</big><em>emitter</em>, <em>options=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_rpl_isupport" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_rpl_isupport" title="girclib.signals.on_rpl_isupport"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_isupport()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_rpl_luserchannels">
+<tt class="descname">on_rpl_luserchannels</tt><big>(</big><em>emitter</em>, <em>channels=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_rpl_luserchannels" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_rpl_luserchannels" title="girclib.signals.on_rpl_luserchannels"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_luserchannels()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_rpl_luserclient">
+<tt class="descname">on_rpl_luserclient</tt><big>(</big><em>emitter</em>, <em>info=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_rpl_luserclient" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_rpl_luserclient" title="girclib.signals.on_rpl_luserclient"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_luserclient()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_rpl_luserme">
+<tt class="descname">on_rpl_luserme</tt><big>(</big><em>emitter</em>, <em>info=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_rpl_luserme" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_rpl_luserme" title="girclib.signals.on_rpl_luserme"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_luserme()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_rpl_luserop">
+<tt class="descname">on_rpl_luserop</tt><big>(</big><em>emitter</em>, <em>ops=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_rpl_luserop" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_rpl_luserop" title="girclib.signals.on_rpl_luserop"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_luserop()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_rpl_myinfo">
+<tt class="descname">on_rpl_myinfo</tt><big>(</big><em>emitter</em>, <em>servername=None</em>, <em>version=None</em>, <em>umodes=None</em>, <em>cmodes=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_rpl_myinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_rpl_myinfo" title="girclib.signals.on_rpl_myinfo"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_myinfo()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_rpl_notopic">
+<tt class="descname">on_rpl_notopic</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_rpl_notopic" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_rpl_notopic" title="girclib.signals.on_rpl_notopic"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_notopic()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_rpl_topic">
+<tt class="descname">on_rpl_topic</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>new_topic=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_rpl_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_rpl_topic" title="girclib.signals.on_rpl_topic"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_topic()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_rpl_yourhost">
+<tt class="descname">on_rpl_yourhost</tt><big>(</big><em>emitter</em>, <em>info=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_rpl_yourhost" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_rpl_yourhost" title="girclib.signals.on_rpl_yourhost"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_yourhost()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_signed_on">
+<tt class="descname">on_signed_on</tt><big>(</big><em>emitter</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_signed_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Here you can join channels for example</p>
+<p>See <a class="reference internal" href="signals.html#girclib.signals.on_signed_on" title="girclib.signals.on_signed_on"><tt class="xref py py-meth docutils literal"><span class="pre">on_signed_on()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_topic_changed">
+<tt class="descname">on_topic_changed</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>new_topic=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_topic_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_topic_changed" title="girclib.signals.on_topic_changed"><tt class="xref py py-meth docutils literal"><span class="pre">on_topic_changed()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_user_joined">
+<tt class="descname">on_user_joined</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>user=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_user_joined" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_user_joined" title="girclib.signals.on_user_joined"><tt class="xref py py-meth docutils literal"><span class="pre">on_user_joined()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_user_kicked">
+<tt class="descname">on_user_kicked</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>kicked=None</em>, <em>kicker=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_user_kicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_user_kicked" title="girclib.signals.on_user_kicked"><tt class="xref py py-meth docutils literal"><span class="pre">on_user_kicked()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_user_left">
+<tt class="descname">on_user_left</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>user=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_user_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_user_left" title="girclib.signals.on_user_left"><tt class="xref py py-meth docutils literal"><span class="pre">on_user_left()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_user_quit">
+<tt class="descname">on_user_quit</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_user_quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_user_quit" title="girclib.signals.on_user_quit"><tt class="xref py py-meth docutils literal"><span class="pre">on_user_quit()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.client.IRCClient.on_user_renamed">
+<tt class="descname">on_user_renamed</tt><big>(</big><em>emitter</em>, <em>oldname=None</em>, <em>newname=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_user_renamed" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_user_renamed" title="girclib.signals.on_user_renamed"><tt class="xref py py-meth docutils literal"><span class="pre">on_user_renamed()</span></tt></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/girclib.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to gIRClib&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="irc.html"
+                        title="next chapter">gEvent IRC Implementation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/client.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="irc.html" title="gEvent IRC Implementation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to gIRClib’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">gIRClib v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Pedro Algarvio.
+      Last updated on Mar 25, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

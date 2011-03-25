@@ -1,0 +1,1187 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gEvent IRC Implementation &mdash; gIRClib v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="gIRClib v0.1 documentation" href="index.html" />
+    <link rel="next" title="Signals" href="signals.html" />
+    <link rel="prev" title="gIRClib IRC Client" href="client.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="signals.html" title="Signals"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="client.html" title="gIRClib IRC Client"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">gIRClib v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-girclib.irc">
+<span id="gevent-irc-implementation"></span><h1>gEvent IRC Implementation<a class="headerlink" href="#module-girclib.irc" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="girclib.irc.IRCTransport">
+<em class="property">class </em><tt class="descclassname">girclib.irc.</tt><tt class="descname">IRCTransport</tt><a class="headerlink" href="#girclib.irc.IRCTransport" title="Permalink to this definition">¶</a></dt>
+<dd><p>IRC transport implementation, responsible for connecting, receiving and
+sending data to and from an IRC server.</p>
+<dl class="method">
+<dt id="girclib.irc.IRCTransport.connect">
+<tt class="descname">connect</tt><big>(</big><em>network_host</em>, <em>network_port=6667</em>, <em>use_ssl=False</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCTransport.connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCTransport.disconnect">
+<tt class="descname">disconnect</tt><big>(</big><big>)</big><a class="headerlink" href="#girclib.irc.IRCTransport.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCTransport.on_data_available">
+<tt class="descname">on_data_available</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCTransport.on_data_available" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCTransport.send">
+<tt class="descname">send</tt><big>(</big><em>msg</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCTransport.send" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="girclib.irc.ServerSupportedFeatures">
+<em class="property">class </em><tt class="descclassname">girclib.irc.</tt><tt class="descname">ServerSupportedFeatures</tt><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">girclib.helpers._CommandDispatcherMixin</span></tt></p>
+<p>Handle ISUPPORT messages.</p>
+<p>Feature names match those in the ISUPPORT RFC draft identically.</p>
+<p>Information regarding the specifics of ISUPPORT was gleaned from
+<cite>draft-brocklesby-irc-isupport-03.txt</cite>.</p>
+<dl class="classmethod">
+<dt id="girclib.irc.ServerSupportedFeatures._split_param_args">
+<em class="property">classmethod </em><tt class="descname">_split_param_args</tt><big>(</big><em>params</em>, <em>value_processor=None</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures._split_param_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split ISUPPORT parameter arguments.</p>
+<p>Values can optionally be processed by <tt class="docutils literal"><span class="pre">value_processor</span></tt>.</p>
+<p>For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ServerSupportedFeatures</span><span class="o">.</span><span class="n">_split_param_args</span><span class="p">([</span><span class="s">&#39;A:1&#39;</span><span class="p">,</span> <span class="s">&#39;B:2&#39;</span><span class="p">])</span>
+<span class="go">((&#39;A&#39;, &#39;1&#39;), (&#39;B&#39;, &#39;2&#39;))</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value_processor</strong> (<tt class="docutils literal"><span class="pre">callable</span></tt> taking <tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; Callable to process argument values, or <tt class="xref docutils literal"><span class="pre">None</span></tt>
+to perform no processing</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><tt class="docutils literal"><span class="pre">list</span></tt> of <tt class="docutils literal"><span class="pre">(str,</span> <span class="pre">object)</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Sequence of <tt class="docutils literal"><span class="pre">(name,</span> <span class="pre">processed_value)</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="girclib.irc.ServerSupportedFeatures._unescape_param_value">
+<em class="property">classmethod </em><tt class="descname">_unescape_param_value</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures._unescape_param_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Un-escape an <tt class="docutils literal"><span class="pre">ISUPPORT</span></tt> parameter.</p>
+<p>The only form of supported escape is <tt class="docutils literal"><span class="pre">\xHH</span></tt>, where HH must be a valid
+2-digit hexadecimal number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><tt class="docutils literal"><span class="pre">str</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="girclib.irc.ServerSupportedFeatures._split_param">
+<em class="property">classmethod </em><tt class="descname">_split_param</tt><big>(</big><em>param</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures._split_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split an ISUPPORT parameter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><tt class="docutils literal"><span class="pre">(str,</span> <span class="pre">list)</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="docutils literal"><span class="pre">(key,</span> <span class="pre">arguments)</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="girclib.irc.ServerSupportedFeatures._parse_prefix_param">
+<em class="property">classmethod </em><tt class="descname">_parse_prefix_param</tt><big>(</big><em>prefix</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures._parse_prefix_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the ISUPPORT &#8220;PREFIX&#8221; parameter.</p>
+<p>The order in which the parameter arguments appear is significant, the
+earlier a mode appears the more privileges it gives.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><tt class="docutils literal"><span class="pre">dict</span></tt> mapping <tt class="docutils literal"><span class="pre">str</span></tt> to <tt class="docutils literal"><span class="pre">(str,</span> <span class="pre">int)</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">A dictionary mapping a mode character to a two-tuple of
+<tt class="docutils literal"><span class="pre">(symbol,</span> <span class="pre">priority)</span></tt>, the lower a priority (the lowest being
+<tt class="docutils literal"><span class="pre">0</span></tt>) the more privileges it gives</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="girclib.irc.ServerSupportedFeatures._parse_chan_modes_param">
+<em class="property">classmethod </em><tt class="descname">_parse_chan_modes_param</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures._parse_chan_modes_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the ISUPPORT &#8220;CHANMODES&#8221; parameter.</p>
+<p>See <tt class="xref py py-meth docutils literal"><span class="pre">isupport_CHANMODES()</span></tt>
+for a detailed explanation of this parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.get_feature">
+<tt class="descname">get_feature</tt><big>(</big><em>feature</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.get_feature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a server supported feature&#8217;s value.</p>
+<p>A feature with the value <tt class="xref docutils literal"><span class="pre">None</span></tt> is equivalent to the feature being
+unsupported.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>feature</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; Feature name</li>
+<li><strong>default</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The value to default to, assuming that <tt class="docutils literal"><span class="pre">feature</span></tt>
+is not supported</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Feature value</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.has_feature">
+<tt class="descname">has_feature</tt><big>(</big><em>feature</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.has_feature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether a feature is supported or not.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><tt class="docutils literal"><span class="pre">bool</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_CHANLIMIT">
+<tt class="descname">isupport_CHANLIMIT</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_CHANLIMIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number of each channel type a user may join.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_CHANMODES">
+<tt class="descname">isupport_CHANMODES</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_CHANMODES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Available channel modes.</p>
+<p>There are 4 categories of channel mode:</p>
+<ul class="simple">
+<li><strong>param</strong>: Modes that change a setting on a channel, these modes
+always take a parameter.</li>
+<li><strong>noParam</strong>: Modes that change a setting on a channel, these modes
+never take a parameter.</li>
+<li><strong>setParam</strong>: Modes that change a setting on a channel, these modes
+only take a parameter when being set.</li>
+<li><strong>addressModes</strong>: Modes that add or remove an address to or from a
+list, these modes always take a parameter.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_CHANNELLEN">
+<tt class="descname">isupport_CHANNELLEN</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_CHANNELLEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum length of a channel name a client may create.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_CHANTYPES">
+<tt class="descname">isupport_CHANTYPES</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_CHANTYPES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Valid channel prefixes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_EXCEPTS">
+<tt class="descname">isupport_EXCEPTS</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_EXCEPTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mode character for &#8220;ban exceptions&#8221;.</p>
+<p>The presence of this parameter indicates that the server supports
+this functionality.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_IDCHAN">
+<tt class="descname">isupport_IDCHAN</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_IDCHAN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Safe channel identifiers.</p>
+<p>The presence of this parameter indicates that the server supports
+this functionality.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_INVEX">
+<tt class="descname">isupport_INVEX</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_INVEX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mode character for &#8220;invite exceptions&#8221;.</p>
+<p>The presence of this parameter indicates that the server supports
+this functionality.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_KICKLEN">
+<tt class="descname">isupport_KICKLEN</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_KICKLEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum length of a kick message a client may provide.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_MAXCHANNELS">
+<tt class="descname">isupport_MAXCHANNELS</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_MAXCHANNELS" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number of each channel type a user may join. This was
+deprecated in <a class="reference external" href="http://www.irc.org/tech_docs/draft-brocklesby-irc-isupport-03.txt">http://www.irc.org/tech_docs/draft-brocklesby-irc-isupport-03.txt</a>
+in favour of CHANLIMIT</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_MAXLIST">
+<tt class="descname">isupport_MAXLIST</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_MAXLIST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum number of &#8220;list modes&#8221; a client may set on a channel at once.</p>
+<p>List modes are identified by the &#8220;addressModes&#8221; key in CHANMODES.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_MODES">
+<tt class="descname">isupport_MODES</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_MODES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum number of modes accepting parameters that may be sent, by a
+client, in a single MODE command.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_NETWORK">
+<tt class="descname">isupport_NETWORK</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_NETWORK" title="Permalink to this definition">¶</a></dt>
+<dd><p>IRC network name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_NICKLEN">
+<tt class="descname">isupport_NICKLEN</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_NICKLEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum length of a nickname the client may use.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_PREFIX">
+<tt class="descname">isupport_PREFIX</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_PREFIX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping of channel modes that clients may have to status flags.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_SAFELIST">
+<tt class="descname">isupport_SAFELIST</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_SAFELIST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag indicating that a client may request a LIST without being
+disconnected due to the large amount of data generated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_STATUSMSG">
+<tt class="descname">isupport_STATUSMSG</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_STATUSMSG" title="Permalink to this definition">¶</a></dt>
+<dd><p>The server supports sending messages to only to clients on a channel
+with a specific status.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_TARGMAX">
+<tt class="descname">isupport_TARGMAX</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_TARGMAX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum number of targets allowable for commands that accept multiple
+targets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_TOPICLEN">
+<tt class="descname">isupport_TOPICLEN</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_TOPICLEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum length of a topic that may be set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.isupport_unknown">
+<tt class="descname">isupport_unknown</tt><big>(</big><em>command</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.isupport_unknown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unknown ISUPPORT parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.ServerSupportedFeatures.parse">
+<tt class="descname">parse</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse ISUPPORT parameters.</p>
+<p>If an unknown parameter is encountered, it is simply added to the
+dictionary, keyed by its name, as a tuple of the parameters provided.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> (<tt class="docutils literal"><span class="pre">iterable</span></tt> of <tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; Iterable of ISUPPORT parameters to parse</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="girclib.irc.IRCProtocol">
+<em class="property">class </em><tt class="descclassname">girclib.irc.</tt><tt class="descname">IRCProtocol</tt><a class="headerlink" href="#girclib.irc.IRCProtocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#girclib.irc.IRCTransport" title="girclib.irc.IRCTransport"><tt class="xref py py-class docutils literal"><span class="pre">girclib.irc.IRCTransport</span></tt></a></p>
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_make_query">
+<tt class="descname">ctcp_make_query</tt><big>(</big><em>user</em>, <em>messages</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_make_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send one or more <tt class="docutils literal"><span class="pre">extended</span> <span class="pre">messages</span></tt> as a CTCP query.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_make_reply">
+<tt class="descname">ctcp_make_reply</tt><big>(</big><em>user</em>, <em>messages</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_make_reply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send one or more <tt class="docutils literal"><span class="pre">extended</span> <span class="pre">messages</span></tt> as a CTCP reply.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_query">
+<tt class="descname">ctcp_query</tt><big>(</big><em>user</em>, <em>channel</em>, <em>messages</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dispatch method for any CTCP queries received.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_query_ACTION">
+<tt class="descname">ctcp_query_ACTION</tt><big>(</big><em>user</em>, <em>channel</em>, <em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_query_ACTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_query_CLIENTINFO">
+<tt class="descname">ctcp_query_CLIENTINFO</tt><big>(</big><em>user</em>, <em>channel</em>, <em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_query_CLIENTINFO" title="Permalink to this definition">¶</a></dt>
+<dd><p>A master index of what CTCP tags this client knows.</p>
+<p>If no arguments are provided, respond with a list of known tags.
+If an argument is provided, provide human-readable help on
+the usage of that tag.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_query_ERRMSG">
+<tt class="descname">ctcp_query_ERRMSG</tt><big>(</big><em>user</em>, <em>channel</em>, <em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_query_ERRMSG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_query_FINGER">
+<tt class="descname">ctcp_query_FINGER</tt><big>(</big><em>user</em>, <em>channel</em>, <em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_query_FINGER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_query_PING">
+<tt class="descname">ctcp_query_PING</tt><big>(</big><em>user</em>, <em>channel</em>, <em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_query_PING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_query_SOURCE">
+<tt class="descname">ctcp_query_SOURCE</tt><big>(</big><em>user</em>, <em>channel</em>, <em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_query_SOURCE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_query_TIME">
+<tt class="descname">ctcp_query_TIME</tt><big>(</big><em>user</em>, <em>channel</em>, <em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_query_TIME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_query_USERINFO">
+<tt class="descname">ctcp_query_USERINFO</tt><big>(</big><em>user</em>, <em>channel</em>, <em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_query_USERINFO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_query_VERSION">
+<tt class="descname">ctcp_query_VERSION</tt><big>(</big><em>user</em>, <em>channel</em>, <em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_query_VERSION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_reply">
+<tt class="descname">ctcp_reply</tt><big>(</big><em>user</em>, <em>channel</em>, <em>messages</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_reply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dispatch method for any CTCP replies received.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_reply_PING">
+<tt class="descname">ctcp_reply_PING</tt><big>(</big><em>user</em>, <em>channel</em>, <em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_reply_PING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_unknown_query">
+<tt class="descname">ctcp_unknown_query</tt><big>(</big><em>user</em>, <em>channel</em>, <em>tag</em>, <em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_unknown_query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.ctcp_unknown_reply">
+<tt class="descname">ctcp_unknown_reply</tt><big>(</big><em>user</em>, <em>channel</em>, <em>tag</em>, <em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.ctcp_unknown_reply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a fitting <tt class="docutils literal"><span class="pre">ctcp_reply_</span></tt> method is not found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Attention :</th><td class="field-body">If the client makes arbitrary CTCP queries, this method
+should probably show the responses to them instead of
+treating them as anomalies.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.handle_command">
+<tt class="descname">handle_command</tt><big>(</big><em>prefix</em>, <em>command</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.handle_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the function to call for the given command and call it with
+the given arguments.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_ERROR">
+<tt class="descname">irc_ERROR</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_ERROR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_ERR_BANNEDFROMCHAN">
+<tt class="descname">irc_ERR_BANNEDFROMCHAN</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_ERR_BANNEDFROMCHAN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_ERR_ERRONEUSNICKNAME">
+<tt class="descname">irc_ERR_ERRONEUSNICKNAME</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_ERR_ERRONEUSNICKNAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when we try to register or change to an illegal nickname.</p>
+<p>The server should send this reply when the nickname contains any
+disallowed characters.  The bot will stall, waiting for RPL_WELCOME, if
+we don&#8217;t handle this during sign-on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">The method uses the spelling <em>erroneus</em>, as it appears in
+the RFC, section 6.1.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_ERR_NICKNAMEINUSE">
+<tt class="descname">irc_ERR_NICKNAMEINUSE</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_ERR_NICKNAMEINUSE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when we try to register or change to a nickname that is already
+taken.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_ERR_NOTREGISTERED">
+<tt class="descname">irc_ERR_NOTREGISTERED</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_ERR_NOTREGISTERED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when we have not yet registered with the network</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_ERR_PASSWDMISMATCH">
+<tt class="descname">irc_ERR_PASSWDMISMATCH</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_ERR_PASSWDMISMATCH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the login was incorrect.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_JOIN">
+<tt class="descname">irc_JOIN</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_JOIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a user joins a channel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_KICK">
+<tt class="descname">irc_KICK</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_KICK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a user is kicked from a channel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_MODE">
+<tt class="descname">irc_MODE</tt><big>(</big><em>user</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_MODE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a server mode change message.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_NICK">
+<tt class="descname">irc_NICK</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_NICK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a user changes their nickname.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_NOTICE">
+<tt class="descname">irc_NOTICE</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_NOTICE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a user gets a notice.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_PART">
+<tt class="descname">irc_PART</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_PART" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a user leaves a channel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_PING">
+<tt class="descname">irc_PING</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_PING" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when some has pinged us.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_PRIVMSG">
+<tt class="descname">irc_PRIVMSG</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_PRIVMSG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when we get a message.</p>
+<p>Here, for usage simplicity, we separate between two signals;
+<a class="reference internal" href="signals.html#girclib.signals.on_chanmsg" title="girclib.signals.on_chanmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_chanmsg()</span></tt></a> and
+<a class="reference internal" href="signals.html#girclib.signals.on_privmsg" title="girclib.signals.on_privmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_privmsg()</span></tt></a>.</p>
+<p><a class="reference internal" href="signals.html#girclib.signals.on_chanmsg" title="girclib.signals.on_chanmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_chanmsg()</span></tt></a>. Is not really an IRC signal,
+but it will simplify the library usage by separating channel, from
+private messages.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_QUIT">
+<tt class="descname">irc_QUIT</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_QUIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a user has quit.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_BOUNCE">
+<tt class="descname">irc_RPL_BOUNCE</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_BOUNCE" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is sent by the server to a user to suggest an alternative server.
+This is often used when the connection is refused because the server is
+already full.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_CREATED">
+<tt class="descname">irc_RPL_CREATED</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_CREATED" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is called to tell when the server was created.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_ENDOFMOTD">
+<tt class="descname">irc_RPL_ENDOFMOTD</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_ENDOFMOTD" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">RPL_ENDOFMOTD</span></tt> indicates the end of the message of the day messages.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_ENDOFNAMES">
+<tt class="descname">irc_RPL_ENDOFNAMES</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_ENDOFNAMES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finished receiving channel users.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_ISUPPORT">
+<tt class="descname">irc_RPL_ISUPPORT</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_ISUPPORT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_LIST">
+<tt class="descname">irc_RPL_LIST</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_LIST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_LISTEND">
+<tt class="descname">irc_RPL_LISTEND</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_LISTEND" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_LUSERCHANNELS">
+<tt class="descname">irc_RPL_LUSERCHANNELS</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_LUSERCHANNELS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This tells us how many channels there are.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_LUSERCLIENT">
+<tt class="descname">irc_RPL_LUSERCLIENT</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_LUSERCLIENT" title="Permalink to this definition">¶</a></dt>
+<dd><p>This tells us how many clients, services and servers are connected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_LUSERME">
+<tt class="descname">irc_RPL_LUSERME</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_LUSERME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_LUSEROP">
+<tt class="descname">irc_RPL_LUSEROP</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_LUSEROP" title="Permalink to this definition">¶</a></dt>
+<dd><p>This tells us how many operators are connected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_MOTD">
+<tt class="descname">irc_RPL_MOTD</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_MOTD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_MOTDSTART">
+<tt class="descname">irc_RPL_MOTDSTART</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_MOTDSTART" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">RPL_MOTDSTART</span></tt> indicates the start of the message of the day messages.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_MYINFO">
+<tt class="descname">irc_RPL_MYINFO</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_MYINFO" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is called upon a successful registration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_NAMREPLY">
+<tt class="descname">irc_RPL_NAMREPLY</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_NAMREPLY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive channel users.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_NOTOPIC">
+<tt class="descname">irc_RPL_NOTOPIC</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_NOTOPIC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when no topic for a channel is set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_TOPIC">
+<tt class="descname">irc_RPL_TOPIC</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_TOPIC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the topic for a channel is initially reported or when it
+subsequently changes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_WELCOME">
+<tt class="descname">irc_RPL_WELCOME</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_WELCOME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when we have received the welcome from the server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_RPL_YOURHOST">
+<tt class="descname">irc_RPL_YOURHOST</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_RPL_YOURHOST" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is called to tell to which server we&#8217;re connected to and
+it&#8217;s version.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_TOPIC">
+<tt class="descname">irc_TOPIC</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_TOPIC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Someone in the channel set the topic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.irc_unknown">
+<tt class="descname">irc_unknown</tt><big>(</big><em>prefix</em>, <em>command</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_unknown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCProtocol.quirky_message">
+<tt class="descname">quirky_message</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.quirky_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is called when I receive a message which is peculiar,
+but not wholly indecipherable.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="girclib.irc.IRCCommandsHelper">
+<em class="property">class </em><tt class="descclassname">girclib.irc.</tt><tt class="descname">IRCCommandsHelper</tt><a class="headerlink" href="#girclib.irc.IRCCommandsHelper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#girclib.irc.IRCProtocol" title="girclib.irc.IRCProtocol"><tt class="xref py py-class docutils literal"><span class="pre">girclib.irc.IRCProtocol</span></tt></a></p>
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.away">
+<tt class="descname">away</tt><big>(</big><em>message=''</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.away" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark this client as away.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; If specified, the away message.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.back">
+<tt class="descname">back</tt><big>(</big><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.back" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the away status.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.describe">
+<tt class="descname">describe</tt><big>(</big><em>channel</em>, <em>action</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.describe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Strike a pose.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The name of the channel to have an action on. If it
+has no prefix, it is sent to the user of that name.</li>
+<li><strong>action</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The action to preform.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.join">
+<tt class="descname">join</tt><big>(</big><em>channel</em>, <em>key=None</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join a channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The name of the channel to join. If it has no prefix,
+<tt class="docutils literal"><span class="pre">#</span></tt> will be prepended to it.</li>
+<li><strong>key</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; If specified, the key used to join the channel.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.kick">
+<tt class="descname">kick</tt><big>(</big><em>channel</em>, <em>user</em>, <em>reason=None</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.kick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt to kick a user from a channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The name of the channel to kick the user from. If it has
+no prefix, <tt class="docutils literal"><span class="pre">#</span></tt> will be prepended to it.</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The nick of the user to kick.</li>
+<li><strong>reason</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; If given, the reason for kicking the user.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.leave">
+<tt class="descname">leave</tt><big>(</big><em>channel</em>, <em>reason=None</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.leave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Leave a channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The name of the channel to leave. If it has no prefix,
+<tt class="docutils literal"><span class="pre">#</span></tt> will be prepended to it.</li>
+<li><strong>reason</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; If given, the reason for leaving.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.list">
+<tt class="descname">list</tt><big>(</big><em>channels=()</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query the network about the channels it handles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>channels</strong> (<tt class="docutils literal"><span class="pre">list,tuple</span></tt>) &#8211; A list of channel names to query. If omitted all
+channels handled by the server will be queried.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.mode">
+<tt class="descname">mode</tt><big>(</big><em>chan</em>, <em>set</em>, <em>modes</em>, <em>limit=None</em>, <em>user=None</em>, <em>mask=None</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the modes on a user or channel.</p>
+<p>The <tt class="docutils literal"><span class="pre">limit</span></tt>, <tt class="docutils literal"><span class="pre">user</span></tt>, and <tt class="docutils literal"><span class="pre">mask</span></tt> parameters are mutually exclusive.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>chan</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The name of the channel to operate on.</li>
+<li><strong>set</strong> (<tt class="docutils literal"><span class="pre">bool</span></tt>) &#8211; True to give the user or channel permissions and False to
+remove them.</li>
+<li><strong>modes</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The mode flags to set on the user or channel.</li>
+<li><strong>limit</strong> (<tt class="docutils literal"><span class="pre">int</span></tt>) &#8211; In conjunction with the <tt class="docutils literal"><span class="pre">l</span></tt> mode flag, limits the
+number of users on the channel.</li>
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user to change the mode on.</li>
+<li><strong>mask</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; In conjunction with the <tt class="docutils literal"><span class="pre">b</span></tt> mode flag, sets a mask of
+users to be banned from the channel.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.msg">
+<tt class="descname">msg</tt><big>(</big><em>user</em>, <em>message</em>, <em>length=512</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message to a user or channel.</p>
+<dl class="docutils">
+<dt>The message will be split into multiple commands to the server if:</dt>
+<dd><ul class="first last simple">
+<li>The message contains any newline characters</li>
+<li>Any span between newline characters is longer than the given
+line-length.</li>
+</ul>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The username or channel name to which to direct the
+message.</li>
+<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The text to send.</li>
+<li><strong>length</strong> (<tt class="docutils literal"><span class="pre">int</span></tt>) &#8211; The maximum number of octets to send in a single
+command, including the IRC protocol framing. If not supplied,
+defaults to <tt class="docutils literal"><span class="pre">MAX_COMMAND_LENGTH</span></tt>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.notice">
+<tt class="descname">notice</tt><big>(</big><em>user</em>, <em>message</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.notice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a notice to a user.</p>
+<p>Notices are like normal message, but should never get automated
+replies.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user to send a notice to.</li>
+<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The contents of the notice to send.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.part">
+<tt class="descname">part</tt><big>(</big><em>channel</em>, <em>reason=None</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.part" title="Permalink to this definition">¶</a></dt>
+<dd><p>Leave a channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The name of the channel to leave. If it has no prefix,
+<tt class="docutils literal"><span class="pre">#</span></tt> will be prepended to it.</li>
+<li><strong>reason</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; If given, the reason for leaving.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.ping">
+<tt class="descname">ping</tt><big>(</big><em>user</em>, <em>text=None</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.ping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Measure round-trip delay to another IRC client.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.quit">
+<tt class="descname">quit</tt><big>(</big><em>message='Quiting...'</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnect from the server</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; If specified, the message to give when quitting the
+server.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.register">
+<tt class="descname">register</tt><big>(</big><em>nickname</em>, <em>hostname='foo'</em>, <em>servername='bar'</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Login to the server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nickname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The nickname to register.</li>
+<li><strong>hostname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; If specified, the hostname to logon as.</li>
+<li><strong>servername</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; If specified, the servername to logon as.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.say">
+<tt class="descname">say</tt><big>(</big><em>channel</em>, <em>message</em>, <em>length=None</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.say" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message to a channel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel to say the message on. If it has no prefix,
+<tt class="docutils literal"><span class="pre">#</span></tt> will be prepended to it.</li>
+<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The message to say.</li>
+<li><strong>length</strong> (<tt class="docutils literal"><span class="pre">int</span></tt>) &#8211; The maximum number of octets to send at a time.  This has
+the effect of turning a single call to <tt class="docutils literal"><span class="pre">msg()</span></tt> into multiple
+commands to the server.  This is useful when long messages may be
+sent that would otherwise cause the server to kick us off or
+silently truncate the text we are sending.  If <tt class="xref docutils literal"><span class="pre">None</span></tt> is passed,
+the entire message is always send in one command.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.set_nick">
+<tt class="descname">set_nick</tt><big>(</big><em>nickname</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.set_nick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set this client&#8217;s nickname.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nickname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The nickname to change to.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.topic">
+<tt class="descname">topic</tt><big>(</big><em>channel</em>, <em>topic=None</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt to set the topic of the given channel, or ask what it is.</p>
+<p>If topic is None, then I sent a topic query instead of trying to set the
+topic. The server should respond with a TOPIC message containing the
+current topic of the given channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The name of the channel to change the topic on. If it
+has no prefix, <tt class="docutils literal"><span class="pre">#</span></tt> will be prepended to it.</li>
+<li><strong>topic</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; If specified, what to set the topic to.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.whois">
+<tt class="descname">whois</tt><big>(</big><em>nickname</em>, <em>server=None</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.whois" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve user information about the given nick name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nickname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The nick name about which to retrieve information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="girclib.irc.IRCChannel">
+<em class="property">class </em><tt class="descclassname">girclib.irc.</tt><tt class="descname">IRCChannel</tt><big>(</big><em>name</em>, <em>public=False</em>, <em>private=False</em>, <em>secret=False</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCChannel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to store the channel&#8217;s state.</p>
+<dl class="method">
+<dt id="girclib.irc.IRCChannel.add_user">
+<tt class="descname">add_user</tt><big>(</big><em>nick</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCChannel.add_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCChannel.add_users">
+<tt class="descname">add_users</tt><big>(</big><em>nicks</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCChannel.add_users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="girclib.irc.IRCChannel.name">
+<tt class="descname">name</tt><a class="headerlink" href="#girclib.irc.IRCChannel.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="girclib.irc.IRCChannel.private">
+<tt class="descname">private</tt><a class="headerlink" href="#girclib.irc.IRCChannel.private" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="girclib.irc.IRCChannel.public">
+<tt class="descname">public</tt><a class="headerlink" href="#girclib.irc.IRCChannel.public" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCChannel.remove_user">
+<tt class="descname">remove_user</tt><big>(</big><em>nick</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCChannel.remove_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="girclib.irc.IRCChannel.secret">
+<tt class="descname">secret</tt><a class="headerlink" href="#girclib.irc.IRCChannel.secret" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.IRCChannel.set_channel_privacy">
+<tt class="descname">set_channel_privacy</tt><big>(</big><em>mode</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCChannel.set_channel_privacy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="girclib.irc.IRCChannel.users">
+<tt class="descname">users</tt><a class="headerlink" href="#girclib.irc.IRCChannel.users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="girclib.irc.BaseIRCClient">
+<em class="property">class </em><tt class="descclassname">girclib.irc.</tt><tt class="descname">BaseIRCClient</tt><a class="headerlink" href="#girclib.irc.BaseIRCClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#girclib.irc.IRCCommandsHelper" title="girclib.irc.IRCCommandsHelper"><tt class="xref py py-class docutils literal"><span class="pre">girclib.irc.IRCCommandsHelper</span></tt></a></p>
+<dl class="method">
+<dt id="girclib.irc.BaseIRCClient.on_data_available">
+<tt class="descname">on_data_available</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.BaseIRCClient.on_data_available" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/girclib.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="client.html"
+                        title="previous chapter">gIRClib IRC Client</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="signals.html"
+                        title="next chapter">Signals</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/irc.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="signals.html" title="Signals"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="client.html" title="gIRClib IRC Client"
+             >previous</a> |</li>
+        <li><a href="index.html">gIRClib v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Pedro Algarvio.
+      Last updated on Mar 25, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
