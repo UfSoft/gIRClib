@@ -472,6 +472,32 @@ Emitted when the login was incorrect.
 
 """)
 
+on_banned_from_channel = signal("banned-from-channel", """\
+Emitted when the client has been banned from a channel.
+
+:param emitter: The signal emitter
+:type  emitter: ``object``
+
+:param channel: The banned channel.
+:type  channel: ``str``
+
+:param message: The banned message.
+:type  message: ``str``
+
+""")
+
+on_channels_available = signal("on-channels-available", """\
+Emitted after issuing a LIST command and when the complete list of channels a
+server handles is available.
+
+:param emitter: The signal emitter
+:type  emitter: ``object``
+
+:param channels: A list of tuples in the form of (channel_name, num_users, topic)
+:type  channels: ``list``
+
+""")
+
 
 # CTCP Signals
 on_ctcp_query_ping = signal("on-ctcp-query-ping", """

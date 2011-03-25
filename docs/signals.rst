@@ -78,6 +78,8 @@ Signals
 .. autofunction:: on_nickname_in_use(emitter, nickname=None)
 .. autofunction:: on_erroneous_nickname(emitter, nickname=None)
 .. autofunction:: on_password_mismatch(emitter)
+.. autofunction:: on_banned_from_channel(emitter, channel=None, message=None)
+.. autofunction:: on_channels_available(emitter, channels=None)
 
 
 Server Queries
