@@ -66,7 +66,7 @@ class IRCTransport(object):
 
     def send(self, msg, *args, **kwargs):
         if not self._processing:
-            log.info("Not processing, so not sending any data.")
+            log.warn("Not processing, so not sending any data.")
             return
         encoding = kwargs.get('encoding') or self.encoding
         bargs = []
@@ -91,8 +91,7 @@ class IRCTransport(object):
                     'Refusing to send one of the args from provided: %s', kwargs
                 )
         msg = (msg.replace("%s", "%%s") % bkwargs % tuple(bargs)).encode(encoding)
-        log.debug("Sending message: \"%s\"", msg)
-        self.pool.spawn(self.__write_socket, "%s\r\n" % msg)
+        gevent.spawn_raw(self.__write_socket, "%s\r\n" % msg)
         gevent.sleep(0) # allow other greenlets to run
 
     def disconnect(self):
@@ -112,6 +111,7 @@ class IRCTransport(object):
             log.log(5, "Client disconnected")
 
         signals.on_quited.connect(on_quited, weak=False)
+
         self.pool.spawn(self.quit)
         gevent.sleep(0)
         self.pool.join()
@@ -121,7 +121,7 @@ class IRCTransport(object):
             return
 
         try:
-            log.debug("Writing data to socket: \"%r\"", data)
+            log.log(5, "Writing data to socket: %r", data)
             self.socket.send(data)
         except socket.error, e:
             try:  # a little dance of compatibility to get the errno
@@ -130,18 +130,23 @@ class IRCTransport(object):
                 _errno = e[0]
             if _errno == errno.ECONNRESET:
                 # Server disconnected us
+                log.warning("Server disconnected us! Stop processing")
                 self._processing = False
                 signals.on_disconnected.send(self)
             elif _errno == errno.EPIPE:
                 # broken pipe. Server disconnected us???
+                log.warning("Broken socket pipe. Server disconnected us?! "
+                            "Stop processing")
                 self._processing = False
                 signals.on_disconnected.send(self)
             elif _errno == errno.EAGAIN:
                 # Socket not ready
+                log.warning("Socket not ready. Retrying on 0.2s")
                 gevent.spawn_later(0.2, self.__write_socket, data)
             elif _errno == errno.EBADF:
                 # Bad file desctiptor. Socket closed!? Re-try just in case,
                 # if self._processing is False this wont run again...
+                log.warning("Bad file descriptor on socket. Retrying on 0.2s")
                 gevent.spawn_later(0.2, self.__write_socket, data)
             else:
                 raise
@@ -381,7 +386,22 @@ class ServerSupportedFeatures(_CommandDispatcherMixin):
         """
         The maximum number of each channel type a user may join.
         """
-        return self._split_param_args(params, _int_or_default)
+        rv = self._split_param_args(params, _int_or_default)
+        if not rv:
+            rv = self.isupport_MAXCHANNELS(params)
+        return rv
+
+    def isupport_MAXCHANNELS(self, params):
+        """
+        The maximum number of each channel type a user may join. This was
+        deprecated in http://www.irc.org/tech_docs/draft-brocklesby-irc-isupport-03.txt
+        in favour of CHANLIMIT
+        """
+        rv = self._split_param_args(params, _int_or_default)
+        if not rv:
+            rv = self.isupport_CHANLIMIT(params)
+        return rv
+
 
 
     def isupport_CHANMODES(self, params):
@@ -756,6 +776,16 @@ class IRCProtocol(IRCTransport):
         """
         log.warn(params[-1])
 
+    def irc_ERR_BANNEDFROMCHAN(self, prefix, params):
+        nick = params[0]
+        channel = params[1]
+        message = params[2]
+        assert nick == self.nickname
+        log.error("We are banned from channel %r: %s", channel, message)
+        signals.on_banned_from_channel.send(
+            self, channel=channel, message=message
+        )
+
     def irc_RPL_WELCOME(self, prefix, params):
         """
         Called when we have received the welcome from the server.
@@ -770,6 +800,7 @@ class IRCProtocol(IRCTransport):
         """
         nick = nick_from_netmask(prefix)
         channel = params[-1]
+        self.channels[channel].add_user(nick)
         if nick == self.nickname:
             signals.on_joined.send(self, channel=channel)
         else:
@@ -784,7 +815,9 @@ class IRCProtocol(IRCTransport):
         if nick == self.nickname:
             signals.on_left.send(self, channel=channel)
         else:
-            self.channels[channel].remove_user(nick)
+            if nick in self.channels[channel].users:
+                # Avoid KeyError's
+                self.channels[channel].remove_user(nick)
             signals.on_user_left.send(self, user=nick, channel=channel)
 
     def irc_QUIT(self, prefix, params):
@@ -1075,6 +1108,16 @@ class IRCProtocol(IRCTransport):
             self, channel_users=self.channels[channel].users
         )
 
+    def irc_RPL_LIST(self, prefix, params):
+        nick = params[0]
+        channel = params[1]
+        num_users = int(params[2])
+        topic = params[3]
+        self.chann_list.append((channel, num_users, topic))
+
+    def irc_RPL_LISTEND(self, prefix, params):
+        signals.on_channels_available.send(self, channels=self.chann_list)
+
     def irc_ERROR(self, prefix, params):
         if 'Closing Link' in params[0]:
             self._processing = False
@@ -1258,6 +1301,21 @@ class IRCCommandsHelper(IRCProtocol):
             line = '%s %s' % (line, mask)
         self.send(line)
 
+    def list(self, channels=()):
+        """
+        Query the network about the channels it handles.
+
+        :type channels: ``list,tuple``
+        :param channels: A list of channel names to query. If omitted all
+                         channels handled by the server will be queried.
+        """
+        self.chann_list = []
+        line = 'LIST'
+        if channels:
+            if not isinstance(channels, (list, tuple)):
+                channels = [channels]
+            line += ' %s' % (','.join(channels),)
+        self.send(line)
 
     def say(self, channel, message, length=None):
         """
@@ -1456,3 +1514,4 @@ class BaseIRCClient(IRCCommandsHelper):
         log.debug('Incomming message. Prefix: "%s" Command: "%s" '
                   'Args: "%s"', prefix, command, args)
         self.pool.spawn(self.handle_command, prefix, command, args)
+        gevent.sleep(0) # Allow other greenlets to run
