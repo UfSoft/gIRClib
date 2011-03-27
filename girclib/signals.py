@@ -172,7 +172,7 @@ Called once we have received all channel's users. See
 
 on_rpl_list = signal("on_rpl_list", """\
 Called for each of the channels from a network when our client issues
-:class:`~girclib.client.IRCClient.list`.
+:class:`~girclib.irc.IRCCommandsHelper.list`.
 
 :param emitter: The signal emitter
 :type  emitter: ``object``
@@ -189,7 +189,7 @@ Called for each of the channels from a network when our client issues
 
 on_rpl_listend = signal("on_rpl_listend", """\
 Called once we have the full list of channels on the network. See
-:class:`~girclib.client.IRCClient.list` and
+:class:`~girclib.irc.IRCCommandsHelper.list` and
 :class:`~girclib.signals.on_rpl_list`.
 
 :param emitter: The signal emitter
