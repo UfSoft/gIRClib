@@ -25,7 +25,7 @@ from girclib.exceptions import IRCBadMessage, IRCBadModes, UnhandledCommand
 from girclib.helpers import (parse_modes, _int_or_default, split, ascii,
                              nick_from_netmask, ctcp_stringify, ctcp_extract,
                              X_DELIM, CHANNEL_PREFIXES, MAX_COMMAND_LENGTH,
-                             parse_raw_irc_command, native, to_uni,
+                             parse_raw_irc_command, native,
                              _CommandDispatcherMixin)
 
 log = logging.getLogger(__name__)
