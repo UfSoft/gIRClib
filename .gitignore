@@ -3,3 +3,4 @@ docs/build
 .settings
 .project
 .pydevproject
+tests/
