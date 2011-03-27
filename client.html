@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gIRClib IRC Client &mdash; gIRClib v0.1 development documentation</title>
+    <title>gIRClib IRC Client &mdash; gIRClib v0.1dev documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1 development',
+        VERSION:     '0.1dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,10 +23,10 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within gIRClib v0.1 development documentation"
+          title="Search within gIRClib v0.1dev documentation"
           href="_static/opensearch.xml"/>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="gIRClib v0.1 development documentation" href="index.html" />
+    <link rel="top" title="gIRClib v0.1dev documentation" href="index.html" />
     <link rel="next" title="gEvent IRC Implementation" href="irc.html" />
     <link rel="prev" title="Welcome to gIRClib’s documentation!" href="index.html" /> 
   </head>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to gIRClib’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">gIRClib v0.1 development documentation</a> &raquo;</li> 
+        <li><a href="index.html">gIRClib v0.1dev documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -72,15 +72,15 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="girclib.client.IRCClient.on_chanmsg">
-<tt class="descname">on_chanmsg</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>user=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_chanmsg" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_chanmsg" title="girclib.signals.on_chanmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_chanmsg()</span></tt></a>.</p>
+<dt id="girclib.client.IRCClient.on_banned">
+<tt class="descname">on_banned</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_banned" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_banned" title="girclib.signals.on_banned"><tt class="xref py py-meth docutils literal"><span class="pre">on_banned()</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="girclib.client.IRCClient.on_channel_users_available">
-<tt class="descname">on_channel_users_available</tt><big>(</big><em>emitter</em>, <em>channel_users=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_channel_users_available" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_channel_users_available" title="girclib.signals.on_channel_users_available"><tt class="xref py py-meth docutils literal"><span class="pre">on_channel_users_available()</span></tt></a>.</p>
+<dt id="girclib.client.IRCClient.on_chanmsg">
+<tt class="descname">on_chanmsg</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>user=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_chanmsg" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_chanmsg" title="girclib.signals.on_chanmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_chanmsg()</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -268,6 +268,12 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="girclib.client.IRCClient.on_user_banned">
+<tt class="descname">on_user_banned</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>user=None</em>, <em>message=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_user_banned" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_user_banned" title="girclib.signals.on_user_banned"><tt class="xref py py-meth docutils literal"><span class="pre">on_user_banned()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="girclib.client.IRCClient.on_user_joined">
 <tt class="descname">on_user_joined</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>user=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_user_joined" title="Permalink to this definition">¶</a></dt>
 <dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_user_joined" title="girclib.signals.on_user_joined"><tt class="xref py py-meth docutils literal"><span class="pre">on_user_joined()</span></tt></a>.</p>
@@ -353,12 +359,12 @@
         <li class="right" >
           <a href="index.html" title="Welcome to gIRClib’s documentation!"
              >previous</a> |</li>
-        <li><a href="index.html">gIRClib v0.1 development documentation</a> &raquo;</li> 
+        <li><a href="index.html">gIRClib v0.1dev documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Pedro Algarvio.
-      Last updated on Mar 25, 2011.
+      Last updated on Mar 27, 2011.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>

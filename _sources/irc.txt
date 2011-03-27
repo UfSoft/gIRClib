@@ -31,11 +31,6 @@ gEvent IRC Implementation
   :show-inheritance:
 
 
-.. autoclass:: IRCChannel
-  :members:
-  :undoc-members:
-
-
 .. autoclass:: BaseIRCClient
   :members:
   :undoc-members:
