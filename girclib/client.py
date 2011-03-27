@@ -63,7 +63,6 @@ class IRCClient(BaseIRCClient):
         signals.on_password_mismatch.connect(self.on_password_mismatch, sender=self)
         signals.on_signed_on.connect(self.on_signed_on, sender=self)
         signals.on_joined.connect(self.on_joined, sender=self)
-        signals.on_channel_users_available.connect(self.on_channel_users_available, sender=self)
         signals.on_user_joined.connect(self.on_user_joined, sender=self)
         signals.on_left.connect(self.on_left, sender=self)
         signals.on_user_left.connect(self.on_user_left, sender=self)
@@ -77,6 +76,8 @@ class IRCClient(BaseIRCClient):
         signals.on_kicked.connect(self.on_kicked, sender=self)
         signals.on_user_kicked.connect(self.on_user_kicked, sender=self)
         signals.on_topic_changed.connect(self.on_topic_changed, sender=self)
+        signals.on_banned.connect(self.on_banned, sender=self)
+        signals.on_user_banned.connect(self.on_user_banned, sender=self)
 
     def on_connected(self, emitter):
         log.debug("Connected to %s:%s", self.network_host, self.network_port)
@@ -225,11 +226,6 @@ class IRCClient(BaseIRCClient):
         See :meth:`~girclib.signals.on_joined`.
         """
 
-    def on_channel_users_available(self, emitter, channel_users=None):
-        """
-        See :meth:`~girclib.signals.on_channel_users_available`.
-        """
-
     def on_user_joined(self, emitter, channel=None, user=None):
         """
         See :meth:`~girclib.signals.on_user_joined`.
@@ -291,6 +287,17 @@ class IRCClient(BaseIRCClient):
                        message=None):
         """
         See :meth:`~girclib.signals.on_user_kicked`.
+        """
+
+    def on_banned(self, emitter, channel=None, message=None):
+        """
+        See :meth:`~girclib.signals.on_banned`.
+        """
+
+
+    def on_user_banned(self, emitter, channel=None, user=None, message=None):
+        """
+        See :meth:`~girclib.signals.on_user_banned`.
         """
 
     def on_topic_changed(self, emitter, user=None, channel=None, new_topic=None):

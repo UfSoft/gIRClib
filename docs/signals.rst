@@ -74,12 +74,11 @@ Signals
 .. autofunction:: on_topic_changed(emitter, user=None, channel=None, new_topic=None)
 .. autofunction:: on_user_renamed(emitter, oldname=None, newname=None)
 .. autofunction:: on_motd(emitter, motd=None)
-.. autofunction:: on_channel_users_available(emitter, channel_users=None)
 .. autofunction:: on_nickname_in_use(emitter, nickname=None)
 .. autofunction:: on_erroneous_nickname(emitter, nickname=None)
 .. autofunction:: on_password_mismatch(emitter)
-.. autofunction:: on_banned_from_channel(emitter, channel=None, message=None)
-.. autofunction:: on_channels_available(emitter, channels=None)
+.. autofunction:: on_banned(emitter, channel=None, message=None)
+.. autofunction:: on_user_banned(emitter, channel=None, user=None, message=None)
 
 
 Server Queries
@@ -116,6 +115,10 @@ Signals
 .. autofunction:: on_rpl_isupport(emitter, options=None)
 .. autofunction:: on_rpl_topic(emitter, user=None, channel=None, topic=None)
 .. autofunction:: on_rpl_notopic(emitter, user=None, channel=None)
+.. autofunction:: on_rpl_namreply(emitter, channel=None, users=None, privacy)
+.. autofunction:: on_rpl_endofnames(emitter, channel=None)
+.. autofunction:: on_rpl_list(emitter, channel=None, count=None, topic=None)
+.. autofunction:: on_rpl_listend(emitter)
 
 
 .. _blinker: http://pypi.python.org/pypi/blinker

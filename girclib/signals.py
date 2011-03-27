@@ -139,6 +139,64 @@ Called when the channel has no topic set
 
 """)
 
+on_rpl_namreply = signal("on-rpl-namreply", """\
+Called whenever we receive a channel's user list. The user's list is only
+complete when :meth:`~girclib.signals.on_rpl_endofnames` is called.
+
+:param emitter: The signal emitter
+:type  emitter: ``object``
+
+:type  channel: ``str``
+:param channel: The channel name.
+
+:type  users: ``list``
+:param users: List of channel users.
+
+:type  privacy: ``str``
+:param privacy: Channel privacy. One of ``@`` (secret channel), ``*`` (private
+    channel) or ``=`` (public channel).
+
+""")
+
+on_rpl_endofnames = signal("on-rpl-endofnames", """\
+Called once we have received all channel's users. See
+:meth:`~girclib.signals.on_rpl_namreply`.
+
+:param emitter: The signal emitter
+:type  emitter: ``object``
+
+:type  channel: ``str``
+:param channel: The channel name.
+
+""")
+
+on_rpl_list = signal("on_rpl_list", """\
+Called for each of the channels from a network when our client issues
+:class:`~girclib.client.IRCClient.list`.
+
+:param emitter: The signal emitter
+:type  emitter: ``object``
+
+:type  channel: ``str``
+:param channel: The channel name.
+
+:type  ucount: ``int``
+:param ucount: The number of users in the channel.
+
+:type  topic: ``str``
+:param topic: The channel's topic.
+""")
+
+on_rpl_listend = signal("on_rpl_listend", """\
+Called once we have the full list of channels on the network. See
+:class:`~girclib.client.IRCClient.list` and
+:class:`~girclib.signals.on_rpl_list`.
+
+:param emitter: The signal emitter
+:type  emitter: ``object``
+
+""")
+
 on_privmsg = signal('on-privmsg', """\
 Called when I receive a message from a user to me.
 
@@ -423,17 +481,6 @@ To display and get a nicely formatted string, you might want to use::
 
 """)
 
-on_channel_users_available = signal("on-channel-users-available", """\
-Emitted when the list of channel users is available.
-
-:param emitter: The signal emitter
-:type  emitter: ``object``
-
-:param channel_users: The channel users list.
-:type  channel_users: ``list``
-
-""")
-
 
 on_nickname_in_use = signal("on-nickname-in-use", """\
 Called when we try to register or change to a nickname that is already taken.
@@ -472,7 +519,7 @@ Emitted when the login was incorrect.
 
 """)
 
-on_banned_from_channel = signal("banned-from-channel", """\
+on_banned = signal("on-banned", """\
 Emitted when the client has been banned from a channel.
 
 :param emitter: The signal emitter
@@ -480,6 +527,23 @@ Emitted when the client has been banned from a channel.
 
 :param channel: The banned channel.
 :type  channel: ``str``
+
+:param message: The banned message.
+:type  message: ``str``
+
+""")
+
+on_user_banned = signal("on-user-banned", """\
+Emitted when the client has been banned from a channel.
+
+:param emitter: The signal emitter
+:type  emitter: ``object``
+
+:param channel: The banned channel.
+:type  channel: ``str``
+
+:param user: The user banned.
+:type  user: ``str``
 
 :param message: The banned message.
 :type  message: ``str``
