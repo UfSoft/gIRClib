@@ -122,7 +122,11 @@ Called with information about the server connected to.
 """)
 
 on_rpl_topic = signal("on-rpl-topic", """\
-Called with the initial information about the channel's topic
+Called when the topic for a channel is initially reported or when it
+subsequently changes.
+
+:param user: The user changing the topic.
+:type  user: :class:`~girclib.irc.IRCUser`
 
 :type  channel: ``str``
 :param channel: The channel name.
@@ -204,7 +208,7 @@ Called when I receive a message from a user to me.
 :type  emitter: ``object``
 
 :param user: The user the message is coming from.
-:type  user: ``str``
+:type  user: :class:`~girclib.irc.IRCUser`
 
 :param message: The message.
 :type  message: ``str``
@@ -221,7 +225,7 @@ Called when I receive a message from a channel.
 :type  channel: ``str``
 
 :param user: The user who sent the message.
-:type  user: ``str``
+:type  user: :class:`~girclib.irc.IRCUser`
 
 :param message: The message.
 :type  message: ``str``
@@ -269,7 +273,7 @@ If the client makes any automated replies, it must not do so in response to a
 :type  emitter: ``object``
 
 :param user: the user sending the notice
-:type  user: ``str``
+:type  user: :class:`~girclib.irc.IRCUser`
 
 :param channel: the channel where the notice is coming from
 :type  channel: ``str``
@@ -285,7 +289,7 @@ Called when users or channel's modes are changed.
 :param emitter: The signal emitter
 :type  emitter: ``object``
 
-:type user: ``str``
+:type user: :class:`~girclib.irc.IRCUser`
 :param user: The user and hostmask which instigated this change.
 
 :type channel: ``str``
@@ -339,7 +343,7 @@ Called when I am kicked from a channel.
 :type  channel: ``str``
 
 :param kicker: The user that kicked.
-:type  kicker: ``str``
+:type  kicker: :class:`~girclib.irc.IRCUser`
 
 :param message: The kick message.
 :type  message: ``str``
@@ -352,8 +356,11 @@ Called when my nick has been changed.
 :param emitter: The signal emitter
 :type  emitter: ``object``
 
-:param nickname: The nickname.
-:type  nickname: ``str``
+:param user: Our user.
+:type  user: ~:class:girclib.irc.IRCUser
+
+:param newnick: The new nickname.
+:type  newnick: ``str``
 
 """)
 
@@ -367,7 +374,7 @@ Called when I see another user joining a channel.
 :type  channel: ``str``
 
 :param user: The joining.
-:type  user: ``str``
+:type  user: :class:`~girclib.irc.IRCUser`
 
 """)
 
@@ -381,7 +388,7 @@ Called when I see another user leaving a channel.
 :type  channel: ``str``
 
 :param user: The user leaving.
-:type  user: ``str``
+:type  user: :class:`~girclib.irc.IRCUser`
 
 """)
 
@@ -392,7 +399,7 @@ Called when I see another user disconnect from the network.
 :type  emitter: ``object``
 
 :param user: The user quiting.
-:type  user: ``str``
+:type  user: :class:`~girclib.irc.IRCUser`
 
 :param message: The quit message.
 :type  message: ``str``
@@ -406,7 +413,7 @@ Called when I observe someone else being kicked from a channel.
 :type  emitter: ``object``
 
 :param kicked: The user being kicked.
-:type  kicked: ``str``
+:type  kicked: :class:`~girclib.irc.IRCUser`
 
 :param channel: The channel the user is being kicked from.
 :type  channel: ``str``
@@ -423,7 +430,7 @@ Called when I see a user perform an ``ACTION`` on a channel.
 :type  emitter: ``object``
 
 :param user: The user that performed the ``ACTION``
-:type  user: ``str``
+:type  user: :class:`~girclib.irc.IRCUser`
 
 :param channel: The channel the ``ACTION`` is coming from.
 :type  channel: ``str``
@@ -437,11 +444,11 @@ on_topic_changed = signal('on-topic-changed', """\
 In channel, user changed the topic to ``new_topic``. Also called when first
 joining a channel.
 
-:param emitter: The signal emitter
+:param emitter: The signal emitter.
 :type  emitter: ``object``
 
 :param user: The user changing the topic.
-:type  user: ``str``
+:type  user: :class:`~girclib.irc.IRCUser`
 
 :param channel: The channel the topic is being changed.
 :type  channel: ``str``
@@ -457,11 +464,11 @@ A user changed their name from oldname to newname.
 :param emitter: The signal emitter
 :type  emitter: ``object``
 
-:param oldname: The old name.
-:type  oldname: ``str``
+:param user: The user who changed nick.
+:type  user: :class:`~girclib.irc.IRCUser`
 
-:param newname: The new name.
-:type  newname: ``str``
+:param newnick: The new nickname.
+:type  newnick: ``str``
 
 """)
 
@@ -572,8 +579,8 @@ A CTCP reply must be made with the data received.
 :param emitter: The signal emitter
 :type  emitter: ``object``
 
-:param user: the nickname netmask querying
-:type  user: ``str``
+:param user: the user querying
+:type  user: :class:`~girclib.irc.IRCUser`
 
 :param channel: the channel name
 :type  channel: ``str``
@@ -588,8 +595,8 @@ Emitted when receiving a FINGER query.
 :param emitter: The signal emitter
 :type  emitter: ``object``
 
-:param user: the nickname netmask querying
-:type  user: ``str``
+:param user: the user querying
+:type  user: :class:`~girclib.irc.IRCUser`
 
 :param channel: the channel name
 :type  channel: ``str``
@@ -604,8 +611,8 @@ Emitted when receiving a VERSION query.
 :param emitter: The signal emitter
 :type  emitter: ``object``
 
-:param user: the nickname netmask querying
-:type  user: ``str``
+:param user: the user querying
+:type  user: :class:`~girclib.irc.IRCUser`
 
 :param channel: the channel name
 :type  channel: ``str``
@@ -620,8 +627,8 @@ Emitted when receiving a SOURCE query.
 :param emitter: The signal emitter
 :type  emitter: ``object``
 
-:param user: the nickname netmask querying
-:type  user: ``str``
+:param user: the user querying
+:type  user: :class:`~girclib.irc.IRCUser`
 
 :param channel: the channel name
 :type  channel: ``str``

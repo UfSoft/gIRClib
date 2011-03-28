@@ -130,20 +130,9 @@ def _int_or_default(value, default=None):
             pass
     return default
 
-def nick_from_netmask(netmask):
-    """
-    Return the nickname from a netmask
-
-    :rtype: ``str``
-    :returns: Returns the nickname part of a netmask.
-
-    """
-    if not netmask:
-        # irc.quakenet.org doesn't always send the netmask :|
-        return
-    return netmask.split(ascii('!'))[0]
 
 X_DELIM = chr(001)
+
 
 def ctcp_extract(message):
     """Extract CTCP data from a string.
@@ -326,6 +315,27 @@ def parse_raw_irc_command(element):
                 break
 
     return (prefix, command, args)
+
+def parse_netmask(netmask):
+    """
+    Parse a netmask and return a tuple of (nick, mode, user, host)
+
+    <nick> [ '!' [<mode> = ] <user> ] [ '@' <host> ]
+    """
+    try:
+        nick, rest = netmask.split('!')
+    except ValueError:
+        return (netmask, None, None, None)
+    try:
+        mode, rest = rest.split('=')
+    except ValueError:
+        mode, rest = None, rest
+    try:
+        user, host = rest.split('@')
+    except ValueError:
+        return (name, mode, rest, None)
+    return (nick, mode, user, host)
+
 
 class _CommandDispatcherMixin(object):
     """

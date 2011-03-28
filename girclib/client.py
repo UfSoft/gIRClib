@@ -13,8 +13,8 @@ import gevent
 import girclib
 import logging
 from girclib import signals
-from girclib.helpers import nick_from_netmask, parse_raw_irc_command
-from girclib.irc import BaseIRCClient, ServerSupportedFeatures
+from girclib.helpers import parse_raw_irc_command
+from girclib.irc import BaseIRCClient, ServerSupportedFeatures, IRCUser
 
 log = logging.getLogger(__name__)
 
@@ -28,7 +28,6 @@ class IRCClient(BaseIRCClient):
 
     def __init__(self, host="", port=6667, nickname="girclib", username=None,
                  realname="gIRClib", password=None, encoding="utf-8"):
-        BaseIRCClient.__init__(self)
         self.host = host
         self.port = port
         self.nickname = nickname
@@ -42,11 +41,7 @@ class IRCClient(BaseIRCClient):
 
     def connect_signals(self):
         signals.on_connected.connect(self.on_connected, sender=self)
-        signals.on_ctcp_query_ping.connect(self.on_ctcp_query_ping, sender=self)
         signals.on_ctcp_query_finger.connect(self.on_ctcp_query_finger, sender=self)
-        signals.on_ctcp_query_version.connect(self.on_ctcp_query_version, sender=self)
-        signals.on_ctcp_query_source.connect(self.on_ctcp_query_source, sender=self)
-        signals.on_ctcp_query_userinfo.connect(self.on_ctcp_query_userinfo, sender=self)
         signals.on_rpl_topic.connect(self.on_rpl_topic, sender=self)
         signals.on_rpl_created.connect(self.on_rpl_created, sender=self)
         signals.on_rpl_yourhost.connect(self.on_rpl_yourhost, sender=self)
@@ -84,12 +79,6 @@ class IRCClient(BaseIRCClient):
         self.register(self.nickname, hostname=socket.gethostname(),
                       servername=socket.gethostname())
 
-    def on_ctcp_query_ping(self, emitter, user=None, channel=None, data=None):
-        """
-        See :meth:`~girclib.signals.on_ctcp_query_ping`.
-        """
-        emitter.ctcp_make_reply(nick_from_netmask(user), [("PING", data)])
-
     def on_ctcp_query_finger(self, emitter, user=None, channel=None, data=None):
         """
         In case you implement a finger reply, a response should be made like::
@@ -100,41 +89,6 @@ class IRCClient(BaseIRCClient):
         See :meth:`~girclib.signals.on_ctcp_query_finger`.
 
         """
-
-    def on_ctcp_query_version(self, emitter, user=None, channel=None, data=None):
-        """
-        See :meth:`~girclib.signals.on_ctcp_query_version`.
-        """
-        if not self.version_name:
-            return
-
-        emitter.ctcp_make_reply(nick_from_netmask(user), [
-            ('VERSION', '%s:%s:%s' % (self.version_name,
-                                      self.version_num or '',
-                                      self.version_env or ''))
-        ])
-
-    def on_ctcp_query_source(self, emitter, user=None, channel=None, data=None):
-        """
-        See :meth:`~girclib.signals.on_ctcp_query_source`.
-        """
-        if self.source_url:
-            # The CTCP document (Zeuge, Rollo, Mesander 1994) says that SOURCE
-            # replies should be responded to with the location of an anonymous
-            # FTP server in host:directory:file format.  I'm taking the liberty
-            # of bringing it into the 21st century by sending a URL instead.
-            emitter.ctcp_make_reply(nick_from_netmask(user), [
-                ('SOURCE', self.source_url), ('SOURCE', None)
-            ])
-
-    def on_ctcp_query_userinfo(self, emitter, user=None, channel=None, data=None):
-        """
-        See :meth:`~girclib.signals.on_ctcp_query_userinfo`.
-        """
-        if self.userinfo:
-            emitter.ctcp_make_reply(nick_from_netmask(user), [
-                ('USERINFO', self.userinfo)
-            ])
 
     def on_rpl_topic(self, emitter, user=None, channel=None, new_topic=None):
         """
@@ -294,7 +248,6 @@ class IRCClient(BaseIRCClient):
         See :meth:`~girclib.signals.on_banned`.
         """
 
-
     def on_user_banned(self, emitter, channel=None, user=None, message=None):
         """
         See :meth:`~girclib.signals.on_user_banned`.
@@ -317,6 +270,23 @@ if __name__ == '__main__':
     from gevent.backdoor import BackdoorServer
     server = BackdoorServer(('127.0.0.1', 2000), locals=locals())
     server.start()
+
+    nicks = []
+
+    @signals.on_rpl_namreply.connect
+    def on_rpl_namreply(emitter, users=None, channel=None, privacy=None):
+        if users:
+            nicks.extend(users)
+
+
+    @signals.on_rpl_endofnames.connect
+    def on_rpl_endofnames(emitter, channel=None):
+        gevent.sleep(2)
+        for nick in nicks:
+            if nick == "girclib":
+                continue
+            client.ping(nick)
+
 
     @signals.on_signed_on.connect
     def _on_motd(emitter):

@@ -3,6 +3,10 @@ gEvent IRC Implementation
 
 .. module:: girclib.irc
 
+.. autoclass:: IRCUser
+  :members:
+  :undoc-members:
+
 .. autoclass:: IRCTransport
   :members:
   :undoc-members:

@@ -24,9 +24,9 @@ from string import letters, digits, punctuation
 from girclib import signals
 from girclib.exceptions import IRCBadMessage, IRCBadModes, UnhandledCommand
 from girclib.helpers import (parse_modes, _int_or_default, split,
-                             nick_from_netmask, ctcp_stringify, ctcp_extract,
-                             X_DELIM, CHANNEL_PREFIXES, MAX_COMMAND_LENGTH,
-                             parse_raw_irc_command,
+                             ctcp_stringify, ctcp_extract, X_DELIM,
+                             CHANNEL_PREFIXES, MAX_COMMAND_LENGTH,
+                             parse_raw_irc_command, parse_netmask,
                              _CommandDispatcherMixin)
 
 log = logging.getLogger(__name__)
@@ -40,6 +40,17 @@ if sys.version_info < (3,):
 def ascii(data):
     """Convert an ASCII string to a native string"""
     return bytes(data, encoding='ascii')
+
+class IRCUser(object):
+    __slots__ = ('netmask', 'nick', 'mode', 'user', 'host')
+    def __init__(self, netmask):
+        self.netmask = netmask
+        self.nick, self.mode, self.user, self.host = parse_netmask(netmask)
+
+    def __repr__(self):
+        return (
+            '<IRCUser nick="%s" user="%s" mode="%s" host="%s">'
+        ) % (self.nick, self.user, self.mode, self.host)
 
 class IRCTransport(object):
     """
@@ -637,8 +648,7 @@ class IRCProtocol(IRCTransport):
                 "Why did %s send '%s' with a USERINFO query?" % (user, data)
             )
         if self.userinfo:
-            self.ctcp_make_reply(nick_from_netmask(user),
-                                 [('USERINFO', self.userinfo)])
+            self.ctcp_make_reply(user, [('USERINFO', self.userinfo)])
 
     def ctcp_query_CLIENTINFO(self, user, channel, data):
         """A master index of what CTCP tags this client knows.
@@ -647,7 +657,6 @@ class IRCProtocol(IRCTransport):
         If an argument is provided, provide human-readable help on
         the usage of that tag.
         """
-        nick = nick_from_netmask(user)
         if not data:
             names = []
             for name in dir(self):
@@ -657,26 +666,26 @@ class IRCProtocol(IRCTransport):
                     continue
                 names.append(name.lstrip('ctcp_query_'))
 
-            self.ctcp_make_reply(nick, [
+            self.ctcp_make_reply(user, [
                 ('CLIENTINFO', ascii(' ').join(names))
             ])
         else:
             args = data.split(ascii('\n'))
             method = getattr(self, 'ctcp_query_%s' % (args[0],), None)
             if not method:
-                self.ctcp_make_reply(nick, [
+                self.ctcp_make_reply(user, [
                     ('ERRMSG', "CLIENTINFO %s :" "Unknown query '%s'"
                      % (data, args[0]))
                 ])
                 return
             doc = getattr(method, '__doc__', '')
-            self.ctcp_make_reply(nick, [('CLIENTINFO', doc)])
+            self.ctcp_make_reply(user, [('CLIENTINFO', doc)])
 
 
     def ctcp_query_ERRMSG(self, user, channel, data):
         # Yeah, this seems strange, but that's what the spec says to do
         # when faced with an ERRMSG query (not a reply).
-        self.ctcp_make_reply(nick_from_netmask(user), [
+        self.ctcp_make_reply(user, [
             ('ERRMSG', "%s :No error has occoured." % data)
         ])
 
@@ -684,12 +693,12 @@ class IRCProtocol(IRCTransport):
         if data is not None:
             self.quirky_message("Why did %s send '%s' with a TIME query?"
                                 % (user, data))
-        self.ctcp_make_reply(nick_from_netmask(user), [
+        self.ctcp_make_reply(user, [
             ('TIME', ':%s' % time.asctime(time.localtime(time.time())))
         ])
 
     def ctcp_unknown_query(self, user, channel, tag, data):
-        self.ctcp_make_reply(nick_from_netmask(user), [
+        self.ctcp_make_reply(user, [
             ('ERRMSG', "%s %s: Unknown query '%s'" % (tag, data, tag))
         ])
         log.warn("Unknown CTCP query from %s: %s %s", user, tag, data)
@@ -702,7 +711,7 @@ class IRCProtocol(IRCTransport):
                         ``(tag, data)`` tuple, where 'data' may be ``None``.
 
         """
-        self.notice(user, ctcp_stringify(messages))
+        self.notice(user.nick, ctcp_stringify(messages))
 
     ### client CTCP query commands
 
@@ -715,7 +724,7 @@ class IRCProtocol(IRCTransport):
                         may be ``None``.
 
         """
-        self.msg(user, ctcp_stringify(messages))
+        self.msg(getattr(user, 'nick', user), ctcp_stringify(messages))
 
     ### Receiving a response to a CTCP query (presumably to one we made)
     ### You may want to add methods here, or override UnknownReply.
@@ -732,9 +741,10 @@ class IRCProtocol(IRCTransport):
                 self.ctcp_unknown_reply(user, channel, msg[0], msg[1])
 
     def ctcp_reply_PING(self, user, channel, data):
-        nick = nick_from_netmask(user)
+        nick = getattr(user, 'nick', user)
         if (not self._pings) or (not self._pings.has_key((nick, data))):
-            raise IRCBadMessage, "Bogus PING response from %s: %s" % (user, data)
+            log.error("Bogus PING response from %s: %s", user, data)
+            return
 
         t0 = self._pings[(nick, data)]
         self.pong(user, time.time() - t0)
@@ -822,37 +832,37 @@ class IRCProtocol(IRCTransport):
         """
         Called when a user joins a channel.
         """
-        nick = nick_from_netmask(prefix)
+        user = IRCUser(prefix)
         channel = params[-1]
-        if nick == self.nickname:
+        if user.nick == self.nickname:
             signals.on_joined.send(self, channel=channel)
         else:
-            signals.on_user_joined.send(self, channel=channel, user=nick)
+            signals.on_user_joined.send(self, channel=channel, user=user)
 
     def irc_PART(self, prefix, params):
         """
         Called when a user leaves a channel.
         """
-        nick = nick_from_netmask(prefix)
+        user = IRCUser(prefix)
         channel = params[0]
         if nick == self.nickname:
             signals.on_left.send(self, channel=channel)
         else:
-            signals.on_user_left.send(self, user=nick, channel=channel)
+            signals.on_user_left.send(self, channel=channel, user=user)
 
     def irc_QUIT(self, prefix, params):
         """
         Called when a user has quit.
         """
-        signals.on_user_quit.send(
-            self, user=nick_from_netmask(prefix), message=params[0]
-        )
+        user = IRCUser(prefix)
+        signals.on_user_quit.send(self, user=user, message=params[0])
 
 
-    def irc_MODE(self, user, params):
+    def irc_MODE(self, prefix, params):
         """
         Parse a server mode change message.
         """
+        user = IRCUser(prefix)
         channel, modes, args = params[0], params[1], params[2:]
 
         if modes[0] not in '-+':
@@ -884,14 +894,14 @@ class IRCProtocol(IRCTransport):
             if added:
                 modes, params = zip(*added)
                 signals.on_mode_changed.send(
-                    self, user=nick_from_netmask(user), channel=channel,
+                    self, user=user, channel=channel,
                     set=True, modes=ascii('').join(modes), args=params
                 )
 
             if removed:
                 modes, params = zip(*removed)
                 signals.on_mode_changed.send(
-                    self, user=nick_from_netmask(user), channel=channel,
+                    self, user=user, channel=channel,
                     set=False, modes=ascii('').join(modes), args=params
                 )
 
@@ -914,7 +924,7 @@ class IRCProtocol(IRCTransport):
         but it will simplify the library usage by separating channel, from
         private messages.
         """
-        user = prefix
+        user = IRCUser(prefix)
         channel = params[0]
         message = params[-1]
 
@@ -932,18 +942,16 @@ class IRCProtocol(IRCTransport):
 
             message = ascii(' ').join(m['normal'])
         if channel == self.nickname:
-            signals.on_privmsg.send(self, user=nick_from_netmask(user),
-                                    message=message)
+            signals.on_privmsg.send(self, user=user, message=message)
         else:
-            signals.on_chanmsg.send(self, channel=channel,
-                                    user=nick_from_netmask(user),
+            signals.on_chanmsg.send(self, channel=channel, user=user,
                                     message=message)
 
     def irc_NOTICE(self, prefix, params):
         """
         Called when a user gets a notice.
         """
-        user = prefix
+        user = IRCUser(prefix)
         channel = params[0]
         message = params[-1]
 
@@ -956,24 +964,23 @@ class IRCProtocol(IRCTransport):
                 return
             message = ascii(' ').join(m['normal'])
 
-        signals.on_notice.send(self, user=nick_from_netmask(prefix),
-                               channel=channel, message=message)
+        signals.on_notice.send(self, user=user, channel=channel, message=message)
 
     def irc_NICK(self, prefix, params):
         """
         Called when a user changes their nickname.
         """
-        nick = nick_from_netmask(prefix)
-        if nick == self.nickname:
-            signals.on_nick_changed.send(self, nickname=nick)
+        user = IRCUser(prefix)
+        if user.nick == self.nickname:
+            signals.on_nick_changed.send(self, user=user, newnick=params[0])
         else:
-            signals.on_user_renamed.send(self, oldname=nick, newname=params[0])
+            signals.on_user_renamed.send(self, user=user, newnick=params[0])
 
     def irc_KICK(self, prefix, params):
         """
         Called when a user is kicked from a channel.
         """
-        kicker = nick_from_netmask(prefix)
+        kicker = IRCUser(prefix)
         channel = params[0]
         kicked = params[1]
         message = params[-1]
@@ -989,28 +996,29 @@ class IRCProtocol(IRCTransport):
         """
         Someone in the channel set the topic.
         """
+        user = IRCUser(prefix)
         channel = params[0]
         newtopic = params[1]
-        signals.on_topic_changed.send(self, user=nick_from_netmask(prefix),
-                                      channel=channel, new_topic=newtopic)
+        signals.on_topic_changed.send(self, user=user, channel=channel,
+                                      new_topic=newtopic)
 
     def irc_RPL_TOPIC(self, prefix, params):
         """
         Called when the topic for a channel is initially reported or when it
         subsequently changes.
         """
+        user = IRCUser(prefix)
         channel = params[1]
         newtopic = params[2]
-        signals.on_rpl_topic.send(self, user=nick_from_netmask(prefix),
-                                  channel=channel, new_topic=newtopic)
+        signals.on_rpl_topic.send(self, user=user, channel=channel,
+                                  new_topic=newtopic)
 
     def irc_RPL_NOTOPIC(self, prefix, params):
         """
         Called when no topic for a channel is set.
         """
         channel = params[1]
-        signals.on_rpl_notopic.send(self, user=nick_from_netmask(prefix),
-                                    channel=channel)
+        signals.on_rpl_notopic.send(self, channel=channel)
 
     def irc_RPL_MOTDSTART(self, prefix, params):
         """
@@ -1427,7 +1435,7 @@ class IRCCommandsHelper(IRCProtocol):
         self.set_nick(nickname)
         if self.username is None:
             self.username = nickname
-        gevent.spawn_later(0.5, self.send, "USER %s %s %s :%s", self.username,
+        gevent.spawn_later(1, self.send, "USER %s %s %s :%s", self.username,
                            hostname, servername, self.realname)
 
     def set_nick(self, nickname):
@@ -1438,7 +1446,7 @@ class IRCCommandsHelper(IRCProtocol):
         :param nickname: The nickname to change to.
         """
         self._attempted_nick = nickname
-        gevent.spawn_later(0.5, self.send, "NICK %s", nickname)
+        gevent.spawn_later(2, self.send, "NICK %s", nickname)
 
     def quit(self, message='Quiting...'):
         """
@@ -1477,10 +1485,12 @@ class IRCCommandsHelper(IRCProtocol):
         if text is None:
             chars = letters + digits + punctuation
             key = ''.join([random.choice(chars) for i in range(12)])
+            key = key.replace('\\', '|')
         else:
             key = str(text)
-        self._pings[(user, key)] = time.time()
+        self._pings[(getattr(user, 'nick', user), key)] = time.time()
         self.ctcp_make_query(user, [('PING', key)])
+        gevent.sleep(0.5)
 
         if len(self._pings) > self._MAX_PINGRING:
             # Remove some of the oldest entries.
@@ -1490,11 +1500,74 @@ class IRCCommandsHelper(IRCProtocol):
             for i in xrange(excess):
                 del self._pings[byValue[i][1]]
 
+    def pong(self, user, secs):
+        """
+        Called with the results of a CTCP PING query. See
+        :meth:`~girclib.irc.IRCCommandsHelper.ping`
+        """
+        log.info("Ping result for user %s: %.1fsecs", user, secs)
+
 class BaseIRCClient(IRCCommandsHelper):
-    def __init__(self):
-        self.pool = Pool(500)   # Don't choke CPU. Stop processing when there's
-                                # 500 greenlets in pool
-        self.supported = ServerSupportedFeatures()
+
+    @staticmethod
+    def __new__(cls, *args, **kwargs):
+        # Do some handled signal connections
+        instance = super(BaseIRCClient, cls).__new__(cls)
+        signals.on_ctcp_query_ping.connect(
+            instance.on_ctcp_query_ping, sender=instance
+        )
+        signals.on_ctcp_query_finger.connect(
+            instance.on_ctcp_query_finger, sender=instance
+        )
+        signals.on_ctcp_query_version.connect(
+            instance.on_ctcp_query_version, sender=instance
+        )
+        signals.on_ctcp_query_source.connect(
+            instance.on_ctcp_query_source, sender=instance
+        )
+        instance.pool = Pool(500)   # Don't choke CPU. Stop processing when
+                                    # there's 500 greenlets in pool
+        instance.supported = ServerSupportedFeatures()
+        return instance
+
+    def on_ctcp_query_ping(self, emitter, user=None, channel=None, data=None):
+        """
+        See :meth:`~girclib.signals.on_ctcp_query_ping`.
+        """
+        emitter.ctcp_make_reply(user, [("PING", data)])
+
+    def on_ctcp_query_version(self, emitter, user=None, channel=None, data=None):
+        """
+        See :meth:`~girclib.signals.on_ctcp_query_version`.
+        """
+        if not self.version_name:
+            return
+
+        emitter.ctcp_make_reply(user, [
+            ('VERSION', '%s:%s:%s' % (self.version_name,
+                                      self.version_num or '',
+                                      self.version_env or ''))
+        ])
+
+    def on_ctcp_query_source(self, emitter, user=None, channel=None, data=None):
+        """
+        See :meth:`~girclib.signals.on_ctcp_query_source`.
+        """
+        if self.source_url:
+            # The CTCP document (Zeuge, Rollo, Mesander 1994) says that SOURCE
+            # replies should be responded to with the location of an anonymous
+            # FTP server in host:directory:file format.  I'm taking the liberty
+            # of bringing it into the 21st century by sending a URL instead.
+            emitter.ctcp_make_reply(user, [
+                ('SOURCE', self.source_url), ('SOURCE', None)
+            ])
+
+    def on_ctcp_query_userinfo(self, emitter, user=None, channel=None, data=None):
+        """
+        See :meth:`~girclib.signals.on_ctcp_query_userinfo`.
+        """
+        if self.userinfo:
+            emitter.ctcp_make_reply(user, [('USERINFO', self.userinfo)])
 
     def on_data_available(self, data):
         log.debug("Data %r", data)
