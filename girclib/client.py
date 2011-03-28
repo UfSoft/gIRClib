@@ -41,7 +41,7 @@ class IRCClient(BaseIRCClient):
         BaseIRCClient.connect(self, self.host, self.port, use_ssl=False)
 
     def connect_signals(self):
-        signals.on_connected.connect(self.on_connected)
+        signals.on_connected.connect(self.on_connected, sender=self)
         signals.on_ctcp_query_ping.connect(self.on_ctcp_query_ping, sender=self)
         signals.on_ctcp_query_finger.connect(self.on_ctcp_query_finger, sender=self)
         signals.on_ctcp_query_version.connect(self.on_ctcp_query_version, sender=self)
