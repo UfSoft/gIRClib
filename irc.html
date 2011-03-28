@@ -58,6 +58,36 @@
   <div class="section" id="module-girclib.irc">
 <span id="gevent-irc-implementation"></span><h1>gEvent IRC Implementation<a class="headerlink" href="#module-girclib.irc" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
+<dt id="girclib.irc.IRCUser">
+<em class="property">class </em><tt class="descclassname">girclib.irc.</tt><tt class="descname">IRCUser</tt><big>(</big><em>netmask</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCUser" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="girclib.irc.IRCUser.host">
+<tt class="descname">host</tt><a class="headerlink" href="#girclib.irc.IRCUser.host" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="girclib.irc.IRCUser.mode">
+<tt class="descname">mode</tt><a class="headerlink" href="#girclib.irc.IRCUser.mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="girclib.irc.IRCUser.netmask">
+<tt class="descname">netmask</tt><a class="headerlink" href="#girclib.irc.IRCUser.netmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="girclib.irc.IRCUser.nick">
+<tt class="descname">nick</tt><a class="headerlink" href="#girclib.irc.IRCUser.nick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="girclib.irc.IRCUser.user">
+<tt class="descname">user</tt><a class="headerlink" href="#girclib.irc.IRCUser.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="girclib.irc.IRCTransport">
 <em class="property">class </em><tt class="descclassname">girclib.irc.</tt><tt class="descname">IRCTransport</tt><a class="headerlink" href="#girclib.irc.IRCTransport" title="Permalink to this definition">¶</a></dt>
 <dd><p>IRC transport implementation, responsible for connecting, receiving and
@@ -554,7 +584,7 @@ taken.</p>
 
 <dl class="method">
 <dt id="girclib.irc.IRCProtocol.irc_MODE">
-<tt class="descname">irc_MODE</tt><big>(</big><em>user</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_MODE" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">irc_MODE</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_MODE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a server mode change message.</p>
 </dd></dl>
 
@@ -952,6 +982,13 @@ replies.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="girclib.irc.IRCCommandsHelper.pong">
+<tt class="descname">pong</tt><big>(</big><em>user</em>, <em>secs</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.pong" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with the results of a CTCP PING query. See
+<a class="reference internal" href="#girclib.irc.IRCCommandsHelper.ping" title="girclib.irc.IRCCommandsHelper.ping"><tt class="xref py py-meth docutils literal"><span class="pre">ping()</span></tt></a></p>
+</dd></dl>
+
+<dl class="method">
 <dt id="girclib.irc.IRCCommandsHelper.quit">
 <tt class="descname">quit</tt><big>(</big><em>message='Quiting...'</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.quit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disconnect from the server</p>
@@ -1067,6 +1104,30 @@ has no prefix, <tt class="docutils literal"><span class="pre">#</span></tt> will
 <em class="property">class </em><tt class="descclassname">girclib.irc.</tt><tt class="descname">BaseIRCClient</tt><a class="headerlink" href="#girclib.irc.BaseIRCClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#girclib.irc.IRCCommandsHelper" title="girclib.irc.IRCCommandsHelper"><tt class="xref py py-class docutils literal"><span class="pre">girclib.irc.IRCCommandsHelper</span></tt></a></p>
 <dl class="method">
+<dt id="girclib.irc.BaseIRCClient.on_ctcp_query_ping">
+<tt class="descname">on_ctcp_query_ping</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.irc.BaseIRCClient.on_ctcp_query_ping" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_ping" title="girclib.signals.on_ctcp_query_ping"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_ping()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.BaseIRCClient.on_ctcp_query_source">
+<tt class="descname">on_ctcp_query_source</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.irc.BaseIRCClient.on_ctcp_query_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_source" title="girclib.signals.on_ctcp_query_source"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_source()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.BaseIRCClient.on_ctcp_query_userinfo">
+<tt class="descname">on_ctcp_query_userinfo</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.irc.BaseIRCClient.on_ctcp_query_userinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_userinfo" title="girclib.signals.on_ctcp_query_userinfo"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_userinfo()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="girclib.irc.BaseIRCClient.on_ctcp_query_version">
+<tt class="descname">on_ctcp_query_version</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.irc.BaseIRCClient.on_ctcp_query_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_version" title="girclib.signals.on_ctcp_query_version"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_version()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="girclib.irc.BaseIRCClient.on_data_available">
 <tt class="descname">on_data_available</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#girclib.irc.BaseIRCClient.on_data_available" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1132,7 +1193,7 @@ has no prefix, <tt class="docutils literal"><span class="pre">#</span></tt> will
     </div>
     <div class="footer">
         &copy; Copyright 2011, Pedro Algarvio.
-      Last updated on Mar 27, 2011.
+      Last updated on Mar 28, 2011.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>

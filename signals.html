@@ -150,7 +150,7 @@ to interact with an IRC server.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user the message is coming from.</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user the message is coming from.</li>
 <li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The message.</li>
 </ul>
 </td>
@@ -170,7 +170,7 @@ to interact with an IRC server.</p>
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the message is coming from.</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user who sent the message.</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user who sent the message.</li>
 <li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The message.</li>
 </ul>
 </td>
@@ -235,7 +235,7 @@ response to something it received.</pre>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the user sending the notice</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; the user sending the notice</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel where the notice is coming from</li>
 <li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the notice message</li>
 </ul>
@@ -255,7 +255,7 @@ response to something it received.</pre>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user and hostmask which instigated this change.</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user and hostmask which instigated this change.</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel where the modes are changed. If args is
 empty the channel for which the modes are changing. If the
 changes are at server level it could be equal to <tt class="docutils literal"><span class="pre">user</span></tt>.</li>
@@ -317,7 +317,7 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel being kicked from.</li>
-<li><strong>kicker</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user that kicked.</li>
+<li><strong>kicker</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user that kicked.</li>
 <li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The kick message.</li>
 </ul>
 </td>
@@ -328,7 +328,7 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 
 <dl class="function">
 <dt id="girclib.signals.on_nick_changed">
-<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_nick_changed</tt><big>(</big><em>emitter</em>, <em>nickname=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_nick_changed" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_nick_changed</tt><big>(</big><em>emitter</em>, <em>user=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_nick_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called when my nick has been changed.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -336,7 +336,8 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>nickname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The nickname.</li>
+<li><strong>user</strong> (<em>~:class:girclib.irc.IRCUser</em>) &#8211; Our user.</li>
+<li><strong>newnick</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The new nickname.</li>
 </ul>
 </td>
 </tr>
@@ -355,7 +356,7 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the message is coming from.</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The joining.</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The joining.</li>
 </ul>
 </td>
 </tr>
@@ -374,7 +375,7 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the message is coming from.</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The joining.</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The joining.</li>
 </ul>
 </td>
 </tr>
@@ -392,7 +393,7 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user quiting.</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user quiting.</li>
 <li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The quit message.</li>
 </ul>
 </td>
@@ -411,7 +412,7 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>kicked</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user being kicked.</li>
+<li><strong>kicked</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user being kicked.</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the user is being kicked from.</li>
 <li><strong>message</strong> &#8211; The kick message.</li>
 </ul>
@@ -431,7 +432,7 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user that performed the <tt class="docutils literal"><span class="pre">ACTION</span></tt></li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user that performed the <tt class="docutils literal"><span class="pre">ACTION</span></tt></li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the <tt class="docutils literal"><span class="pre">ACTION</span></tt> is coming from.</li>
 <li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The <tt class="docutils literal"><span class="pre">ACTION</span></tt> data.</li>
 </ul>
@@ -451,8 +452,8 @@ joining a channel.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user changing the topic.</li>
+<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter.</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user changing the topic.</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the topic is being changed.</li>
 <li><strong>new_topic</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel&#8217;s new topic.</li>
 </ul>
@@ -464,7 +465,7 @@ joining a channel.</p>
 
 <dl class="function">
 <dt id="girclib.signals.on_user_renamed">
-<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_user_renamed</tt><big>(</big><em>emitter</em>, <em>oldname=None</em>, <em>newname=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_user_renamed" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">girclib.signals.</tt><tt class="descname">on_user_renamed</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>newname=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_user_renamed" title="Permalink to this definition">¶</a></dt>
 <dd><p>A user changed their name from oldname to newname.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -472,8 +473,8 @@ joining a channel.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>oldname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The old name.</li>
-<li><strong>newname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The new name.</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user who changed nick.</li>
+<li><strong>newnick</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The new nickname.</li>
 </ul>
 </td>
 </tr>
@@ -616,7 +617,7 @@ section 6.1.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the nickname netmask querying</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; the user querying</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
 <li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
 </ul>
@@ -636,7 +637,7 @@ section 6.1.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the nickname netmask querying</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; the user querying</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
 <li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
 </ul>
@@ -656,7 +657,7 @@ section 6.1.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the nickname netmask querying</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; the user querying</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
 <li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
 </ul>
@@ -676,7 +677,7 @@ section 6.1.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the nickname netmask querying</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; the user querying</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
 <li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
 </ul>
@@ -851,12 +852,14 @@ the form &#8220;NAME=VALUE&#8221;.</td>
 <dl class="function">
 <dt id="girclib.signals.on_rpl_topic">
 <tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_topic</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>topic=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_topic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called with the initial information about the channel&#8217;s topic</p>
+<dd><p>Called when the topic for a channel is initially reported or when it
+subsequently changes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user changing the topic.</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel name.</li>
 <li><strong>topic</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel&#8217;s topic.</li>
 </ul>
@@ -869,12 +872,14 @@ the form &#8220;NAME=VALUE&#8221;.</td>
 <dl class="function">
 <dt id="girclib.signals.on_rpl_notopic">
 <tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_notopic</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_notopic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called with the initial information about the channel&#8217;s topic</p>
+<dd><p>Called when the topic for a channel is initially reported or when it
+subsequently changes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user changing the topic.</li>
 <li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel name.</li>
 <li><strong>topic</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel&#8217;s topic.</li>
 </ul>
@@ -1047,7 +1052,7 @@ channel) or <tt class="docutils literal"><span class="pre">=</span></tt> (public
     </div>
     <div class="footer">
         &copy; Copyright 2011, Pedro Algarvio.
-      Last updated on Mar 27, 2011.
+      Last updated on Mar 28, 2011.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>

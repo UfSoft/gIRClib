@@ -99,30 +99,6 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="girclib.client.IRCClient.on_ctcp_query_ping">
-<tt class="descname">on_ctcp_query_ping</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_ctcp_query_ping" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_ping" title="girclib.signals.on_ctcp_query_ping"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_ping()</span></tt></a>.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="girclib.client.IRCClient.on_ctcp_query_source">
-<tt class="descname">on_ctcp_query_source</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_ctcp_query_source" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_source" title="girclib.signals.on_ctcp_query_source"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_source()</span></tt></a>.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="girclib.client.IRCClient.on_ctcp_query_userinfo">
-<tt class="descname">on_ctcp_query_userinfo</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_ctcp_query_userinfo" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_userinfo" title="girclib.signals.on_ctcp_query_userinfo"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_userinfo()</span></tt></a>.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="girclib.client.IRCClient.on_ctcp_query_version">
-<tt class="descname">on_ctcp_query_version</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_ctcp_query_version" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_version" title="girclib.signals.on_ctcp_query_version"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_version()</span></tt></a>.</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="girclib.client.IRCClient.on_erroneous_nickname">
 <tt class="descname">on_erroneous_nickname</tt><big>(</big><em>emitter</em>, <em>nickname=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_erroneous_nickname" title="Permalink to this definition">¶</a></dt>
 <dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_erroneous_nickname" title="girclib.signals.on_erroneous_nickname"><tt class="xref py py-meth docutils literal"><span class="pre">on_erroneous_nickname()</span></tt></a>.</p>
@@ -160,7 +136,7 @@
 
 <dl class="method">
 <dt id="girclib.client.IRCClient.on_nick_changed">
-<tt class="descname">on_nick_changed</tt><big>(</big><em>emitter</em>, <em>nickname=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_nick_changed" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">on_nick_changed</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>newnick=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_nick_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_nick_changed" title="girclib.signals.on_nick_changed"><tt class="xref py py-meth docutils literal"><span class="pre">on_nick_changed()</span></tt></a>.</p>
 </dd></dl>
 
@@ -299,7 +275,7 @@
 
 <dl class="method">
 <dt id="girclib.client.IRCClient.on_user_renamed">
-<tt class="descname">on_user_renamed</tt><big>(</big><em>emitter</em>, <em>oldname=None</em>, <em>newname=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_user_renamed" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">on_user_renamed</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>newnick=None</em><big>)</big><a class="headerlink" href="#girclib.client.IRCClient.on_user_renamed" title="Permalink to this definition">¶</a></dt>
 <dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_user_renamed" title="girclib.signals.on_user_renamed"><tt class="xref py py-meth docutils literal"><span class="pre">on_user_renamed()</span></tt></a>.</p>
 </dd></dl>
 
@@ -364,7 +340,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Pedro Algarvio.
-      Last updated on Mar 27, 2011.
+      Last updated on Mar 28, 2011.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
