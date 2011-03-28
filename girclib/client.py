@@ -267,12 +267,12 @@ class IRCClient(BaseIRCClient):
         See :meth:`~girclib.signals.on_notice`.
         """
 
-    def on_nick_changed(self, emitter, nickname=None):
+    def on_nick_changed(self, emitter, user=None, newnick=None):
         """
         See :meth:`~girclib.signals.on_nick_changed`.
         """
 
-    def on_user_renamed(self, emitter, oldname=None, newname=None):
+    def on_user_renamed(self, emitter, user=None, newnick=None):
         """
         See :meth:`~girclib.signals.on_user_renamed`.
         """

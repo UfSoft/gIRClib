@@ -10,6 +10,7 @@
     :license: BSD, see LICENSE for more details.
 """
 
+import sys
 import time
 import errno
 import socket
@@ -22,13 +23,23 @@ from gevent.socket import create_connection
 from string import letters, digits, punctuation
 from girclib import signals
 from girclib.exceptions import IRCBadMessage, IRCBadModes, UnhandledCommand
-from girclib.helpers import (parse_modes, _int_or_default, split, ascii,
+from girclib.helpers import (parse_modes, _int_or_default, split,
                              nick_from_netmask, ctcp_stringify, ctcp_extract,
                              X_DELIM, CHANNEL_PREFIXES, MAX_COMMAND_LENGTH,
-                             parse_raw_irc_command, native,
+                             parse_raw_irc_command,
                              _CommandDispatcherMixin)
 
 log = logging.getLogger(__name__)
+
+# Python < 3 compatibility
+if sys.version_info < (3,):
+    class bytes(object):
+        def __new__(self, b='', encoding='utf8'):
+            return str(b)
+
+def ascii(data):
+    """Convert an ASCII string to a native string"""
+    return bytes(data, encoding='ascii')
 
 class IRCTransport(object):
     """
@@ -73,27 +84,31 @@ class IRCTransport(object):
         bargs = []
         bkwargs = {}
         for arg in args:
-            if isinstance(arg, str) or type(arg).__name__ == 'unicode':
-                bargs.append(native(arg, encoding))
-            elif isinstance(arg, native):
+            if isinstance(arg, str):
+                bargs.append(bytes(arg, encoding))
+            elif isinstance(arg, bytes):
                 bargs.append(arg)
+            elif type(arg).__name__ == 'unicode':
+                bargs.append(arg.encode(encoding))
             else:
                 log.warning(
                     'Refusing to send one of the args from provided: %s',
                     repr([(type(arg), arg) for arg in args])
                 )
         for key, value in kwargs.iteritems():
-            if isinstance(value, str) or type(arg).__name__ == 'unicode':
-                bkwargs[key] = native(value, encoding)
-            elif isinstance(value, native):
+            if isinstance(value, str):
+                bkwargs[key] = bytes(value, encoding)
+            elif isinstance(value, bytes):
                 bkwargs[key] = arg
+            elif type(value).__name__ == 'unicode':
+                bkwargs[key] = value.encode(encoding)
             else:
                 log.warning(
                     'Refusing to send one of the args from provided: %s', kwargs
                 )
 
-        msg = (msg.replace("%s", "%%s") % bkwargs % tuple(bargs)).encode(encoding)
-        gevent.spawn_raw(self.__write_socket, "%s\r\n" % msg)
+        msg = (msg.replace(ascii("%s"), ascii("%%s")) % bkwargs % tuple(bargs))
+        gevent.spawn_raw(self.__write_socket, msg + ascii("\r\n"))
         gevent.sleep(0) # allow other greenlets to run
 
     def disconnect(self):
@@ -112,7 +127,7 @@ class IRCTransport(object):
             signals.on_disconnected.send(self)
             log.log(5, "Client disconnected")
 
-        signals.on_quited.connect(on_quited, weak=False)
+        signals.on_quited.connect(on_quited, sender=self, weak=False)
 
         self.pool.spawn(self.quit)
         gevent.sleep(0)
@@ -564,6 +579,7 @@ class IRCProtocol(IRCTransport):
     _MAX_PINGRING = 12
     _attempted_nick = None
 
+    motd = None
     # ---- CTCP Abstraction Start ----------------------------------------------
     userinfo     = None
 
@@ -1016,7 +1032,7 @@ class IRCProtocol(IRCTransport):
         ``RPL_ENDOFMOTD`` indicates the end of the message of the day messages.
         """
         motd = self.motd
-        self.motd = None
+        self.motd = None    # Restore motd to None
         signals.on_motd.send(self, motd=motd)
 
     def irc_RPL_CREATED(self, prefix, params):
@@ -1065,6 +1081,7 @@ class IRCProtocol(IRCTransport):
             self._isupport_ready_event = Event()
             self._isupport_ready_event.wait()
             signals.on_rpl_isupport.send(self, options=self.supported._features)
+            del self._isupport_ready_event
 
 
     def irc_RPL_LUSERCLIENT(self, prefix, params):
@@ -1142,7 +1159,6 @@ class IRCProtocol(IRCTransport):
             # have all issuport options
             self._isupport_ready_event.set()
             gevent.sleep(0.5)
-            del self._isupport_ready_event
 
         method = getattr(self, "irc_%s" % command, None)
         try:
@@ -1476,13 +1492,12 @@ class IRCCommandsHelper(IRCProtocol):
 
 class BaseIRCClient(IRCCommandsHelper):
     def __init__(self):
-        self.pool = Pool()
+        self.pool = Pool(500)   # Don't choke CPU. Stop processing when there's
+                                # 500 greenlets in pool
         self.supported = ServerSupportedFeatures()
 
     def on_data_available(self, data):
         log.debug("Data %r", data)
         prefix, command, args = parse_raw_irc_command(data)
-        log.debug('Incomming message. Prefix: "%s" Command: "%s" '
-                  'Args: "%s"', prefix, command, args)
         self.pool.spawn(self.handle_command, prefix, command, args)
         gevent.sleep(0) # Allow other greenlets to run
