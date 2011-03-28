@@ -27,29 +27,15 @@ SPC     = chr(040)
 MAX_COMMAND_LENGTH = 512
 CHANNEL_PREFIXES = '&#!+'
 
-if sys.version_info >= (3,0,0):
-    def to_uni(x, encoding='utf-8'):
-        """ Convert anything to unicode """
-        return str(x, encoding=encoding) if isinstance(x, bytes) else str(x)
-else:
-    bytes = str
-    def to_uni(x, encoding='utf-8'):
-        """ Convert anything to unicode """
-        return x if isinstance(x, unicode) else unicode(str(x), encoding=encoding)
-
-def to_bytes(data, encoding='utf-8'):
-    """ Convert anything to bytes """
-    return data.encode(encoding) if isinstance(data, unicode) else bytes(data)
-
-if sys.version_info >= (3,0,0):
-    native = to_uni
-else:
-    native = to_bytes
-native.__doc__ = """ Convert anything to native strings """
+# Python < 3 compatibility
+if sys.version_info < (3,):
+    class bytes(object):
+        def __new__(self, b='', encoding='utf8'):
+            return str(b)
 
 def ascii(data):
     """Convert an ASCII string to a native string"""
-    return native(data, encoding='ascii')
+    return bytes(data, encoding='ascii')
 
 def parse_modes(modes, params, param_modes=('', '')):
     """
@@ -172,7 +158,7 @@ def ctcp_extract(message):
     retval = {'extended': extended_messages,
               'normal': normal_messages }
 
-    messages = native(message).split(X_DELIM)
+    messages = ascii(message).split(X_DELIM)
     odd = 0
 
     # X1 extended data X2 nomal data X3 extended data X4 normal...
@@ -283,13 +269,13 @@ def ctcp_stringify(messages):
                 except TypeError:
                     # No?  Then use it's %s representation.
                     pass
-            m = native("%s %s" % (tag, data))
+            m = ascii("%s %s" % (tag, data))
         else:
-            m = native(tag)
+            m = ascii(tag)
         m = ctcp_quote(m)
-        m = native("%s%s%s" % (X_DELIM, m, X_DELIM))
+        m = ascii("%s%s%s" % (X_DELIM, m, X_DELIM))
         coded_messages.append(m)
-    return native("").join(coded_messages)
+    return ascii("").join(coded_messages)
 
 
 def parse_raw_irc_command(element):
