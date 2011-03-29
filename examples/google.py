@@ -21,7 +21,6 @@ import httplib2
 from gevent import monkey
 from girclib import signals
 from girclib.client import IRCClient
-from girclib.helpers import nick_from_netmask
 
 log = logging.getLogger(__name__)
 
@@ -49,11 +48,11 @@ class GoogleSearchBot(IRCClient):
                       match.group(0))
             results = self.fetch_result(match.group(1))
             if results:
-                self.msg(user, "Search results: %s" % ', '.join(results))
+                self.msg(user.nick, "Search results: %s" % ', '.join(results))
             else:
-                self.msg(user, "No results for %r" % match.group(1))
+                self.msg(user.nick, "No results for %r" % match.group(1))
         else:
-            self.msg(user, "Can't understand your command: \"%s\"" % message)
+            self.msg(user.nick, "Can't understand your command: \"%s\"" % message)
 
     def on_chanmsg(self, emitter, channel=None, user=None, message=None):
         log.debug("Google search bot got a channel message")
@@ -70,11 +69,11 @@ class GoogleSearchBot(IRCClient):
             results = self.fetch_result(match.group(2))
             if results:
                 self.notice(channel, "%s: Search results: %s" % (
-                    user, ', '.join(results),
+                    user.nick, ', '.join(results),
                 ))
             else:
                 self.notice(channel, "%: No results for %r" % (
-                    user, match.group(1)
+                    user.nick, match.group(1)
                 ))
         else:
             self.notice(channel,

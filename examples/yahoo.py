@@ -20,7 +20,6 @@ import httplib2
 from gevent import monkey
 from girclib import signals
 from girclib.client import IRCClient
-from girclib.helpers import nick_from_netmask
 
 log = logging.getLogger(__name__)
 
@@ -63,13 +62,14 @@ class YahooAnswerBot(IRCClient):
 
             answer = self.fetch_result(match.group(2))
             if answer:
-                self.notice(channel, "%s: %s" % (user, answer))
+                self.notice(channel, "%s: %s" % (user.nick, answer))
             else:
                 self.notice(channel, "%s: Yahoo answers cannot answer %r" % (
-                    user, match.group(1)
+                    user.nick, match.group(1)
                 ))
                 self.notice(
-                    channel, "%s: Try \"Does napping make you smarter?\"" % user
+                    channel, "%s: Try \"Does napping make you smarter?\"" %
+                    user.nick
                 )
 
     def on_privmsg(self, emitter, user=None, channel=None, message=None):
@@ -81,12 +81,14 @@ class YahooAnswerBot(IRCClient):
                       match.group(0))
             answer = self.fetch_result(match.group(1))
             if answer:
-                self.msg(user, "Answer: %s" % answer)
+                self.msg(user.nick, "Answer: %s" % answer)
             else:
-                self.msg(user, "Yahoo answers cannot answer %r" % match.group(1))
-                self.msg(user, "Try: \"Does napping make you smarter?\"")
+                self.msg(user.nick, "Yahoo answers cannot answer %r" %
+                         match.group(1))
+                self.msg(user.nick, "Try: \"Does napping make you smarter?\"")
         else:
-            self.msg(user, "Can't understand your command: \"%s\"" % message)
+            self.msg(user.nick, "Can't understand your command: \"%s\"" %
+                     message)
 
 
 if __name__ == '__main__':
