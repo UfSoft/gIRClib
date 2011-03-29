@@ -8,17 +8,22 @@
     :license: BSD, see LICENSE for more details.
 """
 
-import socket
-import gevent
 import girclib
 import logging
 from girclib import signals
-from girclib.helpers import parse_raw_irc_command
-from girclib.irc import BaseIRCClient, ServerSupportedFeatures, IRCUser
+from girclib.irc import BaseIRCClient
 
 log = logging.getLogger(__name__)
 
-class IRCClient(BaseIRCClient):
+class BasicIRCClient(BaseIRCClient):
+    """
+    This is the simplest IRC client you have. It manages the minimal required
+    signals and events to have a working irc client.
+
+    For a client which already has some methods you can override please see
+    :class:`~girclib.client.IRCClient`.
+
+    """
     source_url   = girclib.__url__
     version_name = girclib.__package_name__
     version_num  = girclib.__version__
@@ -27,57 +32,24 @@ class IRCClient(BaseIRCClient):
     erroneous_nick_fallback = "%s-Client" % girclib.__package_name__
 
     def __init__(self, host="", port=6667, nickname="girclib", username=None,
-                 realname="gIRClib", password=None, encoding="utf-8"):
+                 realname="gIRClib", password=None):
         self.host = host
         self.port = port
         self.nickname = nickname
         self.username = username
         self.realname = realname
         self.password = password
-        self.connect_signals()
 
     def connect(self):
         BaseIRCClient.connect(self, self.host, self.port, use_ssl=False)
 
-    def connect_signals(self):
-        signals.on_connected.connect(self.on_connected, sender=self)
-        signals.on_ctcp_query_finger.connect(self.on_ctcp_query_finger, sender=self)
-        signals.on_rpl_topic.connect(self.on_rpl_topic, sender=self)
-        signals.on_rpl_created.connect(self.on_rpl_created, sender=self)
-        signals.on_rpl_yourhost.connect(self.on_rpl_yourhost, sender=self)
-        signals.on_rpl_myinfo.connect(self.on_rpl_myinfo, sender=self)
-        signals.on_rpl_bounce.connect(self.on_rpl_bounce, sender=self)
-        signals.on_rpl_isupport.connect(self.on_rpl_isupport, sender=self)
-        signals.on_rpl_luserclient.connect(self.on_rpl_luserclient, sender=self)
-        signals.on_rpl_luserop.connect(self.on_rpl_luserop, sender=self)
-        signals.on_rpl_luserchannels.connect(self.on_rpl_luserchannels, sender=self)
-        signals.on_rpl_luserme.connect(self.on_rpl_luserme, sender=self)
-        signals.on_motd.connect(self.on_motd, sender=self)
-        signals.on_nickname_in_use.connect(self.on_nickname_in_use, sender=self)
-        signals.on_erroneous_nickname.connect(self.on_erroneous_nickname, sender=self)
-        signals.on_password_mismatch.connect(self.on_password_mismatch, sender=self)
-        signals.on_signed_on.connect(self.on_signed_on, sender=self)
-        signals.on_joined.connect(self.on_joined, sender=self)
-        signals.on_user_joined.connect(self.on_user_joined, sender=self)
-        signals.on_left.connect(self.on_left, sender=self)
-        signals.on_user_left.connect(self.on_user_left, sender=self)
-        signals.on_user_quit.connect(self.on_user_quit, sender=self)
-        signals.on_mode_changed.connect(self.on_mode_changed, sender=self)
-        signals.on_chanmsg.connect(self.on_chanmsg, sender=self)
-        signals.on_privmsg.connect(self.on_privmsg, sender=self)
-        signals.on_notice.connect(self.on_notice, sender=self)
-        signals.on_nick_changed.connect(self.on_nick_changed, sender=self)
-        signals.on_user_renamed.connect(self.on_user_renamed, sender=self)
-        signals.on_kicked.connect(self.on_kicked, sender=self)
-        signals.on_user_kicked.connect(self.on_user_kicked, sender=self)
-        signals.on_topic_changed.connect(self.on_topic_changed, sender=self)
-        signals.on_banned.connect(self.on_banned, sender=self)
-        signals.on_user_banned.connect(self.on_user_banned, sender=self)
+class IRCClient(BasicIRCClient):
+    """
+    This IRC client is the same as :class:`~girclib.client.BasicIRCClient` but
+    defines some methods that you can just override to get your own client
+    doing what you want.
 
-    def on_connected(self, emitter):
-        log.debug("Connected to %s:%s", self.network_host, self.network_port)
-        self.register(self.nickname, hostname=socket.gethostname(),
-                      servername=socket.gethostname())
+    """
 
     def on_ctcp_query_finger(self, emitter, user=None, channel=None, data=None):
         """
@@ -110,8 +82,8 @@ class IRCClient(BaseIRCClient):
         See :meth:`~girclib.signals.on_rpl_yourhost`.
         """
 
-    def on_rpl_myinfo(self, emitter, servername=None, version=None, umodes=None,
-                      cmodes=None):
+    def on_rpl_myinfo(self, emitter, servername=None, version=None,
+                      umodes=None, cmodes=None):
         """
         See :meth:`~girclib.signals.on_rpl_myinfo`.
         """
@@ -260,6 +232,7 @@ class IRCClient(BaseIRCClient):
 
 
 if __name__ == '__main__':
+    import gevent
     from girclib.helpers import setup_logging
     format='%(asctime)s [%(lineno)-4s] %(levelname)-7.7s: %(message)s'
     setup_logging(format, 5)

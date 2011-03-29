@@ -19,7 +19,7 @@ import logging
 import gevent
 from gevent.event import Event
 from gevent.pool import Pool
-from gevent.socket import create_connection
+from gevent.socket import create_connection, wait_read
 from string import letters, digits, punctuation
 from girclib import signals
 from girclib.exceptions import IRCBadMessage, IRCBadModes, UnhandledCommand
@@ -83,9 +83,10 @@ class IRCTransport(object):
         # but, just in case...
         self.socket.setblocking(0)
 
-        gevent.spawn_later(0.2, signals.on_connected.send, self)
         self._processing = True
-        gevent.spawn_raw(self.__read_socket)
+        gevent.spawn_later(0.5, self.__read_socket)
+        wait_read(self.socket.fileno(), timeout=30)
+        signals.on_connected.send(self)
 
     def send(self, msg, *args, **kwargs):
         if not self._processing:
@@ -1511,24 +1512,32 @@ class BaseIRCClient(IRCCommandsHelper):
 
     @staticmethod
     def __new__(cls, *args, **kwargs):
-        # Do some handled signal connections
         instance = super(BaseIRCClient, cls).__new__(cls)
-        signals.on_ctcp_query_ping.connect(
-            instance.on_ctcp_query_ping, sender=instance
-        )
-        signals.on_ctcp_query_finger.connect(
-            instance.on_ctcp_query_finger, sender=instance
-        )
-        signals.on_ctcp_query_version.connect(
-            instance.on_ctcp_query_version, sender=instance
-        )
-        signals.on_ctcp_query_source.connect(
-            instance.on_ctcp_query_source, sender=instance
-        )
+
         instance.pool = Pool(500)   # Don't choke CPU. Stop processing when
                                     # there's 500 greenlets in pool
         instance.supported = ServerSupportedFeatures()
+
+        # Do some handled signal connections
+        for signame in sorted(dir(signals)):
+            func = getattr(instance, signame, None)
+            if func:
+                signal = getattr(signals, signame)
+                if signal.has_receivers_for(instance):
+                    # Avoid suplicate signal connection"
+                    log.info("Skiping signal %s. Already connected", signame)
+#                    print (func, list(signal.receivers_for(instance)),
+#                           func in signal.receivers_for(instance))
+                    continue
+                log.info("Connecting %s to %s", func, signame)
+                signal.connect(func, sender=instance)
         return instance
+
+
+    def on_connected(self, emitter):
+        log.debug("Connected to %s:%s", self.network_host, self.network_port)
+        self.register(self.nickname, hostname=socket.gethostname(),
+                      servername=socket.gethostname())
 
     def on_ctcp_query_ping(self, emitter, user=None, channel=None, data=None):
         """

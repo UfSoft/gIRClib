@@ -30,6 +30,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
+    'sphinx.ext.intersphinx',
     'sphinxcontrib.spelling',
     'sphinxcontrib.email'
 #    'sphinx.ext.viewcode'
@@ -79,7 +80,7 @@ exclude_patterns = []
 #default_role = None
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
-#add_function_parentheses = True
+add_function_parentheses = False
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
@@ -138,7 +139,7 @@ html_static_path = ['_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
-html_last_updated_fmt = '%b %d, %Y'
+html_last_updated_fmt = '%b %d, %Y  %H:%m'
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
@@ -248,3 +249,8 @@ spelling_word_list_filename = os.path.join(
     os.path.dirname(__file__), 'spelling_wordlist.txt'
 )
 
+
+# -- Intersphinx ---------------------------------------------------------------
+intersphinx_mapping = {
+    'python': ('http://docs.python.org/', None)
+}
