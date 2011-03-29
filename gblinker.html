@@ -86,15 +86,15 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>receiver</strong> &#8211; A callable.  Will be invoked by <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send()</span></tt></a> with
+<li><strong>receiver</strong> &#8211; A callable.  Will be invoked by <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send</span></tt></a> with
 <cite>sender=</cite> as a single positional argument and any **kwargs that
-were provided to a call to <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send()</span></tt></a>.</li>
+were provided to a call to <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send</span></tt></a>.</li>
 <li><strong>sender</strong> &#8211; Any object or <tt class="xref py py-obj docutils literal"><span class="pre">ANY</span></tt>, defaults to <tt class="docutils literal"><span class="pre">ANY</span></tt>.
 Restricts notifications delivered to <em>receiver</em> to only those
-<a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send()</span></tt></a> emissions sent by <em>sender</em>.  If <tt class="docutils literal"><span class="pre">ANY</span></tt>, the receiver
+<a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send</span></tt></a> emissions sent by <em>sender</em>.  If <tt class="docutils literal"><span class="pre">ANY</span></tt>, the receiver
 will always be notified.  A <em>receiver</em> may be connected to
 multiple <em>sender</em> values on the same Signal through multiple calls
-to <a class="reference internal" href="#girclib.gblinker.NamedSignal.connect" title="girclib.gblinker.NamedSignal.connect"><tt class="xref py py-meth docutils literal"><span class="pre">connect()</span></tt></a>.</li>
+to <a class="reference internal" href="#girclib.gblinker.NamedSignal.connect" title="girclib.gblinker.NamedSignal.connect"><tt class="xref py py-meth docutils literal"><span class="pre">connect</span></tt></a>.</li>
 <li><strong>weak</strong> &#8211; If true, the Signal will hold a weakref to <em>receiver</em>
 and automatically disconnect when <em>receiver</em> goes out of scope or
 is garbage collected.  Defaults to True.</li>
@@ -115,22 +115,22 @@ is garbage collected.  Defaults to True.</li>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>sender</strong> &#8211; Any object or <tt class="xref py py-obj docutils literal"><span class="pre">ANY</span></tt>.  The decorated function
-will only receive <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send()</span></tt></a> emissions sent by <em>sender</em>.  If
+will only receive <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send</span></tt></a> emissions sent by <em>sender</em>.  If
 <tt class="docutils literal"><span class="pre">ANY</span></tt>, the receiver will always be notified.  A function may be
 decorated multiple times with differing <em>sender</em> values.</li>
 <li><strong>weak</strong> &#8211; If true, the Signal will hold a weakref to the
 decorated function and automatically disconnect when <em>receiver</em>
 goes out of scope or is garbage collected.  Unlike
-<a class="reference internal" href="#girclib.gblinker.NamedSignal.connect" title="girclib.gblinker.NamedSignal.connect"><tt class="xref py py-meth docutils literal"><span class="pre">connect()</span></tt></a>, this defaults to False.</li>
+<a class="reference internal" href="#girclib.gblinker.NamedSignal.connect" title="girclib.gblinker.NamedSignal.connect"><tt class="xref py py-meth docutils literal"><span class="pre">connect</span></tt></a>, this defaults to False.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
 <dl class="docutils">
-<dt>The decorated function will be invoked by <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send()</span></tt></a> with</dt>
+<dt>The decorated function will be invoked by <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send</span></tt></a> with</dt>
 <dd><cite>sender=</cite> as a single positional argument and any **kwargs that
-were provided to the call to <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send()</span></tt></a>.</dd>
+were provided to the call to <a class="reference internal" href="#girclib.gblinker.NamedSignal.send" title="girclib.gblinker.NamedSignal.send"><tt class="xref py py-meth docutils literal"><span class="pre">send</span></tt></a>.</dd>
 </dl>
 <p class="versionadded">
 <span class="versionmodified">New in version 1.1.</span></p>
@@ -190,7 +190,7 @@ to disconnect from all senders.  Defaults to <tt class="docutils literal"><span 
 <dd><p>True if there is probably a receiver for <em>sender</em>.</p>
 <p>Performs an optimistic check only.  Does not guarantee that all
 weakly referenced receivers are still alive.  See
-<a class="reference internal" href="#girclib.gblinker.NamedSignal.receivers_for" title="girclib.gblinker.NamedSignal.receivers_for"><tt class="xref py py-meth docutils literal"><span class="pre">receivers_for()</span></tt></a> for a stronger search.</p>
+<a class="reference internal" href="#girclib.gblinker.NamedSignal.receivers_for" title="girclib.gblinker.NamedSignal.receivers_for"><tt class="xref py py-meth docutils literal"><span class="pre">receivers_for</span></tt></a> for a stronger search.</p>
 </dd></dl>
 
 <dl class="method">
@@ -223,7 +223,7 @@ with <tt class="xref docutils literal"><span class="pre">None</span></tt>.  Only
 <dl class="method">
 <dt id="girclib.gblinker.NamedSignal.temporarily_connected_to">
 <tt class="descname">temporarily_connected_to</tt><big>(</big><em>receiver</em>, <em>sender=ANY</em><big>)</big><a class="headerlink" href="#girclib.gblinker.NamedSignal.temporarily_connected_to" title="Permalink to this definition">¶</a></dt>
-<dd><p>An alias for <a class="reference internal" href="#girclib.gblinker.NamedSignal.connected_to" title="girclib.gblinker.NamedSignal.connected_to"><tt class="xref py py-meth docutils literal"><span class="pre">connected_to()</span></tt></a>.</p>
+<dd><p>An alias for <a class="reference internal" href="#girclib.gblinker.NamedSignal.connected_to" title="girclib.gblinker.NamedSignal.connected_to"><tt class="xref py py-meth docutils literal"><span class="pre">connected_to</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -239,7 +239,7 @@ with <tt class="xref docutils literal"><span class="pre">None</span></tt>.  Only
 <p class="versionadded">
 <span class="versionmodified">New in version 0.9.</span></p>
 <p class="versionchanged">
-<span class="versionmodified">Changed in version 1.1: </span>Renamed to <a class="reference internal" href="#girclib.gblinker.NamedSignal.connected_to" title="girclib.gblinker.NamedSignal.connected_to"><tt class="xref py py-meth docutils literal"><span class="pre">connected_to()</span></tt></a>.  <tt class="docutils literal"><span class="pre">temporarily_connected_to</span></tt>
+<span class="versionmodified">Changed in version 1.1: </span>Renamed to <a class="reference internal" href="#girclib.gblinker.NamedSignal.connected_to" title="girclib.gblinker.NamedSignal.connected_to"><tt class="xref py py-meth docutils literal"><span class="pre">connected_to</span></tt></a>.  <tt class="docutils literal"><span class="pre">temporarily_connected_to</span></tt>
 will be deprecated in 1.2 and removed in a subsequent version.</p>
 </dd></dl>
 
@@ -338,7 +338,7 @@ keep the values around longer than needed.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Pedro Algarvio.
-      Last updated on Mar 28, 2011.
+      Last updated on Mar 29, 2011  16:03.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>

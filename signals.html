@@ -71,15 +71,15 @@ are helpful for unittesting for example.</p>
 <div class="section" id="subscribing-to-signals">
 <h2>Subscribing to Signals<a class="headerlink" href="#subscribing-to-signals" title="Permalink to this headline">¶</a></h2>
 <p>To subscribe to a signal, you can use the
-<tt class="xref py py-meth docutils literal"><span class="pre">connect()</span></tt> method of a signal.  The first
+<tt class="xref py py-meth docutils literal"><span class="pre">connect</span></tt> method of a signal.  The first
 argument is the function that should be called when the signal is emitted,
 the optional second argument specifies a sender.  To unsubscribe from a
-signal, you can use the <tt class="xref py py-meth docutils literal"><span class="pre">disconnect()</span></tt> method.</p>
+signal, you can use the <tt class="xref py py-meth docutils literal"><span class="pre">disconnect</span></tt> method.</p>
 </div>
 <div class="section" id="decorator-based-signal-subscriptions">
 <h2>Decorator Based Signal Subscriptions<a class="headerlink" href="#decorator-based-signal-subscriptions" title="Permalink to this headline">¶</a></h2>
 <p>With Blinker 1.1 you can also easily subscribe to signals by using the
-<tt class="xref py py-meth docutils literal"><span class="pre">connect()</span></tt> decorator:</p>
+<tt class="xref py py-meth docutils literal"><span class="pre">connect</span></tt> decorator:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">girclib.signals</span> <span class="kn">import</span> <span class="n">on_connected</span>
 
 <span class="nd">@on_connected.connect</span>
@@ -103,8 +103,8 @@ to interact with an IRC server.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter, in this case a
-<tt class="xref py py-class docutils literal"><span class="pre">IRCTransport</span></tt> instance.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</td>
 </tr>
 </tbody>
 </table>
@@ -118,8 +118,8 @@ to interact with an IRC server.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter, in this case a
-<tt class="xref py py-class docutils literal"><span class="pre">IRCTransport</span></tt> instance.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</td>
 </tr>
 </tbody>
 </table>
@@ -133,8 +133,8 @@ to interact with an IRC server.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter, in this case a
-<tt class="xref py py-class docutils literal"><span class="pre">IRCTransport</span></tt> instance.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</td>
 </tr>
 </tbody>
 </table>
@@ -149,9 +149,10 @@ to interact with an IRC server.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user the message is coming from.</li>
-<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The message.</li>
+<li><strong>message</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The message.</li>
 </ul>
 </td>
 </tr>
@@ -168,10 +169,11 @@ to interact with an IRC server.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the message is coming from.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel the message is coming from.</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user who sent the message.</li>
-<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The message.</li>
+<li><strong>message</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The message.</li>
 </ul>
 </td>
 </tr>
@@ -189,8 +191,9 @@ starting character (<tt class="docutils literal"><span class="pre">#</span></tt>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel joined</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the channel joined</li>
 </ul>
 </td>
 </tr>
@@ -208,8 +211,9 @@ starting character (<tt class="docutils literal"><span class="pre">#</span></tt>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel left</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the channel left</li>
 </ul>
 </td>
 </tr>
@@ -234,10 +238,11 @@ response to something it received.</pre>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; the user sending the notice</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel where the notice is coming from</li>
-<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the notice message</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the channel where the notice is coming from</li>
+<li><strong>message</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the notice message</li>
 </ul>
 </td>
 </tr>
@@ -254,18 +259,19 @@ response to something it received.</pre>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user and hostmask which instigated this change.</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel where the modes are changed. If args is
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel where the modes are changed. If args is
 empty the channel for which the modes are changing. If the
 changes are at server level it could be equal to <tt class="docutils literal"><span class="pre">user</span></tt>.</li>
-<li><strong>set</strong> (<tt class="docutils literal"><span class="pre">bool</span></tt>) &#8211; True if the mode(s) is being added, False if it is being removed.
+<li><strong>set</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">bool</span></tt></a>) &#8211; True if the mode(s) is being added, False if it is being removed.
 If some modes are added and others removed at the same time this
 function will be called twice, the first time with all the added
 modes, the second with the removed ones. (To change this behaviour
 override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt> method)</li>
-<li><strong>modes</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The mode or modes which are being changed.</li>
-<li><strong>args</strong> (<tt class="docutils literal"><span class="pre">tuple</span></tt>) &#8211; Any additional information required for the mode change.</li>
+<li><strong>modes</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The mode or modes which are being changed.</li>
+<li><strong>args</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">tuple</span></tt></a>) &#8211; Any additional information required for the mode change.</li>
 </ul>
 </td>
 </tr>
@@ -282,9 +288,10 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user.</li>
-<li><strong>secs</strong> (<tt class="docutils literal"><span class="pre">float</span></tt>) &#8211; Number of seconds</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The user.</li>
+<li><strong>secs</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">float</span></tt></a>) &#8211; Number of seconds</li>
 </ul>
 </td>
 </tr>
@@ -300,7 +307,8 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</td>
 </tr>
 </tbody>
 </table>
@@ -315,10 +323,11 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel being kicked from.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel being kicked from.</li>
 <li><strong>kicker</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user that kicked.</li>
-<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The kick message.</li>
+<li><strong>message</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The kick message.</li>
 </ul>
 </td>
 </tr>
@@ -335,9 +344,10 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
 <li><strong>user</strong> (<em>~:class:girclib.irc.IRCUser</em>) &#8211; Our user.</li>
-<li><strong>newnick</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The new nickname.</li>
+<li><strong>newnick</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The new nickname.</li>
 </ul>
 </td>
 </tr>
@@ -354,8 +364,9 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the message is coming from.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel the message is coming from.</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The joining.</li>
 </ul>
 </td>
@@ -367,15 +378,16 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <dl class="function">
 <dt id="girclib.signals.on_user_left">
 <tt class="descclassname">girclib.signals.</tt><tt class="descname">on_user_left</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_user_left" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called when I see another user joining a channel.</p>
+<dd><p>Called when I see another user leaving a channel.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the message is coming from.</li>
-<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The joining.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel the message is coming from.</li>
+<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user leaving.</li>
 </ul>
 </td>
 </tr>
@@ -392,9 +404,10 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user quiting.</li>
-<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The quit message.</li>
+<li><strong>message</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The quit message.</li>
 </ul>
 </td>
 </tr>
@@ -411,9 +424,10 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
 <li><strong>kicked</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user being kicked.</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the user is being kicked from.</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel the user is being kicked from.</li>
 <li><strong>message</strong> &#8211; The kick message.</li>
 </ul>
 </td>
@@ -431,10 +445,11 @@ override the <tt class="docutils literal"><span class="pre">irc_MODE</span></tt>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user that performed the <tt class="docutils literal"><span class="pre">ACTION</span></tt></li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the <tt class="docutils literal"><span class="pre">ACTION</span></tt> is coming from.</li>
-<li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The <tt class="docutils literal"><span class="pre">ACTION</span></tt> data.</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel the <tt class="docutils literal"><span class="pre">ACTION</span></tt> is coming from.</li>
+<li><strong>data</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The <tt class="docutils literal"><span class="pre">ACTION</span></tt> data.</li>
 </ul>
 </td>
 </tr>
@@ -452,10 +467,11 @@ joining a channel.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user changing the topic.</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel the topic is being changed.</li>
-<li><strong>new_topic</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel&#8217;s new topic.</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel the topic is being changed.</li>
+<li><strong>new_topic</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel&#8217;s new topic.</li>
 </ul>
 </td>
 </tr>
@@ -472,9 +488,10 @@ joining a channel.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user who changed nick.</li>
-<li><strong>newnick</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The new nickname.</li>
+<li><strong>newnick</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The new nickname.</li>
 </ul>
 </td>
 </tr>
@@ -491,8 +508,9 @@ joining a channel.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>motd</strong> (<tt class="docutils literal"><span class="pre">list</span></tt>) &#8211; list of strings, where each string was sent as a separate
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>motd</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">list</span></tt></a>) &#8211; list of strings, where each string was sent as a separate
 message from the server.</li>
 </ul>
 </td>
@@ -514,8 +532,9 @@ message from the server.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>nickname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The nickname which is in use.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>nickname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The nickname which is in use.</li>
 </ul>
 </td>
 </tr>
@@ -539,8 +558,9 @@ section 6.1.</p>
 </td>
 </tr>
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>nickname</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The erroneous nickname.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>nickname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The erroneous nickname.</li>
 </ul>
 </td>
 </tr>
@@ -556,7 +576,8 @@ section 6.1.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</td>
 </tr>
 </tbody>
 </table>
@@ -571,9 +592,10 @@ section 6.1.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The banned channel.</li>
-<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The banned message.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The banned channel.</li>
+<li><strong>message</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The banned message.</li>
 </ul>
 </td>
 </tr>
@@ -590,10 +612,11 @@ section 6.1.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The banned channel.</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The user banned.</li>
-<li><strong>message</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The banned message.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The banned channel.</li>
+<li><strong>user</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The user banned.</li>
+<li><strong>message</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The banned message.</li>
 </ul>
 </td>
 </tr>
@@ -616,10 +639,11 @@ section 6.1.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; the user querying</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
-<li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the channel name</li>
+<li><strong>data</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the query data</li>
 </ul>
 </td>
 </tr>
@@ -636,10 +660,11 @@ section 6.1.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; the user querying</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
-<li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the channel name</li>
+<li><strong>data</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the query data</li>
 </ul>
 </td>
 </tr>
@@ -656,10 +681,11 @@ section 6.1.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; the user querying</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
-<li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the channel name</li>
+<li><strong>data</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the query data</li>
 </ul>
 </td>
 </tr>
@@ -676,10 +702,11 @@ section 6.1.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; the user querying</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
-<li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the channel name</li>
+<li><strong>data</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the query data</li>
 </ul>
 </td>
 </tr>
@@ -696,10 +723,11 @@ section 6.1.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>user</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the nickname netmask querying</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the channel name</li>
-<li><strong>data</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; the query data</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>user</strong> (<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; the user querying</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the channel name</li>
+<li><strong>data</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; the query data</li>
 </ul>
 </td>
 </tr>
@@ -722,7 +750,12 @@ section 6.1.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>when</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; A string describing when the server was created, probably.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</li>
+<li><strong>when</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; A string describing when the server was created, probably.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -736,7 +769,12 @@ section 6.1.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>when</strong> &#8211; A string describing what software the server is running, probably.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</li>
+<li><strong>when</strong> &#8211; A string describing what software the server is running, probably.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -751,10 +789,12 @@ section 6.1.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>servername</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The hostname of this server.</li>
-<li><strong>version</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; A description of what software this server runs.</li>
-<li><strong>umodes</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; All the available user modes.</li>
-<li><strong>cmodes</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; All the available channel modes.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</li>
+<li><strong>servername</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The hostname of this server.</li>
+<li><strong>version</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; A description of what software this server runs.</li>
+<li><strong>umodes</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; All the available user modes.</li>
+<li><strong>cmodes</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; All the available channel modes.</li>
 </ul>
 </td>
 </tr>
@@ -770,8 +810,13 @@ section 6.1.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; A plain-text string describing the number of users and servers
-connected to this server.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</li>
+<li><strong>info</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; A plain-text string describing the number of users and servers
+connected to this server.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -785,8 +830,13 @@ connected to this server.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; A description of the number of clients and servers
-connected to the network, probably.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</li>
+<li><strong>info</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; A description of the number of clients and servers
+connected to the network, probably.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -800,7 +850,12 @@ connected to the network, probably.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>channels</strong> (<tt class="docutils literal"><span class="pre">int</span></tt>) &#8211; Number of channels existing on the server.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</li>
+<li><strong>channels</strong> (<tt class="docutils literal"><span class="pre">int</span></tt>) &#8211; Number of channels existing on the server.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -814,7 +869,12 @@ connected to the network, probably.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ops</strong> (<tt class="docutils literal"><span class="pre">int</span></tt>) &#8211; Number of operators logged on to the server.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</li>
+<li><strong>ops</strong> (<tt class="docutils literal"><span class="pre">int</span></tt>) &#8211; Number of operators logged on to the server.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -828,7 +888,12 @@ connected to the network, probably.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; A plain-text description of the address that should be connected to.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</li>
+<li><strong>info</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; A plain-text description of the address that should be connected to.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -842,8 +907,13 @@ connected to the network, probably.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>options</strong> (<tt class="docutils literal"><span class="pre">list</span></tt> of <tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; Descriptions of features or limits of the server, possibly in
-the form &#8220;NAME=VALUE&#8221;.</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</li>
+<li><strong>options</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">list</span></tt></a> of <a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; Descriptions of features or limits of the server, possibly in
+the form &#8220;NAME=VALUE&#8221;.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -859,9 +929,11 @@ subsequently changes.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</li>
 <li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user changing the topic.</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel name.</li>
-<li><strong>topic</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel&#8217;s topic.</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel name.</li>
+<li><strong>topic</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel&#8217;s topic.</li>
 </ul>
 </td>
 </tr>
@@ -872,16 +944,15 @@ subsequently changes.</p>
 <dl class="function">
 <dt id="girclib.signals.on_rpl_notopic">
 <tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_notopic</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_notopic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called when the topic for a channel is initially reported or when it
-subsequently changes.</p>
+<dd><p>Called when the channel has no topic set.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>user</strong> (<a class="reference internal" href="irc.html#girclib.irc.IRCUser" title="girclib.irc.IRCUser"><tt class="xref py py-class docutils literal"><span class="pre">IRCUser</span></tt></a>) &#8211; The user changing the topic.</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel name.</li>
-<li><strong>topic</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel&#8217;s topic.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter.</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel name.</li>
 </ul>
 </td>
 </tr>
@@ -893,16 +964,17 @@ subsequently changes.</p>
 <dt id="girclib.signals.on_rpl_namreply">
 <tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_namreply</tt><big>(</big><em>emitter</em>, <em>channel=None</em>, <em>users=None</em>, <em>privacy</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_namreply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called whenever we receive a channel&#8217;s user list. The user&#8217;s list is only
-complete when <a class="reference internal" href="#girclib.signals.on_rpl_endofnames" title="girclib.signals.on_rpl_endofnames"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_endofnames()</span></tt></a> is called.</p>
+complete when <a class="reference internal" href="#girclib.signals.on_rpl_endofnames" title="girclib.signals.on_rpl_endofnames"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_endofnames</span></tt></a> is called.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel name.</li>
-<li><strong>users</strong> (<tt class="docutils literal"><span class="pre">list</span></tt>) &#8211; List of channel users.</li>
-<li><strong>privacy</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; Channel privacy. One of <tt class="docutils literal"><span class="pre">&#64;</span></tt> (secret channel), <tt class="docutils literal"><span class="pre">*</span></tt> (private
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel name.</li>
+<li><strong>users</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">list</span></tt></a>) &#8211; List of channel users.</li>
+<li><strong>privacy</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; Channel privacy. One of <tt class="docutils literal"><span class="pre">&#64;</span></tt> (secret channel), <tt class="docutils literal"><span class="pre">*</span></tt> (private
 channel) or <tt class="docutils literal"><span class="pre">=</span></tt> (public channel).</li>
 </ul>
 </td>
@@ -915,14 +987,15 @@ channel) or <tt class="docutils literal"><span class="pre">=</span></tt> (public
 <dt id="girclib.signals.on_rpl_endofnames">
 <tt class="descclassname">girclib.signals.</tt><tt class="descname">on_rpl_endofnames</tt><big>(</big><em>emitter</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#girclib.signals.on_rpl_endofnames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called once we have received all channel&#8217;s users. See
-<a class="reference internal" href="#girclib.signals.on_rpl_namreply" title="girclib.signals.on_rpl_namreply"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_namreply()</span></tt></a>.</p>
+<a class="reference internal" href="#girclib.signals.on_rpl_namreply" title="girclib.signals.on_rpl_namreply"><tt class="xref py py-meth docutils literal"><span class="pre">on_rpl_namreply</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel name.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel name.</li>
 </ul>
 </td>
 </tr>
@@ -940,10 +1013,11 @@ channel) or <tt class="docutils literal"><span class="pre">=</span></tt> (public
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</li>
-<li><strong>channel</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel name.</li>
+<li><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</li>
+<li><strong>channel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel name.</li>
 <li><strong>ucount</strong> (<tt class="docutils literal"><span class="pre">int</span></tt>) &#8211; The number of users in the channel.</li>
-<li><strong>topic</strong> (<tt class="docutils literal"><span class="pre">str</span></tt>) &#8211; The channel&#8217;s topic.</li>
+<li><strong>topic</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">str</span></tt></a>) &#8211; The channel&#8217;s topic.</li>
 </ul>
 </td>
 </tr>
@@ -961,7 +1035,8 @@ channel) or <tt class="docutils literal"><span class="pre">=</span></tt> (public
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<tt class="docutils literal"><span class="pre">object</span></tt>) &#8211; The signal emitter</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emitter</strong> (<a class="reference internal" href="client.html#girclib.client.BasicIRCClient" title="girclib.client.BasicIRCClient"><tt class="xref py py-class docutils literal"><span class="pre">BasicIRCClient</span></tt></a>,
+<a class="reference internal" href="client.html#girclib.client.IRCClient" title="girclib.client.IRCClient"><tt class="xref py py-class docutils literal"><span class="pre">IRCClient</span></tt></a>) &#8211; The signal emitter</td>
 </tr>
 </tbody>
 </table>
@@ -1052,7 +1127,7 @@ channel) or <tt class="docutils literal"><span class="pre">=</span></tt> (public
     </div>
     <div class="footer">
         &copy; Copyright 2011, Pedro Algarvio.
-      Last updated on Mar 28, 2011.
+      Last updated on Mar 29, 2011  16:03.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>

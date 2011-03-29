@@ -83,6 +83,7 @@
     <dt><a href="irc.html#girclib.irc.BaseIRCClient">BaseIRCClient (class in girclib.irc)</a></dt>
 </dl></td>
   <td style="width: 33%" valign="top"><dl>
+    <dt><a href="client.html#girclib.client.BasicIRCClient">BasicIRCClient (class in girclib.client)</a></dt>
     <dt><a href="helpers.html#girclib.helpers.bytes">bytes (class in girclib.helpers)</a></dt>
 </dl></td>
 </tr></table>
@@ -90,12 +91,11 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
-    <dt><a href="client.html#girclib.client.IRCClient.connect">connect() (girclib.client.IRCClient method)</a></dt>
+    <dt><a href="client.html#girclib.client.BasicIRCClient.connect">connect() (girclib.client.BasicIRCClient method)</a></dt>
     <dd><dl>
       <dt><a href="gblinker.html#girclib.gblinker.NamedSignal.connect">(girclib.gblinker.NamedSignal method)</a></dt>
       <dt><a href="irc.html#girclib.irc.IRCTransport.connect">(girclib.irc.IRCTransport method)</a></dt>
   </dl></dd>
-    <dt><a href="client.html#girclib.client.IRCClient.connect_signals">connect_signals() (girclib.client.IRCClient method)</a></dt>
     <dt><a href="gblinker.html#girclib.gblinker.NamedSignal.connect_via">connect_via() (girclib.gblinker.NamedSignal method)</a></dt>
     <dt><a href="gblinker.html#girclib.gblinker.NamedSignal.connected_to">connected_to() (girclib.gblinker.NamedSignal method)</a></dt>
     <dt><a href="helpers.html#girclib.helpers.ctcp_dequote">ctcp_dequote() (in module girclib.helpers)</a></dt>
@@ -106,9 +106,9 @@
     <dt><a href="irc.html#girclib.irc.IRCProtocol.ctcp_query_ACTION">ctcp_query_ACTION() (girclib.irc.IRCProtocol method)</a></dt>
     <dt><a href="irc.html#girclib.irc.IRCProtocol.ctcp_query_CLIENTINFO">ctcp_query_CLIENTINFO() (girclib.irc.IRCProtocol method)</a></dt>
     <dt><a href="irc.html#girclib.irc.IRCProtocol.ctcp_query_ERRMSG">ctcp_query_ERRMSG() (girclib.irc.IRCProtocol method)</a></dt>
+    <dt><a href="irc.html#girclib.irc.IRCProtocol.ctcp_query_FINGER">ctcp_query_FINGER() (girclib.irc.IRCProtocol method)</a></dt>
 </dl></td>
   <td style="width: 33%" valign="top"><dl>
-    <dt><a href="irc.html#girclib.irc.IRCProtocol.ctcp_query_FINGER">ctcp_query_FINGER() (girclib.irc.IRCProtocol method)</a></dt>
     <dt><a href="irc.html#girclib.irc.IRCProtocol.ctcp_query_PING">ctcp_query_PING() (girclib.irc.IRCProtocol method)</a></dt>
     <dt><a href="irc.html#girclib.irc.IRCProtocol.ctcp_query_SOURCE">ctcp_query_SOURCE() (girclib.irc.IRCProtocol method)</a></dt>
     <dt><a href="irc.html#girclib.irc.IRCProtocol.ctcp_query_TIME">ctcp_query_TIME() (girclib.irc.IRCProtocol method)</a></dt>
@@ -293,7 +293,7 @@
     <dd><dl>
       <dt><a href="signals.html#girclib.signals.on_chanmsg">(in module girclib.signals)</a></dt>
   </dl></dd>
-    <dt><a href="client.html#girclib.client.IRCClient.on_connected">on_connected() (girclib.client.IRCClient method)</a></dt>
+    <dt><a href="irc.html#girclib.irc.BaseIRCClient.on_connected">on_connected() (girclib.irc.BaseIRCClient method)</a></dt>
     <dd><dl>
       <dt><a href="signals.html#girclib.signals.on_connected">(in module girclib.signals)</a></dt>
   </dl></dd>
@@ -581,7 +581,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Pedro Algarvio.
-      Last updated on Mar 28, 2011.
+      Last updated on Mar 29, 2011  16:03.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>

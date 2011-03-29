@@ -203,7 +203,7 @@ earlier a mode appears the more privileges it gives.</p>
 <dt id="girclib.irc.ServerSupportedFeatures._parse_chan_modes_param">
 <em class="property">classmethod </em><tt class="descname">_parse_chan_modes_param</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.ServerSupportedFeatures._parse_chan_modes_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the ISUPPORT &#8220;CHANMODES&#8221; parameter.</p>
-<p>See <tt class="xref py py-meth docutils literal"><span class="pre">isupport_CHANMODES()</span></tt>
+<p>See <tt class="xref py py-meth docutils literal"><span class="pre">isupport_CHANMODES</span></tt>
 for a detailed explanation of this parameter.</p>
 </dd></dl>
 
@@ -617,9 +617,9 @@ taken.</p>
 <tt class="descname">irc_PRIVMSG</tt><big>(</big><em>prefix</em>, <em>params</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCProtocol.irc_PRIVMSG" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called when we get a message.</p>
 <p>Here, for usage simplicity, we separate between two signals;
-<a class="reference internal" href="signals.html#girclib.signals.on_chanmsg" title="girclib.signals.on_chanmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_chanmsg()</span></tt></a> and
-<a class="reference internal" href="signals.html#girclib.signals.on_privmsg" title="girclib.signals.on_privmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_privmsg()</span></tt></a>.</p>
-<p><a class="reference internal" href="signals.html#girclib.signals.on_chanmsg" title="girclib.signals.on_chanmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_chanmsg()</span></tt></a>. Is not really an IRC signal,
+<a class="reference internal" href="signals.html#girclib.signals.on_chanmsg" title="girclib.signals.on_chanmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_chanmsg</span></tt></a> and
+<a class="reference internal" href="signals.html#girclib.signals.on_privmsg" title="girclib.signals.on_privmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_privmsg</span></tt></a>.</p>
+<p><a class="reference internal" href="signals.html#girclib.signals.on_chanmsg" title="girclib.signals.on_chanmsg"><tt class="xref py py-meth docutils literal"><span class="pre">on_chanmsg</span></tt></a>. Is not really an IRC signal,
 but it will simplify the library usage by separating channel, from
 private messages.</p>
 </dd></dl>
@@ -985,7 +985,7 @@ replies.</p>
 <dt id="girclib.irc.IRCCommandsHelper.pong">
 <tt class="descname">pong</tt><big>(</big><em>user</em>, <em>secs</em><big>)</big><a class="headerlink" href="#girclib.irc.IRCCommandsHelper.pong" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called with the results of a CTCP PING query. See
-<a class="reference internal" href="#girclib.irc.IRCCommandsHelper.ping" title="girclib.irc.IRCCommandsHelper.ping"><tt class="xref py py-meth docutils literal"><span class="pre">ping()</span></tt></a></p>
+<a class="reference internal" href="#girclib.irc.IRCCommandsHelper.ping" title="girclib.irc.IRCCommandsHelper.ping"><tt class="xref py py-meth docutils literal"><span class="pre">ping</span></tt></a></p>
 </dd></dl>
 
 <dl class="method">
@@ -1104,27 +1104,32 @@ has no prefix, <tt class="docutils literal"><span class="pre">#</span></tt> will
 <em class="property">class </em><tt class="descclassname">girclib.irc.</tt><tt class="descname">BaseIRCClient</tt><a class="headerlink" href="#girclib.irc.BaseIRCClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#girclib.irc.IRCCommandsHelper" title="girclib.irc.IRCCommandsHelper"><tt class="xref py py-class docutils literal"><span class="pre">girclib.irc.IRCCommandsHelper</span></tt></a></p>
 <dl class="method">
+<dt id="girclib.irc.BaseIRCClient.on_connected">
+<tt class="descname">on_connected</tt><big>(</big><em>emitter</em><big>)</big><a class="headerlink" href="#girclib.irc.BaseIRCClient.on_connected" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="girclib.irc.BaseIRCClient.on_ctcp_query_ping">
 <tt class="descname">on_ctcp_query_ping</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.irc.BaseIRCClient.on_ctcp_query_ping" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_ping" title="girclib.signals.on_ctcp_query_ping"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_ping()</span></tt></a>.</p>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_ping" title="girclib.signals.on_ctcp_query_ping"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_ping</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="girclib.irc.BaseIRCClient.on_ctcp_query_source">
 <tt class="descname">on_ctcp_query_source</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.irc.BaseIRCClient.on_ctcp_query_source" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_source" title="girclib.signals.on_ctcp_query_source"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_source()</span></tt></a>.</p>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_source" title="girclib.signals.on_ctcp_query_source"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_source</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="girclib.irc.BaseIRCClient.on_ctcp_query_userinfo">
 <tt class="descname">on_ctcp_query_userinfo</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.irc.BaseIRCClient.on_ctcp_query_userinfo" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_userinfo" title="girclib.signals.on_ctcp_query_userinfo"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_userinfo()</span></tt></a>.</p>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_userinfo" title="girclib.signals.on_ctcp_query_userinfo"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_userinfo</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="girclib.irc.BaseIRCClient.on_ctcp_query_version">
 <tt class="descname">on_ctcp_query_version</tt><big>(</big><em>emitter</em>, <em>user=None</em>, <em>channel=None</em>, <em>data=None</em><big>)</big><a class="headerlink" href="#girclib.irc.BaseIRCClient.on_ctcp_query_version" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_version" title="girclib.signals.on_ctcp_query_version"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_version()</span></tt></a>.</p>
+<dd><p>See <a class="reference internal" href="signals.html#girclib.signals.on_ctcp_query_version" title="girclib.signals.on_ctcp_query_version"><tt class="xref py py-meth docutils literal"><span class="pre">on_ctcp_query_version</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1193,7 +1198,7 @@ has no prefix, <tt class="docutils literal"><span class="pre">#</span></tt> will
     </div>
     <div class="footer">
         &copy; Copyright 2011, Pedro Algarvio.
-      Last updated on Mar 28, 2011.
+      Last updated on Mar 29, 2011  16:03.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
