@@ -236,7 +236,8 @@ if __name__ == '__main__':
     from girclib.helpers import setup_logging
     format='%(asctime)s [%(lineno)-4s] %(levelname)-7.7s: %(message)s'
     setup_logging(format, 5)
-    client = IRCClient('irc.freenode.net', 6667, 'girclib', 'gIRClib')
+#    client = IRCClient('irc.freenode.net', 6667, 'girclib', 'gIRClib')
+    client = IRCClient('localhost', 6665, 'girclib', 'gIRClib')
 #    log = logging.getLogger('gIRClib')
 
     # Just for the fun, start telnet backdoor on port 2000
