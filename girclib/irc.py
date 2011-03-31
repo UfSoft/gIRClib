@@ -13,10 +13,10 @@
 import sys
 import time
 import errno
+import gevent
 import socket
 import random
 import logging
-import gevent
 from gevent.event import Event
 from gevent.pool import Pool
 from gevent.socket import create_connection, wait_read
@@ -31,6 +31,9 @@ from girclib.helpers import (parse_modes, _int_or_default, split,
 
 log = logging.getLogger(__name__)
 
+# TODO: Handle:
+#    ERR_NOCHANMODES    - We don't have the required modes to join the channel
+#
 # Python < 3 compatibility
 if sys.version_info < (3,):
     class bytes(object):
@@ -41,16 +44,22 @@ def ascii(data):
     """Convert an ASCII string to a native string"""
     return bytes(data, encoding='ascii')
 
+
 class IRCUser(object):
     __slots__ = ('netmask', 'nick', 'mode', 'user', 'host')
+
     def __init__(self, netmask):
         self.netmask = netmask
         self.nick, self.mode, self.user, self.host = parse_netmask(netmask)
 
     def __repr__(self):
         return (
-            '<IRCUser nick="%s" user="%s" mode="%s" host="%s">'
+            '<IRCUser nick=%r user=%r mode=%r host=%r>'
         ) % (self.nick, self.user, self.mode, self.host)
+
+
+class ConnectTimeout(Exception):
+    pass
 
 class IRCTransport(object):
     """
@@ -85,8 +94,15 @@ class IRCTransport(object):
 
         self._processing = True
         gevent.spawn_later(0.5, self.__read_socket)
-        wait_read(self.socket.fileno(), timeout=30)
-        signals.on_connected.send(self)
+        try:
+            wait_read(self.socket.fileno(), timeout=30, timeout_exc=ConnectTimeout())
+        except ConnectTimeout:
+            self._processing = False
+            log.error("Timed out while trying to connect to %s:%s",
+                      self.host, self.port)
+            signals.on_disconnected.send(self)
+        else:
+            signals.on_connected.send(self)
 
     def send(self, msg, *args, **kwargs):
         if not self._processing:
@@ -846,7 +862,7 @@ class IRCProtocol(IRCTransport):
         """
         user = IRCUser(prefix)
         channel = params[0]
-        if nick == self.nickname:
+        if user.nick == self.nickname:
             signals.on_left.send(self, channel=channel)
         else:
             signals.on_user_left.send(self, channel=channel, user=user)
@@ -1520,15 +1536,23 @@ class BaseIRCClient(IRCCommandsHelper):
 
         # Do some handled signal connections
         for signame in sorted(dir(signals)):
+            if signame.startswith('_'):
+                continue
             func = getattr(instance, signame, None)
             if func:
                 signal = getattr(signals, signame)
                 if signal.has_receivers_for(instance):
                     # Avoid suplicate signal connection"
-                    log.info("Skiping signal %s. Already connected", signame)
+                    skip_connect = False
+                    for receiver in signal.receivers_for(instance):
+                        if receiver == func:
+                            skip_connect = True
+                            break
 #                    print (func, list(signal.receivers_for(instance)),
 #                           func in signal.receivers_for(instance))
-                    continue
+                    if skip_connect:
+                        log.info("Skiping signal %s. Already connected", signame)
+                        continue
                 log.info("Connecting %s to %s", func, signame)
                 signal.connect(func, sender=instance)
         return instance
