@@ -302,7 +302,9 @@ def parse_raw_irc_command(element):
         try:
             command = numeric_to_symbolic[command]
         except KeyError:
-            logging.warn('unknown numeric event %s' % command)
+            logging.getLogger(__name__).warn(
+                'unknown numeric event %s' % command
+            )
 #    command = command.lower()
     command = command.upper()
 
@@ -326,6 +328,9 @@ def parse_netmask(netmask):
         nick, rest = netmask.split('!')
     except ValueError:
         return (netmask, None, None, None)
+    except AttributeError:
+        # irc.quakenet.org doesn't always send us a netmask
+        return (netmask, None, None, None)
     try:
         mode, rest = rest.split('=')
     except ValueError:
@@ -333,7 +338,7 @@ def parse_netmask(netmask):
     try:
         user, host = rest.split('@')
     except ValueError:
-        return (name, mode, rest, None)
+        return (nick, mode, rest, None)
     return (nick, mode, user, host)
 
 
