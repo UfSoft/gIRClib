@@ -37,6 +37,18 @@ Called once disconnected from the IRC network.
 
 """)
 
+on_rpl_welcome = signal("on-rpl-welcome", """\
+Called when we have received the welcome from the server.
+
+:param emitter: The signal emitter.
+:type  emitter: :class:`~girclib.client.BasicIRCClient`,
+    :class:`~girclib.client.IRCClient`
+
+:type  message: :func:`~str`
+:param message: The welcome message.
+
+""")
+
 on_rpl_created = signal("on-rpl-created", """\
 Called with creation date information about the server, usually at logon.
 

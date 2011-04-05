@@ -17,6 +17,7 @@ import gevent
 import socket
 import random
 import logging
+from gevent.dns import DNSError
 from gevent.event import Event
 from gevent.pool import Pool
 from gevent.socket import create_connection, wait_read
@@ -67,48 +68,70 @@ class IRCTransport(object):
     sending data to and from an IRC server.
     """
 
-    encoding = "utf-8"
-    network_host = None
-    network_port = None
-    use_ssl = False
-    _processing = False
+    @classmethod
+    def __new__(cls, *args, **kwargs):
+        instance = super(IRCTransport, cls).__new__(cls)
+        instance.network_host = None
+        instance.network_port = None
+        instance.use_ssl = False
+        instance._processing = Event()
+        return instance
 
-    def connect(self, network_host, network_port=6667, use_ssl=False):
+    @property
+    def processing(self):
+        return self._processing.is_set()
+
+    def connect(self, network_host, network_port=6667, use_ssl=False,
+                timeout=30):
         self.network_host = network_host
         self.network_port = network_port
         self.use_ssl = use_ssl
         log.debug("Connecting to %s:%s", self.network_host, self.network_port)
-        if self.use_ssl:
-            from gevent.ssl import SSLSocket
-            log.warning("SSL support not properly tested yet")
-            self.socket = SSLSocket(
-                create_connection((self.network_host, self.network_port))
-            )
-        else:
-            self.socket = create_connection(
-                (self.network_host, self.network_port)
-            )
+        try:
+            if self.use_ssl:
+                from gevent.ssl import SSLSocket
+                log.warning("SSL support not properly tested yet")
+                self.socket = SSLSocket(
+                    create_connection((self.network_host, self.network_port))
+                )
+            else:
+                self.socket = create_connection(
+                    (self.network_host, self.network_port)
+                )
+        except DNSError, err:
+            log.fatal("Failed to resolve DNS: %s", err)
+            signals.on_disconnected.send(self)
+            return
+        except socket.error, err:
+            log.fatal("Unable to connect: %s", err)
+            signals.on_disconnected.send(self)
+            return
+
         # Socket shouldn't be blobking because we're using gevent,
         # but, just in case...
         self.socket.setblocking(0)
 
-        self._processing = True
-        gevent.spawn_later(0.5, self.__read_socket)
+        gevent.spawn_raw(self.__read_socket)
+        gevent.spawn_raw(self.__connect_wait, timeout)
+
+    def __connect_wait(self, timeout):
         try:
-            wait_read(self.socket.fileno(), timeout=30, timeout_exc=ConnectTimeout())
+            wait_read(self.socket.fileno(), timeout=timeout,
+                      timeout_exc=ConnectTimeout())
         except ConnectTimeout:
-            self._processing = False
+            self._processing.clear()
             log.error("Timed out while trying to connect to %s:%s",
                       self.host, self.port)
             signals.on_disconnected.send(self)
         else:
+            self._processing.set()
             signals.on_connected.send(self)
 
     def send(self, msg, *args, **kwargs):
-        if not self._processing:
+        if not self.processing:
             log.info("Not processing, so not sending any data.")
             return
-        encoding = kwargs.get('encoding') or self.encoding
+        encoding = kwargs.get('encoding', 'utf-8')
         bargs = []
         bkwargs = {}
         for arg in args:
@@ -140,13 +163,13 @@ class IRCTransport(object):
         gevent.sleep(0) # allow other greenlets to run
 
     def disconnect(self):
-        if not self._processing:
+        if not self.processing:
             log.log(5, "Not processing")
             # Double disconnects!?
             return
 
         def on_quited(emitter):
-            self._processing = False
+            self._processing.clear()
             if hasattr(self, 'socket'):
                 # Allow some time to stop recv socket
                 # gevent.sleep(1)
@@ -162,11 +185,9 @@ class IRCTransport(object):
         self.pool.join()
 
     def __write_socket(self, data):
-        if not self._processing:
-            return
-
+        self._processing.wait()
         try:
-            log.log(5, "Writing data to socket: %r", data)
+            log.debug("Writing Data: %r", data)
             self.socket.send(data)
         except socket.error, e:
             try:  # a little dance of compatibility to get the errno
@@ -176,13 +197,13 @@ class IRCTransport(object):
             if _errno == errno.ECONNRESET:
                 # Server disconnected us
                 log.warning("Server disconnected us! Stop processing")
-                self._processing = False
+                self._processing.clear()
                 signals.on_disconnected.send(self)
             elif _errno == errno.EPIPE:
                 # broken pipe. Server disconnected us???
                 log.warning("Broken socket pipe. Server disconnected us?! "
                             "Stop processing")
-                self._processing = False
+                self._processing.clear()
                 signals.on_disconnected.send(self)
             elif _errno == errno.EAGAIN:
                 # Socket not ready
@@ -196,13 +217,14 @@ class IRCTransport(object):
             else:
                 raise
         except Exception, e:
-            self._processing = False
+            self._processing.clear()
             signals.on_disconnected.send(self)
             raise
 
     def __read_socket(self):
+        self._processing.wait()
         buffer = ascii('')
-        while self._processing:
+        while self.processing:
             try:
                 buffer += self.socket.recv(MAX_COMMAND_LENGTH)
             except socket.error, e:
@@ -841,6 +863,7 @@ class IRCProtocol(IRCTransport):
         """
         Called when we have received the welcome from the server.
         """
+        signals.on_rpl_welcome.send(self, message=params[1])
         self._registered = True
         self.nickname = self._attempted_nick
         signals.on_signed_on.send(self)
@@ -1168,10 +1191,10 @@ class IRCProtocol(IRCTransport):
 
     def irc_ERROR(self, prefix, params):
         if 'Closing Link' in params[0]:
-            self._processing = False
+            self._processing.clear()
             signals.on_disconnected.send(self)
         else:
-            log.debug("\n\n%s\n\n", params)
+            log.debug("\n\nirc_ERROR(unhandled): %s\n\n", params)
 
     def handle_command(self, prefix, command, params):
         """
@@ -1431,6 +1454,7 @@ class IRCCommandsHelper(IRCProtocol):
         :param nickname: The nick name about which to retrieve information.
 
         """
+        # XXX: Need to handle 311, 319, 312, 330, 318
         if server is None:
             self.send('WHOIS %s', nickname)
         else:
@@ -1603,7 +1627,8 @@ class BaseIRCClient(IRCCommandsHelper):
             emitter.ctcp_make_reply(user, [('USERINFO', self.userinfo)])
 
     def on_data_available(self, data):
-        log.debug("Data %r", data)
+        log.log(5, "Data %r", data)
         prefix, command, args = parse_raw_irc_command(data)
+        log.debug("Prefix: %r  Command: %r  Args:%r", prefix, command, args)
         self.pool.spawn(self.handle_command, prefix, command, args)
         gevent.sleep(0) # Allow other greenlets to run
