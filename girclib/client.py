@@ -40,8 +40,9 @@ class BasicIRCClient(BaseIRCClient):
         self.realname = realname
         self.password = password
 
-    def connect(self):
-        BaseIRCClient.connect(self, self.host, self.port, use_ssl=False)
+    def connect(self, timeout=30):
+        BaseIRCClient.connect(self, self.host, self.port, use_ssl=False,
+                              timeout=timeout)
 
 class IRCClient(BasicIRCClient):
     """
@@ -232,13 +233,21 @@ class IRCClient(BasicIRCClient):
 
 
 if __name__ == '__main__':
+    import sys
     import gevent
+    import logging
     from girclib.helpers import setup_logging
-    format='%(asctime)s [%(lineno)-4s] %(levelname)-7.7s: %(message)s'
-    setup_logging(format, 5)
-#    client = IRCClient('irc.freenode.net', 6667, 'girclib', 'gIRClib')
-    client = IRCClient('localhost', 6665, 'girclib', 'gIRClib')
-#    log = logging.getLogger('gIRClib')
+
+    try:
+        host, port, channel = sys.argv[1:]
+    except ValueError:
+        print 'USAGE: %s %s <network> <port> <\#channel>' % (
+            sys.executable, sys.argv[0]
+        )
+        sys.exit(1)
+
+    setup_logging(level=logging.DEBUG)
+    client = IRCClient(host, int(port), 'girclib', 'gIRClib')
 
     # Just for the fun, start telnet backdoor on port 2000
     from gevent.backdoor import BackdoorServer
@@ -260,12 +269,13 @@ if __name__ == '__main__':
             if nick == "girclib":
                 continue
             client.ping(nick)
+            gevent.sleep(20)    # Some networks require us to wait before another ping
 
 
     @signals.on_signed_on.connect
     def _on_motd(emitter):
-        log.info("Signed on. Let's join #ufs")
-        client.join("ufs")
+        log.info("Signed on. Let's join %s", channel)
+        client.join(channel)
 
     @signals.on_disconnected.connect
     def disconnected(emitter):
