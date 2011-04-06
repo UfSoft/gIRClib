@@ -131,7 +131,7 @@ class IRCTransport(object):
         if not self.processing:
             log.info("Not processing, so not sending any data.")
             return
-        encoding = kwargs.get('encoding', 'utf-8')
+        encoding = kwargs.get('encoding', self.encoding)
         bargs = []
         bkwargs = {}
         for arg in args:

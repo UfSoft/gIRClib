@@ -32,13 +32,14 @@ class BasicIRCClient(BaseIRCClient):
     erroneous_nick_fallback = "%s-Client" % girclib.__package_name__
 
     def __init__(self, host="", port=6667, nickname="girclib", username=None,
-                 realname="gIRClib", password=None):
+                 realname="gIRClib", password=None, encoding='utf8'):
         self.host = host
         self.port = port
         self.nickname = nickname
         self.username = username
         self.realname = realname
         self.password = password
+        self.encoding = encoding
 
     def connect(self, timeout=30):
         BaseIRCClient.connect(self, self.host, self.port, use_ssl=False,
