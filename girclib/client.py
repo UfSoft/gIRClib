@@ -42,8 +42,8 @@ class BasicIRCClient(BaseIRCClient):
         self.encoding = encoding
 
     def connect(self, timeout=30):
-        BaseIRCClient.connect(self, self.host, self.port, use_ssl=False,
-                              timeout=timeout)
+        return BaseIRCClient.connect(self, self.host, self.port, use_ssl=False,
+                                     timeout=timeout)
 
 class IRCClient(BasicIRCClient):
     """
@@ -247,7 +247,8 @@ if __name__ == '__main__':
         )
         sys.exit(1)
 
-    setup_logging(level=logging.DEBUG)
+#    setup_logging(level=logging.DEBUG)
+    setup_logging(level=5)
     client = IRCClient(host, int(port), 'girclib', 'gIRClib')
 
     # Just for the fun, start telnet backdoor on port 2000

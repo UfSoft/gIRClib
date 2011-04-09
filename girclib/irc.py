@@ -75,11 +75,15 @@ class IRCTransport(object):
         instance.network_port = None
         instance.use_ssl = False
         instance._processing = Event()
+        instance._exited = Event()
         return instance
 
     @property
     def processing(self):
         return self._processing.is_set()
+
+    def wait_for_exit(self):
+        return self._exited.wait()
 
     def connect(self, network_host, network_port=6667, use_ssl=False,
                 timeout=30):
@@ -113,6 +117,7 @@ class IRCTransport(object):
 
         gevent.spawn_raw(self.__read_socket)
         gevent.spawn_raw(self.__connect_wait, timeout)
+        return self._exited
 
     def __connect_wait(self, timeout):
         try:
@@ -177,6 +182,7 @@ class IRCTransport(object):
 
             signals.on_disconnected.send(self)
             log.log(5, "Client disconnected")
+            self._exited.set()
 
         signals.on_quited.connect(on_quited, sender=self, weak=False)
 
@@ -1471,7 +1477,7 @@ class IRCCommandsHelper(IRCProtocol):
         :type servername: ``str``
         :param servername: If specified, the servername to logon as.
         """
-        if self.password is not None:
+        if self.password not in (None, ''):
             self.send("PASS %s", self.password)
         self.set_nick(nickname)
         if self.username is None:
