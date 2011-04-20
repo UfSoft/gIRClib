@@ -83,7 +83,8 @@ class IRCTransport(object):
         return self._processing.is_set()
 
     def wait_for_exit(self):
-        return self._exited.wait()
+        self._exited.wait()
+        self.pool.join()
 
     def connect(self, network_host, network_port=6667, use_ssl=False,
                 timeout=30):
