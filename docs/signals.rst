@@ -56,7 +56,7 @@ Signals
 .. autofunction:: on_connected(emitter)
 .. autofunction:: on_quited(emitter)
 .. autofunction:: on_disconnected(emitter)
-.. autofunction:: on_privmsg(emitter, channel=None, message=None)
+.. autofunction:: on_privmsg(emitter, user=None, message=None)
 .. autofunction:: on_chanmsg(emitter, channel=None, user=None, message=None)
 .. autofunction:: on_joined(emitter, channel=None)
 .. autofunction:: on_left(emitter, channel=None)
@@ -104,6 +104,7 @@ These are replies from the IRC server we're connecting to to this IRC client.
 Signals
 .......
 
+.. autofunction:: on_rpl_welcome(emitter, message=None)
 .. autofunction:: on_rpl_created(emitter, when=None)
 .. autofunction:: on_rpl_yourhost(emitter, info=None)
 .. autofunction:: on_rpl_myinfo(emitter, servername=None, version=None, umodes=None, cmodes=None)
