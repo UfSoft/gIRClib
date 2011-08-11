@@ -308,7 +308,7 @@ def parse_raw_irc_command(element):
 #    command = command.lower()
     command = command.upper()
 
-    if args[0].startswith(ascii(":")):
+    if args and args[0].startswith(ascii(":")):
         args = [ascii(" ").join(args)[1:]]
     else:
         for idx, arg in enumerate(args):
