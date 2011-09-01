@@ -76,6 +76,7 @@ class IRCTransport(object):
         instance.use_ssl = False
         instance._processing = Event()
         instance._exited = Event()
+        instance._joining_channels_possible = Event()
         return instance
 
     @property
@@ -870,6 +871,7 @@ class IRCProtocol(IRCTransport):
         """
         Called when we have received the welcome from the server.
         """
+        self._joining_channels_possible.set()
         signals.on_rpl_welcome.send(self, message=params[1])
         self._registered = True
         self.nickname = self._attempted_nick
@@ -1246,6 +1248,9 @@ class IRCCommandsHelper(IRCProtocol):
         """
         if channel[0] not in CHANNEL_PREFIXES:
             channel = '#' + channel
+        if not self._joining_channels_possible.is_set():
+            log.info("Waiting until joining channels is possible")
+            self._joining_channels_possible.wait()
         # Channel names are case insensitive
         log.info("Joining %s on %s:%d", channel, self.host, self.port)
         if key:
