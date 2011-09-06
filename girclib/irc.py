@@ -74,6 +74,7 @@ class IRCTransport(object):
         instance.network_host = None
         instance.network_port = None
         instance.use_ssl = False
+        instance._connected = Event()
         instance._processing = Event()
         instance._exited = Event()
         instance._joining_channels_possible = Event()
@@ -82,6 +83,10 @@ class IRCTransport(object):
     @property
     def processing(self):
         return self._processing.is_set()
+
+    @property
+    def connected(self):
+        return self._connected.is_set()
 
     def wait_for_exit(self):
         self._exited.wait()
@@ -113,24 +118,26 @@ class IRCTransport(object):
             signals.on_disconnected.send(self)
             return
 
-        # Socket shouldn't be blobking because we're using gevent,
+        # Socket shouldn't be blocking because we're using gevent,
         # but, just in case...
         self.socket.setblocking(0)
 
         gevent.spawn_raw(self.__read_socket)
         gevent.spawn_raw(self.__connect_wait, timeout)
-        return self._exited
+        return self._connected
 
     def __connect_wait(self, timeout):
         try:
             wait_read(self.socket.fileno(), timeout=timeout,
                       timeout_exc=ConnectTimeout())
         except ConnectTimeout:
+            self._connected.clear()
             self._processing.clear()
             log.error("Timed out while trying to connect to %s:%s",
                       self.host, self.port)
             signals.on_disconnected.send(self)
         else:
+            self._connected.set()
             self._processing.set()
             signals.on_connected.send(self)
 
@@ -176,6 +183,7 @@ class IRCTransport(object):
             return
 
         def on_quited(emitter):
+            self._connected.clear()
             self._processing.clear()
             if hasattr(self, 'socket'):
                 # Allow some time to stop recv socket
@@ -193,6 +201,7 @@ class IRCTransport(object):
         self.pool.join()
 
     def __write_socket(self, data):
+        self._connected.wait()
         self._processing.wait()
         try:
             log.debug("Writing Data: %r", data)
@@ -205,12 +214,14 @@ class IRCTransport(object):
             if _errno == errno.ECONNRESET:
                 # Server disconnected us
                 log.warning("Server disconnected us! Stop processing")
+                self._connected.clear()
                 self._processing.clear()
                 signals.on_disconnected.send(self)
             elif _errno == errno.EPIPE:
                 # broken pipe. Server disconnected us???
                 log.warning("Broken socket pipe. Server disconnected us?! "
                             "Stop processing")
+                self._connected.clear()
                 self._processing.clear()
                 signals.on_disconnected.send(self)
             elif _errno == errno.EAGAIN:
@@ -225,11 +236,13 @@ class IRCTransport(object):
             else:
                 raise
         except Exception, e:
+            self._connected.clear()
             self._processing.clear()
             signals.on_disconnected.send(self)
             raise
 
     def __read_socket(self):
+        self._connected.wait()
         self._processing.wait()
         buffer = ascii('')
         while self.processing:
@@ -1200,6 +1213,7 @@ class IRCProtocol(IRCTransport):
 
     def irc_ERROR(self, prefix, params):
         if 'Closing Link' in params[0]:
+            self._connected.clear()
             self._processing.clear()
             signals.on_disconnected.send(self)
         else:
