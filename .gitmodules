@@ -1,0 +1,3 @@
+[submodule "docs"]
+	path = docs
+	url = git@dev.ufsoft.org:gevent/girclib.git
