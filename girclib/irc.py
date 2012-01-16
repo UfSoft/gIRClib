@@ -9,6 +9,8 @@
     :copyright: © 2011 UfSoft.org - :email:`Pedro Algarvio (pedro@algarvio.me)`
     :license: BSD, see LICENSE for more details.
 """
+from gevent import monkey
+monkey.patch_all()
 
 import sys
 import time
