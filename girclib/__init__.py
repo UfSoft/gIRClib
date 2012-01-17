@@ -15,3 +15,9 @@ __email__        = 'pedro@algarvio.me'
 __license__      = 'BSD'
 __url__          = 'https://github.com/s0undt3ch/girclib'
 __description__  = __doc__
+
+try:
+    from gevent import monkey
+    monkey.patch_socket()
+except ImportError:
+    pass
