@@ -19,5 +19,6 @@ __description__  = __doc__
 try:
     from gevent import monkey
     monkey.patch_socket()
+    monkey.patch_all()
 except ImportError:
     pass

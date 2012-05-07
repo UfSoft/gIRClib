@@ -20,7 +20,7 @@ import logging
 from gevent.dns import DNSError
 from gevent.event import Event
 from gevent.pool import Pool
-from gevent.socket import create_connection, wait_read
+from gevent.socket import create_connection, wait_readwrite
 from string import letters, digits, punctuation
 from girclib import signals
 from girclib.exceptions import IRCBadMessage, IRCBadModes, UnhandledCommand
@@ -128,8 +128,8 @@ class IRCTransport(object):
 
     def __connect_wait(self, timeout):
         try:
-            wait_read(self.socket.fileno(), timeout=timeout,
-                      timeout_exc=ConnectTimeout())
+            wait_readwrite(self.socket.fileno(), timeout=timeout,
+                           timeout_exc=ConnectTimeout())
         except ConnectTimeout:
             self._connected.clear()
             self._processing.clear()
